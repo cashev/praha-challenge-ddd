@@ -20,7 +20,7 @@ export class UserEmail extends ValueObject<UserEmailProps> {
 
   public static create(value: string): UserEmail {
     if (!this.isValid(value)) {
-      throw new Error();
+      throw new Error("メールアドレスではありません。:" + value);
     }
     return new UserEmail({ value });
   }
