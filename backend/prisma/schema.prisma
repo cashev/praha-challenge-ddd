@@ -14,6 +14,7 @@ model User {
   id         Int          @id @default(autoincrement())
   name       String
   email      String       @unique
+  status     String
   TaskStatus TaskStatus[]
 }
 
@@ -30,12 +31,5 @@ model TaskStatus {
   userId          Int
   task            Task          @relation(fields: [taskId], references: [id])
   taskId          Int
-  taskStatusMst   TaskStatusMst @relation(fields: [taskStatusMstId], references: [id])
-  taskStatusMstId Int
-}
-
-model TaskStatusMst {
-  id         Int          @id @default(autoincrement())
-  name       String
-  TaskStatus TaskStatus[]
+  status          String
 }
