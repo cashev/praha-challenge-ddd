@@ -6,16 +6,19 @@ describe('do', () => {
     id: 1,
     name: '永野 哲哉',
     email: 'tty-ngn19800814@dion.ne.jp',
+    status: '在籍',
   });
   const u2 = new UserDto({
     id: 2,
     name: '江口 隆吉',
     email: 'egt572@asp.home.ne.jp',
+    status: '在籍',
   });
   const u3 = new UserDto({
     id: 3,
     name: '柳沢 朋美',
     email: 'tmmyngsw@ybb.ne.jp',
+    status: '在籍',
   });
   const mockUserQS = new (class implements IUserQS {
     public getAll(): Promise<UserDto[]> {
