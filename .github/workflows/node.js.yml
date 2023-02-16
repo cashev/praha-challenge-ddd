@@ -40,5 +40,5 @@ jobs:
         working-directory: backend
       - run: npm test
         working-directory: backend
-      - run: npm test:integration
+      - run: npm run test:integration
         working-directory: backend
