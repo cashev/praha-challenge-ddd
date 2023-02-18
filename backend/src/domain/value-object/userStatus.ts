@@ -18,5 +18,7 @@ export function createUserStatus(status: string): UserStatus {
     case UserStatusValues.Taikai:
       return Taikai;
   }
-  throw Error('不正な値です。在籍中, 休会中, 退会済を指定してください。: ' + status);
+  throw Error(
+    '不正な値です。在籍中, 休会中, 退会済を指定してください。: ' + status,
+  );
 }
