@@ -13,7 +13,7 @@ export class TeamName extends ValueObject<TeamNameProps> {
     super(props);
   }
 
-  private static isValid(value: string) {
+  private static validate(value: string) {
     if (isNaN(Number(value))) {
       throw new Error('チーム名は数字のみ使えます。: ' + value);
     }
@@ -23,7 +23,7 @@ export class TeamName extends ValueObject<TeamNameProps> {
   }
 
   public static create(value: string): TeamName {
-    this.isValid(value);
+    this.validate(value);
     return new TeamName({ value });
   }
 }
