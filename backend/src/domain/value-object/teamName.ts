@@ -13,17 +13,17 @@ export class TeamName extends ValueObject<TeamNameProps> {
     super(props);
   }
 
-  private static isValid(value: string): boolean {
-    return !isNaN(Number(value));
-  }
-
-  public static create(value: string): TeamName {
-    if (!this.isValid(value)) {
+  private static isValid(value: string) {
+    if (isNaN(Number(value))) {
       throw new Error('チーム名は数字のみ使えます。: ' + value);
     }
     if (value.length > 3) {
       throw new Error('チーム名は3文字以下です。: ' + value);
     }
+  }
+
+  public static create(value: string): TeamName {
+    this.isValid(value);
     return new TeamName({ value });
   }
 }
