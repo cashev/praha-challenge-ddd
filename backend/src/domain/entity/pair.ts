@@ -31,11 +31,11 @@ export class Pair extends Entity<PairProps> {
 
   private static validate(member: User[]) {
     if (member.length < 2 || member.length > 3) {
-        throw new Error('ペアは2名または3名です。: ' + member.length);
+      throw new Error('ペアは2名または3名です。: ' + member.length);
     }
 
-    if (member.some(user => user.status !== Zaiseki)) {
-        throw new Error('在籍中ではない参加者が含まれています。');
+    if (member.some((user) => user.status !== Zaiseki)) {
+      throw new Error('在籍中ではない参加者が含まれています。');
     }
   }
 
