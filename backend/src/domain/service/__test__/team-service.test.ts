@@ -5,6 +5,7 @@ describe('isDuplicated', () => {
   test('[正常系] 重複しないチーム名', async () => {
     const mockTeamRepo = {
       findByName: jest.fn().mockResolvedValue(null),
+      findByUserId: jest.fn(),
     };
     const uniqueTeamName = TeamName.create('1');
 
@@ -16,6 +17,7 @@ describe('isDuplicated', () => {
     const mockTeam = {};
     const mockTeamRepo = {
       findByName: jest.fn().mockResolvedValue(mockTeam),
+      findByUserId: jest.fn(),
     };
     const duplicatedTeamName = TeamName.create('2');
 
