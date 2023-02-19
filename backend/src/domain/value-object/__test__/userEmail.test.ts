@@ -1,4 +1,4 @@
-import { UserEmail } from './userEmail';
+import { UserEmail } from '../userEmail';
 
 describe('UserEmailの生成テスト', () => {
   test('メールアドレスであればインスタンの生成に成功する', () => {
