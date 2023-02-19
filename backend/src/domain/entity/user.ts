@@ -10,6 +10,10 @@ interface UserProps {
 }
 
 export class User extends Entity<UserProps> {
+  get id(): number {
+    return this._id;
+  }
+
   get userName(): UserName {
     return this.props.userName;
   }
