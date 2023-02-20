@@ -9,6 +9,10 @@ interface TeamProps {
 }
 
 export class Team extends Entity<TeamProps> {
+  get id(): number {
+    return this._id;
+  }
+
   get teamName(): TeamName {
     return this.props.teamName;
   }
