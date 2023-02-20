@@ -11,6 +11,7 @@ describe('isDuplicated', () => {
     const mockTeamRepo = {
       findByName: jest.fn().mockResolvedValue(null),
       findByUserId: jest.fn(),
+      getSmallestTeamList: jest.fn(),
     };
     const uniqueTeamName = TeamName.create('1');
 
@@ -23,6 +24,7 @@ describe('isDuplicated', () => {
     const mockTeamRepo = {
       findByName: jest.fn().mockResolvedValue(mockTeam),
       findByUserId: jest.fn(),
+      getSmallestTeamList: jest.fn(),
     };
     const duplicatedTeamName = TeamName.create('2');
 
@@ -71,6 +73,7 @@ describe('isSameTeam', () => {
     const mockTeamRepo = {
       findByName: jest.fn(),
       findByUserId: jest.fn().mockResolvedValue(team),
+      getSmallestTeamList: jest.fn(),
     };
     const pairMember = createPairMember();
 
@@ -82,6 +85,7 @@ describe('isSameTeam', () => {
     const mockTeamRepo = {
       findByName: jest.fn(),
       findByUserId: jest.fn().mockResolvedValue(team),
+      getSmallestTeamList: jest.fn(),
     };
     const u6 = User.create(6, {
       userName: UserName.create('緒方 百世'),
