@@ -20,6 +20,7 @@ describe('do', () => {
   };
   const createMockPairRepo = () => {
     return {
+      findByName: jest.fn(),
       getSmallestPairList: jest.fn(),
     };
   };
