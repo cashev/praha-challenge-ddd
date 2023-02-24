@@ -29,7 +29,7 @@ export class ComebackUserUseCase {
     const team = await this.getSmallestTeam();
     const pair = await this.getSmallestPair(team.id);
 
-    if (pair.member.length == 3) {
+    if (pair.isFullMember()) {
       // todo
     }
   }
@@ -56,4 +56,16 @@ export class ComebackUserUseCase {
     const pairs = await this.pairRepo.getSmallestPairList(teamId);
     return this.randomChoice<Pair>(pairs);
   }
+
+  // private async createNextPairName(basePairName: PairName): Promise<PairName> {
+  //   const pairService = new PairService(this.pairRepo);
+  //   let tmp = String.fromCharCode(basePairName.value.charCodeAt(0) + 1);
+  //   while(pairService.isDuplicated(PairName.create(tmp))) {
+  //     tmp = tmp === 'z' ? 'a' : String.fromCharCode(tmp.charCodeAt(0) + 1);
+  //     if (tmp == basePairName.value) {
+  //       throw new Error('使用可能なペア名がありません。')
+  //     }
+  //   }
+  //   return PairName.create(tmp);
+  // }
 }

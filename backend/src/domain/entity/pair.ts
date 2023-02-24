@@ -21,12 +21,19 @@ export class Pair extends Entity<PairProps> {
     this.props.pairName = PairName;
   }
 
-  get member(): User[] {
+  get member(): readonly User[] {
     return this.props.member;
   }
 
-  set member(member: User[]) {
-    this.props.member = member;
+  addMember(user: User) {
+    if (this.isFullMember()) {
+      throw new Error('ペアは3名までです。');
+    }
+    this.props.member.push(user);
+  }
+
+  isFullMember(): boolean {
+    return this.member.length === 3;
   }
 
   private constructor(id: number, props: PairProps) {
