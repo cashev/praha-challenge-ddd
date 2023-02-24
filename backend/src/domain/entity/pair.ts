@@ -35,6 +35,14 @@ export class Pair extends Entity<PairProps> {
     this.props.member.push(user);
   }
 
+  removeMember(user: User) {
+    const index = this.member.indexOf(user);
+    if (index < 0) {
+      throw new Error('この参加者はペアの一員ではありません。');
+    }
+    this.props.member.splice(index, 1);
+  }
+
   isMember(user: User): boolean {
     return this.member.some((u) => u.id === user.id);
   }

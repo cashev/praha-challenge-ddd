@@ -172,3 +172,31 @@ describe('isMember', () => {
     expect(pair.isMember(nonMember)).toBeFalsy();
   });
 });
+
+describe('removeMember', () => {
+  test('[正常系] ペアの一員であればremoveできる', () => {
+    const member = createMember();
+    const pairName = PairName.create('x');
+    const pair = Pair.create(24, { pairName, member });
+
+    const removedUser = member[0];
+    const newMember = member.splice(1);
+    
+    pair.removeMember(removedUser);
+    expect(pair.member).toEqual(newMember);
+  });
+
+  test('[異常系] ペアの一員でない場合、removeできない', () => {
+    const member = createMember();
+    const pairName = PairName.create('x');
+    const pair = Pair.create(24, { pairName, member });
+
+    const removedUser = User.create(5, {
+      userName: UserName.create('奥村 都義'),
+      email: UserEmail.create('okumura83@eaccess.net'),
+      status: Zaiseki,
+    });
+    
+    expect(() => pair.removeMember(removedUser)).toThrow();
+  });
+});
