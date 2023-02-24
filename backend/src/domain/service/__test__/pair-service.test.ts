@@ -19,7 +19,9 @@ describe('isDuplicated', () => {
     const mockPairRepo = createMockPairRepo(null);
     const pairService = new PairService(mockPairRepo);
 
-    expect(pairService.isDuplicated(1, PairName.create('a'))).resolves.toBeFalsy();
+    expect(
+      pairService.isDuplicated(1, PairName.create('a')),
+    ).resolves.toBeFalsy();
   });
 
   test('[正常系] ペア名が重複する場合、True', async () => {
@@ -40,6 +42,8 @@ describe('isDuplicated', () => {
     const mockPairRepo = createMockPairRepo(p1);
     const pairService = new PairService(mockPairRepo);
 
-    expect(pairService.isDuplicated(1, PairName.create('a'))).resolves.toBeTruthy();
+    expect(
+      pairService.isDuplicated(1, PairName.create('a')),
+    ).resolves.toBeTruthy();
   });
 });
