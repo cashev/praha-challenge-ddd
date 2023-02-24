@@ -35,7 +35,7 @@ export class Pair extends Entity<PairProps> {
     this.props.member.push(user);
   }
 
-  isMember(user: User) {
+  isMember(user: User): boolean {
     return this.member.some((u) => u.id === user.id);
   }
 
