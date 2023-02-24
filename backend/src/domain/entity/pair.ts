@@ -29,6 +29,9 @@ export class Pair extends Entity<PairProps> {
     if (this.isFullMember()) {
       throw new Error('ペアは3名までです。');
     }
+    if (user.status != Zaiseki) {
+      throw new Error('参加者が在籍中ではありません。');
+    }
     this.props.member.push(user);
   }
 
@@ -52,6 +55,7 @@ export class Pair extends Entity<PairProps> {
 
   public static create(id: number, props: PairProps): Pair {
     this.validate(props.member);
+    props.member = [...props.member];
     return new Pair(id, props);
   }
 }
