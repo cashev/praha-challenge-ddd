@@ -129,6 +129,15 @@ describe('addMember', () => {
 
     expect(() => pair.addMember(newMember)).toThrow();
   });
+
+  test('[異常系] 既にペアの一員の参加者は追加できない', () => {
+    const member = createMember().slice(0, 2);
+    const pairName = PairName.create('o');
+    const pair = Pair.create(15, { pairName, member });
+    const newMember = member[0];
+
+    expect(() => pair.addMember(newMember)).toThrow();
+  });
 });
 
 describe('isFullMember', () => {
@@ -181,7 +190,7 @@ describe('removeMember', () => {
 
     const removedUser = member[0];
     const newMember = member.splice(1);
-    
+
     pair.removeMember(removedUser);
     expect(pair.member).toEqual(newMember);
   });
@@ -196,7 +205,7 @@ describe('removeMember', () => {
       email: UserEmail.create('okumura83@eaccess.net'),
       status: Zaiseki,
     });
-    
+
     expect(() => pair.removeMember(removedUser)).toThrow();
   });
 });

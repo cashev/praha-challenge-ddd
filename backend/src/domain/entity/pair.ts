@@ -32,6 +32,9 @@ export class Pair extends Entity<PairProps> {
     if (user.status != Zaiseki) {
       throw new Error('参加者が在籍中ではありません。');
     }
+    if (this.isMember(user)) {
+      throw new Error('既存のメンバーです。');
+    }
     this.props.member.push(user);
   }
 
