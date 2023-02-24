@@ -9,6 +9,10 @@ interface PairProps {
 }
 
 export class Pair extends Entity<PairProps> {
+  get id(): number {
+    return this.id;
+  }
+
   get pairName(): PairName {
     return this.props.pairName;
   }
