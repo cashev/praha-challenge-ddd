@@ -8,8 +8,8 @@ export class PairService {
     this.pairRepo = pairRepo;
   }
 
-  async isDuplicated(pairName: PairName): Promise<boolean> {
-    const pair = await this.pairRepo.findByName(pairName.value);
+  async isDuplicated(teamId: number, pairName: PairName): Promise<boolean> {
+    const pair = await this.pairRepo.findByName(teamId, pairName.value);
     return pair !== null;
   }
 }

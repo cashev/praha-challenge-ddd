@@ -22,6 +22,7 @@ describe('do', () => {
     return {
       findByName: jest.fn(),
       getSmallestPairList: jest.fn(),
+      getMaxId: jest.fn(),
     };
   };
 
