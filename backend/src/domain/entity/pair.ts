@@ -35,6 +35,10 @@ export class Pair extends Entity<PairProps> {
     this.props.member.push(user);
   }
 
+  isMember(user: User) {
+    return this.member.some((u) => u.id === user.id);
+  }
+
   isFullMember(): boolean {
     return this.member.length === 3;
   }

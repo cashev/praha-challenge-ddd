@@ -148,3 +148,27 @@ describe('isFullMember', () => {
     expect(pair.isFullMember()).toBeTruthy();
   });
 });
+
+describe('isMember', () => {
+  test('[正常系] 引数の参加者がペアの一員の場合、True', () => {
+    const member = createMember();
+    const pairName = PairName.create('w');
+    const pair = Pair.create(23, { pairName, member });
+
+    const memberUser = member[0];
+    expect(pair.isMember(memberUser)).toBeTruthy();
+  });
+
+  test('[正常系] 引数の参加者がペアの一員でない場合、False', () => {
+    const member = createMember();
+    const pairName = PairName.create('w');
+    const pair = Pair.create(23, { pairName, member });
+
+    const nonMember = User.create(5, {
+      userName: UserName.create('上原 つばさ'),
+      email: UserEmail.create('rhu469919720429@tokyo24.com'),
+      status: Zaiseki,
+    });
+    expect(pair.isMember(nonMember)).toBeFalsy();
+  });
+});
