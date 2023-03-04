@@ -2,6 +2,7 @@ import { Pair } from 'src/domain/entity/pair';
 import { Team } from 'src/domain/entity/team';
 import { User } from 'src/domain/entity/user';
 import { Zaiseki } from 'src/domain/value-object/userStatus';
+import { randomChoice } from 'src/util/RandomChoice';
 import { IPairRepository } from './repository-interface/pair-repository';
 import { ITeamRepository } from './repository-interface/team-repository';
 import { IUserRepository } from './repository-interface/user-repository';
@@ -43,18 +44,14 @@ export class ComebackUserUseCase {
     }
   }
 
-  private randomChoice<T>(list: T[]): T {
-    return list[Math.floor(Math.random() * list.length)];
-  }
-
   private async getSmallestTeam(): Promise<Team> {
     const teams = await this.teamRepo.getSmallestTeamList();
-    return this.randomChoice<Team>(teams);
+    return randomChoice<Team>(teams);
   }
 
   private async getSmallestPair(teamId: number): Promise<Pair> {
     const pairs = await this.pairRepo.getSmallestPairList(teamId);
-    return this.randomChoice<Pair>(pairs);
+    return randomChoice<Pair>(pairs);
   }
 
   // private async createNextPairName(basePairName: PairName): Promise<PairName> {
