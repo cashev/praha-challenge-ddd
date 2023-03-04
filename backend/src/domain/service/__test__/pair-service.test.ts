@@ -11,7 +11,7 @@ describe('isDuplicated', () => {
     return {
       findByName: jest.fn().mockResolvedValue(pair),
       getSmallestPairList: jest.fn(),
-      getMaxId: jest.fn(),
+      getNextId: jest.fn(),
     };
   };
 
