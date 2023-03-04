@@ -23,6 +23,7 @@ describe('do', () => {
       findByName: jest.fn(),
       getSmallestPairList: jest.fn(),
       getNextId: jest.fn(),
+      findByTeamId: jest.fn(),
     };
   };
 

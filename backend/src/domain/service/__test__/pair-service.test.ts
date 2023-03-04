@@ -12,6 +12,7 @@ describe('isDuplicated', () => {
       findByName: jest.fn().mockResolvedValue(pair),
       getSmallestPairList: jest.fn(),
       getNextId: jest.fn(),
+      findByTeamId: jest.fn(),
     };
   };
 
