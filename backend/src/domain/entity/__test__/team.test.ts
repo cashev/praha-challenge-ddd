@@ -1,7 +1,12 @@
 import { TeamName } from 'src/domain/value-object/teamName';
 import { UserEmail } from 'src/domain/value-object/userEmail';
 import { UserName } from 'src/domain/value-object/userName';
-import { Kyukai, Taikai, Zaiseki } from 'src/domain/value-object/userStatus';
+import {
+  Kyukai,
+  Taikai,
+  UserStatus,
+  Zaiseki,
+} from 'src/domain/value-object/userStatus';
 import { Team } from '../team';
 import { User } from '../user';
 
@@ -77,5 +82,50 @@ describe('isMember', () => {
       status: Zaiseki,
     });
     expect(team.isMember(u4)).toBeFalsy();
+  });
+});
+
+describe('addMember', () => {
+  const createNewMember = (status: UserStatus) => {
+    return User.create(4, {
+      userName: UserName.create('小柳 晃義'),
+      email: UserEmail.create('trys0216@hi-ho.ne.jp'),
+      status,
+    });
+  };
+
+  test('[正常系] 新規メンバーを追加する', () => {
+    const member = createMember();
+    const team = Team.create(1, { teamName: TeamName.create('1'), member });
+
+    const newMember = createNewMember(Zaiseki);
+    team.addMember(newMember);
+    console.log(team.member);
+    console.log([...member, newMember]);
+    expect(team.member).toEqual([...member, newMember]);
+  });
+
+  test('[異常系] 休会中の参加者は追加できない', () => {
+    const member = createMember();
+    const team = Team.create(2, { teamName: TeamName.create('1'), member });
+
+    const newMember = createNewMember(Kyukai);
+    expect(() => team.addMember(newMember)).toThrow();
+  });
+
+  test('[異常系] 退会済の参加者は追加できない', () => {
+    const member = createMember();
+    const team = Team.create(3, { teamName: TeamName.create('1'), member });
+
+    const newMember = createNewMember(Taikai);
+    expect(() => team.addMember(newMember)).toThrow();
+  });
+
+  test('[異常系] 既にペアの一員の参加者は追加できない', () => {
+    const member = createMember();
+    const team = Team.create(4, { teamName: TeamName.create('1'), member });
+
+    const newMember = member[2];
+    expect(() => team.addMember(newMember)).toThrow();
   });
 });

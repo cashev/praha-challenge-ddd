@@ -29,6 +29,16 @@ export class Team extends Entity<TeamProps> {
     return this.member.some((u) => u.id === user.id);
   }
 
+  addMember(user: User) {
+    if (user.status != Zaiseki) {
+      throw new Error('参加者が在籍中ではありません。');
+    }
+    if (this.isMember(user)) {
+      throw new Error('既存のメンバーです。');
+    }
+    this.props.member.push(user);
+  }
+
   private constructor(id: number, props: TeamProps) {
     super(id, props);
   }
@@ -44,6 +54,7 @@ export class Team extends Entity<TeamProps> {
 
   public static create(id: number, props: TeamProps): Team {
     this.validate(props.member);
+    props.member = [...props.member];
     return new Team(id, props);
   }
 }
