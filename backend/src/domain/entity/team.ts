@@ -29,6 +29,10 @@ export class Team extends Entity<TeamProps> {
     this.props.member = member;
   }
 
+  isMember(user: User): boolean {
+    return this.member.some((u) => u.id === user.id);
+  }
+
   private constructor(id: number, props: TeamProps) {
     super(id, props);
   }
