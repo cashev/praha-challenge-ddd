@@ -21,12 +21,8 @@ export class Team extends Entity<TeamProps> {
     this.props.teamName = teamName;
   }
 
-  get member(): User[] {
+  get member(): readonly User[] {
     return this.props.member;
-  }
-
-  set member(member: User[]) {
-    this.props.member = member;
   }
 
   isMember(user: User): boolean {
