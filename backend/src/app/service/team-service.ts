@@ -1,6 +1,6 @@
 import { ITeamRepository } from 'src/app/repository-interface/team-repository';
-import { User } from '../entity/user';
-import { TeamName } from '../value-object/teamName';
+import { User } from 'src/domain/entity/user';
+import { TeamName } from 'src/domain/value-object/teamName';
 
 export class TeamService {
   private readonly teamRepo: ITeamRepository;

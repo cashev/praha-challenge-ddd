@@ -1,5 +1,5 @@
 import { IPairRepository } from 'src/app/repository-interface/pair-repository';
-import { PairName } from '../value-object/pairName';
+import { PairName } from 'src/domain/value-object/pairName';
 
 export class PairService {
   private readonly pairRepo: IPairRepository;
