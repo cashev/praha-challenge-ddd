@@ -1,11 +1,12 @@
 import { TeamName } from '../value-object/teamName';
 import { Zaiseki } from '../value-object/userStatus';
 import { Entity } from './entity';
+import { Pair } from './pair';
 import { User } from './user';
 
 interface TeamProps {
   teamName: TeamName;
-  member: User[];
+  pairList: Pair[];
 }
 
 export class Team extends Entity<TeamProps> {
@@ -21,22 +22,16 @@ export class Team extends Entity<TeamProps> {
     this.props.teamName = teamName;
   }
 
+  get pairList(): readonly Pair[] {
+    return this.props.pairList;
+  }
+
   get member(): readonly User[] {
-    return this.props.member;
+    return this.props.pairList.flatMap((pair) => pair.member);
   }
 
   isMember(user: User): boolean {
     return this.member.some((u) => u.id === user.id);
-  }
-
-  addMember(user: User) {
-    if (user.status != Zaiseki) {
-      throw new Error('参加者が在籍中ではありません。');
-    }
-    if (this.isMember(user)) {
-      throw new Error('既存のメンバーです。');
-    }
-    this.props.member.push(user);
   }
 
   private constructor(id: number, props: TeamProps) {
@@ -53,8 +48,8 @@ export class Team extends Entity<TeamProps> {
   }
 
   public static create(id: number, props: TeamProps): Team {
-    this.validate(props.member);
-    props.member = [...props.member];
+    this.validate(props.pairList.flatMap((pair) => pair.member));
+    props.pairList = [...props.pairList];
     return new Team(id, props);
   }
 }

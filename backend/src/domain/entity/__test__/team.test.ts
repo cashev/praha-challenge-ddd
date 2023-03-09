@@ -1,12 +1,9 @@
+import { PairName } from 'src/domain/value-object/pairName';
 import { TeamName } from 'src/domain/value-object/teamName';
 import { UserEmail } from 'src/domain/value-object/userEmail';
 import { UserName } from 'src/domain/value-object/userName';
-import {
-  Kyukai,
-  Taikai,
-  UserStatus,
-  Zaiseki,
-} from 'src/domain/value-object/userStatus';
+import { Zaiseki } from 'src/domain/value-object/userStatus';
+import { Pair } from '../pair';
 import { Team } from '../team';
 import { User } from '../user';
 
@@ -29,52 +26,47 @@ const createMember = () => {
   return [u1, u2, u3];
 };
 
+const createPairList = (member: User[]) => {
+  const pairName = PairName.create('a');
+  return [
+    Pair.create(1, {
+      pairName,
+      member,
+    }),
+  ];
+};
+
 describe('create', () => {
   test('[正常系] チームの参加者が3人', () => {
-    const member = createMember();
+    const pairList = createPairList(createMember());
     const teamName = TeamName.create('123');
 
-    const team = Team.create(1, { teamName, member });
+    const team = Team.create(1, { teamName, pairList });
     expect(team.teamName).toEqual(teamName);
-    expect(team.member).toEqual(member);
+    expect(team.pairList).toEqual(pairList);
   });
 
   test('[異常系] チームの参加者が2人', () => {
-    const member = createMember().slice(0, 2);
+    const pairList = createPairList(createMember().slice(0, 2));
     const teamName = TeamName.create('123');
 
-    expect(() => Team.create(1, { teamName, member })).toThrow();
-  });
-
-  test('[異常系] 休会中の参加者が含まれる', () => {
-    const member = createMember();
-    member[0].status = Kyukai;
-    const teamName = TeamName.create('123');
-
-    expect(() => Team.create(1, { teamName, member })).toThrow();
-  });
-
-  test('[異常系] 退会済の参加者が含まれる', () => {
-    const member = createMember();
-    member[1].status = Taikai;
-    const teamName = TeamName.create('123');
-
-    expect(() => Team.create(1, { teamName, member })).toThrow();
+    expect(() => Team.create(1, { teamName, pairList })).toThrow();
   });
 });
 
 describe('isMember', () => {
-  test('[正常系] 引数の参加者がチームの一員でない場合、False', () => {
+  test('[正常系] 引数の参加者がチームの一員である場合、True', () => {
     const member = createMember();
-    const team = Team.create(1, { teamName: TeamName.create('1'), member });
+    const pairList = createPairList(member);
+    const team = Team.create(1, { teamName: TeamName.create('1'), pairList });
 
     const u1 = member[0];
     expect(team.isMember(u1)).toBeTruthy();
   });
 
   test('[正常系] 引数の参加者がチームの一員でない場合、False', () => {
-    const member = createMember();
-    const team = Team.create(1, { teamName: TeamName.create('1'), member });
+    const pairList = createPairList(createMember());
+    const team = Team.create(1, { teamName: TeamName.create('1'), pairList });
 
     const u4 = User.create(4, {
       userName: UserName.create('藤村 和好'),
@@ -82,50 +74,5 @@ describe('isMember', () => {
       status: Zaiseki,
     });
     expect(team.isMember(u4)).toBeFalsy();
-  });
-});
-
-describe('addMember', () => {
-  const createNewMember = (status: UserStatus) => {
-    return User.create(4, {
-      userName: UserName.create('小柳 晃義'),
-      email: UserEmail.create('trys0216@hi-ho.ne.jp'),
-      status,
-    });
-  };
-
-  test('[正常系] 新規メンバーを追加する', () => {
-    const member = createMember();
-    const team = Team.create(1, { teamName: TeamName.create('1'), member });
-
-    const newMember = createNewMember(Zaiseki);
-    team.addMember(newMember);
-    console.log(team.member);
-    console.log([...member, newMember]);
-    expect(team.member).toEqual([...member, newMember]);
-  });
-
-  test('[異常系] 休会中の参加者は追加できない', () => {
-    const member = createMember();
-    const team = Team.create(2, { teamName: TeamName.create('1'), member });
-
-    const newMember = createNewMember(Kyukai);
-    expect(() => team.addMember(newMember)).toThrow();
-  });
-
-  test('[異常系] 退会済の参加者は追加できない', () => {
-    const member = createMember();
-    const team = Team.create(3, { teamName: TeamName.create('1'), member });
-
-    const newMember = createNewMember(Taikai);
-    expect(() => team.addMember(newMember)).toThrow();
-  });
-
-  test('[異常系] 既にペアの一員の参加者は追加できない', () => {
-    const member = createMember();
-    const team = Team.create(4, { teamName: TeamName.create('1'), member });
-
-    const newMember = member[2];
-    expect(() => team.addMember(newMember)).toThrow();
   });
 });
