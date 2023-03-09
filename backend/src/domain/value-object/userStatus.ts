@@ -4,9 +4,9 @@ const UserStatusValues = {
   Taikai: '退会済',
 } as const;
 
-export const Zaiseki = Symbol();
-export const Kyukai = Symbol();
-export const Taikai = Symbol();
+export const Zaiseki = Symbol(UserStatusValues.Zaiseki);
+export const Kyukai = Symbol(UserStatusValues.Kyukai);
+export const Taikai = Symbol(UserStatusValues.Taikai);
 export type UserStatus = typeof Zaiseki | typeof Kyukai | typeof Taikai;
 
 export function createUserStatus(status: string): UserStatus {
