@@ -29,11 +29,11 @@ describe('do', () => {
   };
 
   test('[異常系] 存在しない参加者', async () => {
-    const mockUserRepo = createMockUserQS(null);
+    const mockUserQS = createMockUserQS(null);
     const mockTeamRepo = createMockTeamRepo();
     const mockPairRepo = createMockPairRepo();
     const useCase = new ComebackUserUseCase(
-      mockUserRepo,
+      mockUserQS,
       mockTeamRepo,
       mockPairRepo,
     );
@@ -48,11 +48,11 @@ describe('do', () => {
       email: 'sjuru8200331@combzmail.jp',
       status: Zaiseki.toString(),
     });
-    const mockUserRepo = createMockUserQS(userDto);
+    const mockUserQS = createMockUserQS(userDto);
     const mockTeamRepo = createMockTeamRepo();
     const mockPairRepo = createMockPairRepo();
     const useCase = new ComebackUserUseCase(
-      mockUserRepo,
+      mockUserQS,
       mockTeamRepo,
       mockPairRepo,
     );
