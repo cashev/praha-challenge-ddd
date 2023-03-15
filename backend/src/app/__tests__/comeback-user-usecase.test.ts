@@ -3,12 +3,13 @@ import { UserEmail } from 'src/domain/value-object/userEmail';
 import { UserName } from 'src/domain/value-object/userName';
 import { Zaiseki } from 'src/domain/value-object/userStatus';
 import { ComebackUserUseCase } from '../comeback-user-usecase';
+import { UserDto } from '../query-service-interface/user-qs';
 
 describe('do', () => {
-  const createMockUserRepo = (user: User | null) => {
+  const createMockUserQS = (user: UserDto | null) => {
     return {
-      find: jest.fn().mockResolvedValue(user),
-      save: jest.fn(),
+      findById: jest.fn().mockResolvedValue(UserDto),
+      getAll: jest.fn(),
     };
   };
   const createMockTeamRepo = () => {
@@ -28,7 +29,7 @@ describe('do', () => {
   };
 
   test('[異常系] 存在しない参加者', async () => {
-    const mockUserRepo = createMockUserRepo(null);
+    const mockUserRepo = createMockUserQS(null);
     const mockTeamRepo = createMockTeamRepo();
     const mockPairRepo = createMockPairRepo();
     const useCase = new ComebackUserUseCase(
@@ -41,12 +42,13 @@ describe('do', () => {
   });
 
   test('[異常系] 在籍中の参加者', async () => {
-    const user = User.create(1, {
-      userName: UserName.create('川島 佐十郎'),
-      email: UserEmail.create('sjuru8200331@combzmail.jp'),
-      status: Zaiseki,
+    const userDto = new UserDto({
+      id: 1,
+      name: '川島 佐十郎',
+      email: 'sjuru8200331@combzmail.jp',
+      status: Zaiseki.toString(),
     });
-    const mockUserRepo = createMockUserRepo(user);
+    const mockUserRepo = createMockUserQS(userDto);
     const mockTeamRepo = createMockTeamRepo();
     const mockPairRepo = createMockPairRepo();
     const useCase = new ComebackUserUseCase(
