@@ -9,16 +9,16 @@ export class PairService {
   }
 
   async isDuplicated(teamId: number, pairName: PairName): Promise<boolean> {
-    const pair = await this.pairQS.findByName(teamId, pairName.value);
-    return pair !== null;
+    const pairDto = await this.pairQS.findByName(teamId, pairName.value);
+    return pairDto !== null;
   }
 
   async getUnusedPairName(teamId: number): Promise<PairName> {
-    const pairList = await this.pairQS.findByTeamId(teamId);
-    if (pairList == null) {
+    const pairDtoList = await this.pairQS.findByTeamId(teamId);
+    if (pairDtoList == null) {
       return PairName.create('a');
     }
-    const pairNameSet = new Set(pairList.map((pair) => pair.pairName.value));
+    const pairNameSet = new Set(pairDtoList.map((pairDto) => pairDto.name));
     return this.findUnusedName(pairNameSet);
   }
 
