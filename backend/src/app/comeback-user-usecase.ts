@@ -3,7 +3,7 @@ import { Team } from 'src/domain/entity/team';
 import { Zaiseki } from 'src/domain/value-object/userStatus';
 import { randomChoice } from 'src/util/RandomChoice';
 import { IUserQS, UserDto } from './query-service-interface/user-qs';
-import { IPairRepository } from './repository-interface/pair-repository';
+import { IPairQS } from './query-service-interface/pair-qs';
 import { ITeamRepository } from './repository-interface/team-repository';
 import { IUserRepository } from './repository-interface/user-repository';
 
@@ -12,12 +12,12 @@ export class ComebackUserUseCase {
   private readonly userRepo: IUserRepository;
   private readonly userQS: IUserQS;
   private readonly teamRepo: ITeamRepository;
-  private readonly pairRepo: IPairRepository;
+  private readonly pairRepo: IPairQS;
 
   constructor(
     userQS: IUserQS,
     teamRepo: ITeamRepository,
-    pairRepo: IPairRepository,
+    pairRepo: IPairQS,
   ) {
     this.userQS = userQS;
     this.teamRepo = teamRepo;

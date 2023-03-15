@@ -7,7 +7,7 @@ import { Zaiseki } from 'src/domain/value-object/userStatus';
 import { PairService } from '../pair-service';
 
 describe('isDuplicated', () => {
-  const createMockPairRepo = (pair: Pair | null) => {
+  const createMockPairQS = (pair: Pair | null) => {
     return {
       findByName: jest.fn().mockResolvedValue(pair),
       getSmallestPairList: jest.fn(),
@@ -17,8 +17,8 @@ describe('isDuplicated', () => {
   };
 
   test('[正常系] ペア名が重複しない場合、False', async () => {
-    const mockPairRepo = createMockPairRepo(null);
-    const pairService = new PairService(mockPairRepo);
+    const mockPairQS = createMockPairQS(null);
+    const pairService = new PairService(mockPairQS);
 
     expect(
       pairService.isDuplicated(1, PairName.create('a')),
@@ -40,7 +40,7 @@ describe('isDuplicated', () => {
       pairName: PairName.create('a'),
       member: [u1, u2],
     });
-    const mockPairRepo = createMockPairRepo(p1);
+    const mockPairRepo = createMockPairQS(p1);
     const pairService = new PairService(mockPairRepo);
 
     expect(
@@ -50,7 +50,7 @@ describe('isDuplicated', () => {
 });
 
 describe('getUnusedPairName', () => {
-  const createMockPairRepo = (pairList: Pair[] | null) => {
+  const createMockPairQS = (pairList: Pair[] | null) => {
     return {
       findByName: jest.fn(),
       getSmallestPairList: jest.fn(),
@@ -145,25 +145,25 @@ describe('getUnusedPairName', () => {
   test('[正常系] aとbが使われている場合、c', async () => {
     const p1 = createPair(1, 'a', 0);
     const p2 = createPair(2, 'b', 2);
-    const pairRepo = createMockPairRepo([p1, p2]);
+    const pairQS = createMockPairQS([p1, p2]);
 
-    const service = new PairService(pairRepo);
+    const service = new PairService(pairQS);
     expect(service.getUnusedPairName(1)).resolves.toEqual(PairName.create('c'));
   });
 
   test('[正常系] aとcが使われている場合、b', () => {
     const p1 = createPair(1, 'a', 0);
     const p3 = createPair(2, 'c', 2);
-    const pairRepo = createMockPairRepo([p1, p3]);
+    const pairQS = createMockPairQS([p1, p3]);
 
-    const service = new PairService(pairRepo);
+    const service = new PairService(pairQS);
     expect(service.getUnusedPairName(2)).resolves.toEqual(PairName.create('b'));
   });
 
   test('[正常系] ペアがない場合、a', () => {
-    const pairRepo = createMockPairRepo(null);
+    const pairQS = createMockPairQS(null);
 
-    const service = new PairService(pairRepo);
+    const service = new PairService(pairQS);
     expect(service.getUnusedPairName(3)).resolves.toEqual(PairName.create('a'));
   });
 
@@ -195,9 +195,9 @@ describe('getUnusedPairName', () => {
     pairList.push(createPair(24, 'x', 46));
     pairList.push(createPair(25, 'y', 48));
     pairList.push(createPair(26, 'z', 50));
-    const pairRepo = createMockPairRepo(pairList);
+    const pairQS = createMockPairQS(pairList);
 
-    const service = new PairService(pairRepo);
+    const service = new PairService(pairQS);
     expect(service.getUnusedPairName(1)).rejects.toThrow();
   });
 });

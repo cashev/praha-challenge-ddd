@@ -1,6 +1,6 @@
 import { Pair } from 'src/domain/entity/pair';
 
-export interface IPairRepository {
+export interface IPairQS {
   findByName(teamId: number, name: string): Promise<Pair>;
   getSmallestPairList(teamId: number): Promise<Pair[]>;
   getNextId(): Promise<number>;

@@ -1,20 +1,20 @@
-import { IPairRepository } from 'src/app/repository-interface/pair-repository';
 import { PairName } from 'src/domain/value-object/pairName';
+import { IPairQS } from '../query-service-interface/pair-qs';
 
 export class PairService {
-  private readonly pairRepo: IPairRepository;
+  private readonly pairQS: IPairQS;
 
-  constructor(pairRepo: IPairRepository) {
-    this.pairRepo = pairRepo;
+  constructor(pairQS: IPairQS) {
+    this.pairQS = pairQS;
   }
 
   async isDuplicated(teamId: number, pairName: PairName): Promise<boolean> {
-    const pair = await this.pairRepo.findByName(teamId, pairName.value);
+    const pair = await this.pairQS.findByName(teamId, pairName.value);
     return pair !== null;
   }
 
   async getUnusedPairName(teamId: number): Promise<PairName> {
-    const pairList = await this.pairRepo.findByTeamId(teamId);
+    const pairList = await this.pairQS.findByTeamId(teamId);
     if (pairList == null) {
       return PairName.create('a');
     }
