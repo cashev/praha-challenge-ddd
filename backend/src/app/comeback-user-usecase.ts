@@ -14,11 +14,7 @@ export class ComebackUserUseCase {
   private readonly teamRepo: ITeamRepository;
   private readonly pairRepo: IPairQS;
 
-  constructor(
-    userQS: IUserQS,
-    teamRepo: ITeamRepository,
-    pairRepo: IPairQS,
-  ) {
+  constructor(userQS: IUserQS, teamRepo: ITeamRepository, pairRepo: IPairQS) {
     this.userQS = userQS;
     this.teamRepo = teamRepo;
     this.pairRepo = pairRepo;

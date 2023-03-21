@@ -46,8 +46,8 @@ describe('getUnusedPairName', () => {
   };
 
   test('[正常系] aとbが使われている場合、c', async () => {
-    const p1 = new PairDto({id: 1, name: 'a'});
-    const p2 = new PairDto({id: 2, name: 'b'});
+    const p1 = new PairDto({ id: 1, name: 'a' });
+    const p2 = new PairDto({ id: 2, name: 'b' });
     const pairQS = createMockPairQS([p1, p2]);
 
     const service = new PairService(pairQS);
@@ -55,8 +55,8 @@ describe('getUnusedPairName', () => {
   });
 
   test('[正常系] aとcが使われている場合、b', () => {
-    const p1 = new PairDto({id: 1, name: 'a'});
-    const p3 = new PairDto({id: 3, name: 'c'});
+    const p1 = new PairDto({ id: 1, name: 'a' });
+    const p3 = new PairDto({ id: 3, name: 'c' });
     const pairQS = createMockPairQS([p1, p3]);
 
     const service = new PairService(pairQS);
@@ -72,32 +72,32 @@ describe('getUnusedPairName', () => {
 
   test('[異常系] 全て使われている場合、error', () => {
     const pairList = [];
-    pairList.push(new PairDto({id: 1, name: 'a'}));
-    pairList.push(new PairDto({id: 2, name: 'b'}));
-    pairList.push(new PairDto({id: 3, name: 'c'}));
-    pairList.push(new PairDto({id: 4, name: 'd'}));
-    pairList.push(new PairDto({id: 5, name: 'e'}));
-    pairList.push(new PairDto({id: 6, name: 'f'}));
-    pairList.push(new PairDto({id: 7, name: 'g'}));
-    pairList.push(new PairDto({id: 8, name: 'h'}));
-    pairList.push(new PairDto({id: 9, name: 'i'}));
-    pairList.push(new PairDto({id: 10, name: 'j'}));
-    pairList.push(new PairDto({id: 11, name: 'k'}));
-    pairList.push(new PairDto({id: 12, name: 'l'}));
-    pairList.push(new PairDto({id: 13, name: 'm'}));
-    pairList.push(new PairDto({id: 14, name: 'n'}));
-    pairList.push(new PairDto({id: 15, name: 'o'}));
-    pairList.push(new PairDto({id: 16, name: 'p'}));
-    pairList.push(new PairDto({id: 17, name: 'q'}));
-    pairList.push(new PairDto({id: 18, name: 'r'}));
-    pairList.push(new PairDto({id: 19, name: 's'}));
-    pairList.push(new PairDto({id: 20, name: 't'}));
-    pairList.push(new PairDto({id: 21, name: 'u'}));
-    pairList.push(new PairDto({id: 22, name: 'v'}));
-    pairList.push(new PairDto({id: 23, name: 'w'}));
-    pairList.push(new PairDto({id: 24, name: 'x'}));
-    pairList.push(new PairDto({id: 25, name: 'y'}));
-    pairList.push(new PairDto({id: 26, name: 'z'}));
+    pairList.push(new PairDto({ id: 1, name: 'a' }));
+    pairList.push(new PairDto({ id: 2, name: 'b' }));
+    pairList.push(new PairDto({ id: 3, name: 'c' }));
+    pairList.push(new PairDto({ id: 4, name: 'd' }));
+    pairList.push(new PairDto({ id: 5, name: 'e' }));
+    pairList.push(new PairDto({ id: 6, name: 'f' }));
+    pairList.push(new PairDto({ id: 7, name: 'g' }));
+    pairList.push(new PairDto({ id: 8, name: 'h' }));
+    pairList.push(new PairDto({ id: 9, name: 'i' }));
+    pairList.push(new PairDto({ id: 10, name: 'j' }));
+    pairList.push(new PairDto({ id: 11, name: 'k' }));
+    pairList.push(new PairDto({ id: 12, name: 'l' }));
+    pairList.push(new PairDto({ id: 13, name: 'm' }));
+    pairList.push(new PairDto({ id: 14, name: 'n' }));
+    pairList.push(new PairDto({ id: 15, name: 'o' }));
+    pairList.push(new PairDto({ id: 16, name: 'p' }));
+    pairList.push(new PairDto({ id: 17, name: 'q' }));
+    pairList.push(new PairDto({ id: 18, name: 'r' }));
+    pairList.push(new PairDto({ id: 19, name: 's' }));
+    pairList.push(new PairDto({ id: 20, name: 't' }));
+    pairList.push(new PairDto({ id: 21, name: 'u' }));
+    pairList.push(new PairDto({ id: 22, name: 'v' }));
+    pairList.push(new PairDto({ id: 23, name: 'w' }));
+    pairList.push(new PairDto({ id: 24, name: 'x' }));
+    pairList.push(new PairDto({ id: 25, name: 'y' }));
+    pairList.push(new PairDto({ id: 26, name: 'z' }));
     const pairQS = createMockPairQS(pairList);
 
     const service = new PairService(pairQS);
