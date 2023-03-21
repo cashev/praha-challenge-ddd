@@ -10,9 +10,9 @@ export class UserQS implements IUserQS {
 
   public async findById(id: number): Promise<UserDto> {
     const user = await this.prismaClient.user.findUniqueOrThrow({
-      where: {id}
+      where: { id },
     });
-    return new UserDto({...user});
+    return new UserDto({ ...user });
   }
 
   public async getAll(): Promise<UserDto[]> {
