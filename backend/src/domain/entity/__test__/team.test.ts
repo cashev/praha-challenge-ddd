@@ -26,6 +26,20 @@ const createMember = () => {
   return [u1, u2, u3];
 };
 
+const createMember2 = () => {
+  const u1 = User.create(1, {
+    userName: UserName.create('長尾 由記彦'),
+    email: UserEmail.create('ykhk20210106@example.co.jp'),
+    status: Zaiseki,
+  });
+  const u2 = User.create(2, {
+    userName: UserName.create('佐野 晴仁'),
+    email: UserEmail.create('sano1988@sannet.ne.jp'),
+    status: Zaiseki,
+  });
+  return [u1, u2];
+};
+
 const createPairList = (member: User[]) => {
   const pairName = PairName.create('a');
   return [
@@ -54,6 +68,29 @@ describe('create', () => {
   });
 });
 
+describe('addPair', () => {
+  test('[正常系] ペア名が重複しない', () => {
+    const pairList = createPairList(createMember());
+    const teamName = TeamName.create('123');
+    const team = Team.create(1, { teamName, pairList });
+
+    const newPair = Pair.create(2, {pairName: PairName.create('b'), member: createMember2()});
+    team.addPair(newPair);
+
+    expect(team.pairList).toEqual([...pairList, newPair]);
+  });
+
+  test('[異常系] ペア名が重複している場合、エラー', () => {
+    const pairList = createPairList(createMember());
+    const teamName = TeamName.create('123');
+    const team = Team.create(1, { teamName, pairList });
+
+    const newPair = Pair.create(2, {pairName: PairName.create('a'), member: createMember2()});
+
+    expect(() => team.addPair(newPair)).toThrow();
+  });
+});
+
 describe('isMember', () => {
   test('[正常系] 引数の参加者がチームの一員である場合、True', () => {
     const member = createMember();
@@ -78,20 +115,6 @@ describe('isMember', () => {
 });
 
 describe('getSmallestPair', () => {
-  const createMember2 = () => {
-    const u1 = User.create(1, {
-      userName: UserName.create('長尾 由記彦'),
-      email: UserEmail.create('ykhk20210106@example.co.jp'),
-      status: Zaiseki,
-    });
-    const u2 = User.create(2, {
-      userName: UserName.create('佐野 晴仁'),
-      email: UserEmail.create('sano1988@sannet.ne.jp'),
-      status: Zaiseki,
-    });
-    return [u1, u2];
-  };
-
   const createMember3 = () => {
     const u1 = User.create(1, {
       userName: UserName.create('原田 省次郎'),
