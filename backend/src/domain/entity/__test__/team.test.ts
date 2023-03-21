@@ -76,3 +76,79 @@ describe('isMember', () => {
     expect(team.isMember(u4)).toBeFalsy();
   });
 });
+
+describe('getSmallestPair', () => {
+  const createMember2 = () => {
+    const u1 = User.create(1, {
+      userName: UserName.create('長尾 由記彦'),
+      email: UserEmail.create('ykhk20210106@example.co.jp'),
+      status: Zaiseki,
+    });
+    const u2 = User.create(2, {
+      userName: UserName.create('佐野 晴仁'),
+      email: UserEmail.create('sano1988@sannet.ne.jp'),
+      status: Zaiseki,
+    });
+    return [u1, u2];
+  };
+
+  const createMember3 = () => {
+    const u1 = User.create(1, {
+      userName: UserName.create('原田 省次郎'),
+      email: UserEmail.create('urzuys71@geocities.com'),
+      status: Zaiseki,
+    });
+    const u2 = User.create(2, {
+      userName: UserName.create('下村 千治'),
+      email: UserEmail.create('sitamura_senzi@plala.or.jp'),
+      status: Zaiseki,
+    });
+    const u3 = User.create(2, {
+      userName: UserName.create('長島 義子'),
+      email: UserEmail.create('ysk_ngsm@sakura.ne.jp'),
+      status: Zaiseki,
+    });
+    return [u1, u2, u3];
+  };
+
+  const createPair = (id: number, name: string, member: User[]) => {
+    const pairName = PairName.create(name);
+    return Pair.create(id, { pairName, member });
+  };
+
+  test('[正常系] 1つ目が最小のペアの場合', () => {
+    const p1 = createPair(1, 'a', createMember2());
+    const p2 = createPair(2, 'b', createMember());
+    const p3 = createPair(3, 'c', createMember3());
+    const team = Team.create(1, {
+      teamName: TeamName.create('1'),
+      pairList: [p1, p2, p3],
+    });
+
+    expect(team.getSmallestPair()).toEqual(p1);
+  });
+
+  test('[正常系] 2つ目が最小のペアの場合', () => {
+    const p1 = createPair(1, 'a', createMember());
+    const p2 = createPair(2, 'b', createMember2());
+    const p3 = createPair(3, 'c', createMember3());
+    const team = Team.create(1, {
+      teamName: TeamName.create('1'),
+      pairList: [p1, p2, p3],
+    });
+
+    expect(team.getSmallestPair()).toEqual(p2);
+  });
+
+  test('[正常系] 3つ目が最小のペアの場合', () => {
+    const p1 = createPair(1, 'a', createMember());
+    const p2 = createPair(2, 'b', createMember3());
+    const p3 = createPair(3, 'c', createMember2());
+    const team = Team.create(1, {
+      teamName: TeamName.create('1'),
+      pairList: [p1, p2, p3],
+    });
+
+    expect(team.getSmallestPair()).toEqual(p3);
+  });
+});

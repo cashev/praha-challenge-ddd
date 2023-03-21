@@ -34,6 +34,12 @@ export class Team extends Entity<TeamProps> {
     return this.member.some((u) => u.id === user.id);
   }
 
+  getSmallestPair(): Pair {
+    return this.pairList.reduce((a, b) =>
+      a.member.length <= b.member.length ? a : b,
+    );
+  }
+
   private constructor(id: number, props: TeamProps) {
     super(id, props);
   }
