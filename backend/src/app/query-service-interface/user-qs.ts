@@ -19,6 +19,5 @@ export class UserDto {
 }
 
 export interface IUserQS {
-  findById(id: number): Promise<UserDto>;
   getAll(): Promise<UserDto[]>;
 }

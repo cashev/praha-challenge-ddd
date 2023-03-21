@@ -2,26 +2,22 @@ import { Pair } from 'src/domain/entity/pair';
 import { Team } from 'src/domain/entity/team';
 import { Zaiseki } from 'src/domain/value-object/userStatus';
 import { randomChoice } from 'src/util/RandomChoice';
-import { IUserQS, UserDto } from './query-service-interface/user-qs';
-import { IPairQS } from './query-service-interface/pair-qs';
 import { ITeamRepository } from '../domain/repository-interface/team-repository';
 import { IUserRepository } from '../domain/repository-interface/user-repository';
+import { User } from 'src/domain/entity/user';
 
 // 休会中, 退会済の参加者が復帰するユースケース
 export class ComebackUserUseCase {
   private readonly userRepo: IUserRepository;
-  private readonly userQS: IUserQS;
   private readonly teamRepo: ITeamRepository;
-  private readonly pairRepo: IPairQS;
 
-  constructor(userQS: IUserQS, teamRepo: ITeamRepository, pairRepo: IPairQS) {
-    this.userQS = userQS;
+  constructor(userRepo: IUserRepository, teamRepo: ITeamRepository) {
+    this.userRepo = userRepo;
     this.teamRepo = teamRepo;
-    this.pairRepo = pairRepo;
   }
 
   async do(userId: number) {
-    const userDto = await this.userQS.findById(userId);
+    const userDto = await this.userRepo.find(userId);
     this.validate(userDto);
 
     const team = await this.getSmallestTeam();
@@ -32,11 +28,11 @@ export class ComebackUserUseCase {
     // }
   }
 
-  private validate(userDto: UserDto | null) {
-    if (userDto == null) {
+  private validate(user: User) {
+    if (user == null) {
       throw new Error('存在しない参加者です。');
     }
-    if (userDto.status === Zaiseki.toString()) {
+    if (user.status === Zaiseki) {
       throw new Error('在籍中の参加者です。');
     }
   }
