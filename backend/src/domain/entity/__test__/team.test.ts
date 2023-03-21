@@ -152,3 +152,214 @@ describe('getSmallestPair', () => {
     expect(team.getSmallestPair()).toEqual(p3);
   });
 });
+
+describe('getUnusedPairName', () => {
+  test('[正常系] aとbが使われている場合、c', async () => {
+    const p1 = Pair.create(1, {
+      pairName: PairName.create('a'),
+      member: createMember(),
+    });
+    const p2 = Pair.create(2, {
+      pairName: PairName.create('b'),
+      member: createMember(),
+    });
+    const team = Team.create(1, {
+      teamName: TeamName.create('1'),
+      pairList: [p1, p2],
+    });
+    expect(team.getUnusedPairName()).toEqual(PairName.create('c'));
+  });
+
+  test('[正常系] aとcが使われている場合、b', () => {
+    const p1 = Pair.create(1, {
+      pairName: PairName.create('a'),
+      member: createMember(),
+    });
+    const p3 = Pair.create(3, {
+      pairName: PairName.create('c'),
+      member: createMember(),
+    });
+    const team = Team.create(1, {
+      teamName: TeamName.create('1'),
+      pairList: [p1, p3],
+    });
+    expect(team.getUnusedPairName()).toEqual(PairName.create('b'));
+  });
+
+  test('[正常系] bだけが使われている場合、a', () => {
+    const p2 = Pair.create(2, {
+      pairName: PairName.create('b'),
+      member: createMember(),
+    });
+    const team = Team.create(1, {
+      teamName: TeamName.create('1'),
+      pairList: [p2],
+    });
+    expect(team.getUnusedPairName()).toEqual(PairName.create('a'));
+  });
+
+  test('[異常系] 全て使われている場合、error', () => {
+    const pairList = [];
+    pairList.push(
+      Pair.create(1, {
+        pairName: PairName.create('a'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(2, {
+        pairName: PairName.create('b'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(3, {
+        pairName: PairName.create('c'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(4, {
+        pairName: PairName.create('d'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(5, {
+        pairName: PairName.create('e'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(6, {
+        pairName: PairName.create('f'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(7, {
+        pairName: PairName.create('g'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(8, {
+        pairName: PairName.create('h'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(9, {
+        pairName: PairName.create('i'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(10, {
+        pairName: PairName.create('j'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(11, {
+        pairName: PairName.create('k'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(12, {
+        pairName: PairName.create('l'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(13, {
+        pairName: PairName.create('m'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(14, {
+        pairName: PairName.create('n'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(15, {
+        pairName: PairName.create('o'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(16, {
+        pairName: PairName.create('p'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(17, {
+        pairName: PairName.create('q'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(18, {
+        pairName: PairName.create('r'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(19, {
+        pairName: PairName.create('s'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(20, {
+        pairName: PairName.create('t'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(21, {
+        pairName: PairName.create('u'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(22, {
+        pairName: PairName.create('v'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(23, {
+        pairName: PairName.create('w'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(24, {
+        pairName: PairName.create('x'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(25, {
+        pairName: PairName.create('y'),
+        member: createMember(),
+      }),
+    );
+    pairList.push(
+      Pair.create(26, {
+        pairName: PairName.create('z'),
+        member: createMember(),
+      }),
+    );
+    const team = Team.create(1, {
+      teamName: TeamName.create('1'),
+      pairList,
+    });
+    expect(() => team.getUnusedPairName()).toThrow();
+  });
+});

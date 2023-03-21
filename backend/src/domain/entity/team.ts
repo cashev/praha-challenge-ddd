@@ -1,3 +1,4 @@
+import { PairName } from '../value-object/pairName';
 import { TeamName } from '../value-object/teamName';
 import { Zaiseki } from '../value-object/userStatus';
 import { Entity } from './entity';
@@ -38,6 +39,25 @@ export class Team extends Entity<TeamProps> {
     return this.pairList.reduce((a, b) =>
       a.member.length <= b.member.length ? a : b,
     );
+  }
+
+  getUnusedPairName(): PairName {
+    const pairNameSet = new Set(
+      this.pairList.map((pair) => pair.pairName.value),
+    );
+    const unusedName = this.findUnusedName(pairNameSet);
+    return PairName.create(unusedName);
+  }
+
+  private findUnusedName(pairNameSet: Set<string>): string {
+    const alphabet = [...'abcdefghijklmnopqrstuvwxyz'];
+    for (const c of alphabet) {
+      if (pairNameSet.has(c)) {
+        continue;
+      }
+      return c;
+    }
+    throw new Error('利用可能なペア名がありません。');
   }
 
   private constructor(id: number, props: TeamProps) {
