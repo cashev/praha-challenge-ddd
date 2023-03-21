@@ -16,6 +16,7 @@ describe('do', () => {
       findByName: jest.fn(),
       findByUserId: jest.fn(),
       getSmallestTeamList: jest.fn(),
+      save: jest.fn(),
     };
   };
 
