@@ -1,4 +1,4 @@
-import { ITeamRepository } from 'src/app/repository-interface/team-repository';
+import { ITeamRepository } from 'src/domain/repository-interface/team-repository';
 import { TeamName } from 'src/domain/value-object/teamName';
 
 export class TeamService {

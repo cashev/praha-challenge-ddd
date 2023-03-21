@@ -1,5 +1,5 @@
 import { createTaskStatusValue } from 'src/domain/value-object/taskStatusValue';
-import { ITaskStatusRepository } from './repository-interface/taskStatus-repository';
+import { ITaskStatusRepository } from '../domain/repository-interface/taskStatus-repository';
 
 export class UpdateTaskStatusUseCase {
   readonly taskStatusRepo: ITaskStatusRepository;

@@ -4,8 +4,8 @@ import { Zaiseki } from 'src/domain/value-object/userStatus';
 import { randomChoice } from 'src/util/RandomChoice';
 import { IUserQS, UserDto } from './query-service-interface/user-qs';
 import { IPairQS } from './query-service-interface/pair-qs';
-import { ITeamRepository } from './repository-interface/team-repository';
-import { IUserRepository } from './repository-interface/user-repository';
+import { ITeamRepository } from '../domain/repository-interface/team-repository';
+import { IUserRepository } from '../domain/repository-interface/user-repository';
 
 // 休会中, 退会済の参加者が復帰するユースケース
 export class ComebackUserUseCase {
