@@ -28,7 +28,11 @@ export class Team extends Entity<TeamProps> {
   }
 
   addPair(newPair: Pair) {
-    if (this.pairList.map(pair => pair.pairName).some(pairName => pairName.equals(newPair.pairName))) {
+    if (
+      this.pairList
+        .map((pair) => pair.pairName)
+        .some((pairName) => pairName.equals(newPair.pairName))
+    ) {
       throw new Error('ペア名が重複しています');
     }
     this.props.pairList.push(newPair);

@@ -74,7 +74,10 @@ describe('addPair', () => {
     const teamName = TeamName.create('123');
     const team = Team.create(1, { teamName, pairList });
 
-    const newPair = Pair.create(2, {pairName: PairName.create('b'), member: createMember2()});
+    const newPair = Pair.create(2, {
+      pairName: PairName.create('b'),
+      member: createMember2(),
+    });
     team.addPair(newPair);
 
     expect(team.pairList).toEqual([...pairList, newPair]);
@@ -85,7 +88,10 @@ describe('addPair', () => {
     const teamName = TeamName.create('123');
     const team = Team.create(1, { teamName, pairList });
 
-    const newPair = Pair.create(2, {pairName: PairName.create('a'), member: createMember2()});
+    const newPair = Pair.create(2, {
+      pairName: PairName.create('a'),
+      member: createMember2(),
+    });
 
     expect(() => team.addPair(newPair)).toThrow();
   });
