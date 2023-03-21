@@ -29,11 +29,11 @@ export class ComebackUserUseCase {
     this.validate(userDto);
 
     const team = await this.getSmallestTeam();
-    const pair = await this.getSmallestPair(team.id);
+    // const pair = await this.getSmallestPair(team.id);
 
-    if (pair.isFullMember()) {
-      // todo
-    }
+    // if (pair.isFullMember()) {
+    //   // todo
+    // }
   }
 
   private validate(userDto: UserDto | null) {
@@ -48,11 +48,6 @@ export class ComebackUserUseCase {
   private async getSmallestTeam(): Promise<Team> {
     const teams = await this.teamRepo.getSmallestTeamList();
     return randomChoice<Team>(teams);
-  }
-
-  private async getSmallestPair(teamId: number): Promise<Pair> {
-    const pairs = await this.pairRepo.getSmallestPairList(teamId);
-    return randomChoice<Pair>(pairs);
   }
 
   // private async createNextPairName(basePairName: PairName): Promise<PairName> {
