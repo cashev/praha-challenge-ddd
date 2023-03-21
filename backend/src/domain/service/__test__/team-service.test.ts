@@ -7,6 +7,7 @@ describe('isDuplicated', () => {
       findByName: jest.fn().mockResolvedValue(null),
       findByUserId: jest.fn(),
       getSmallestTeamList: jest.fn(),
+      getNextPairId: jest.fn(),
       save: jest.fn(),
     };
     const uniqueTeamName = TeamName.create('1');
@@ -21,6 +22,7 @@ describe('isDuplicated', () => {
       findByName: jest.fn().mockResolvedValue(mockTeam),
       findByUserId: jest.fn(),
       getSmallestTeamList: jest.fn(),
+      getNextPairId: jest.fn(),
       save: jest.fn(),
     };
     const duplicatedTeamName = TeamName.create('2');
