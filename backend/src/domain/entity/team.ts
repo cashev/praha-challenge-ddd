@@ -1,9 +1,9 @@
 import { PairName } from '../value-object/pairName';
 import { TeamName } from '../value-object/teamName';
-import { Zaiseki } from '../value-object/userStatus';
+import { Zaiseki } from '../value-object/participantStatus';
 import { Entity } from './entity';
 import { Pair } from './pair';
-import { User } from './user';
+import { Participant } from './participant';
 
 interface TeamProps {
   teamName: TeamName;
@@ -38,11 +38,11 @@ export class Team extends Entity<TeamProps> {
     this.props.pairList.push(newPair);
   }
 
-  get member(): readonly User[] {
+  get member(): readonly Participant[] {
     return this.props.pairList.flatMap((pair) => pair.member);
   }
 
-  isMember(user: User): boolean {
+  isMember(user: Participant): boolean {
     return this.member.some((u) => u.id === user.id);
   }
 
@@ -75,7 +75,7 @@ export class Team extends Entity<TeamProps> {
     super(id, props);
   }
 
-  private static validate(member: User[]) {
+  private static validate(member: Participant[]) {
     if (member.length < 3) {
       throw new Error('チームの参加者は3名以上です。: ' + member.length);
     }

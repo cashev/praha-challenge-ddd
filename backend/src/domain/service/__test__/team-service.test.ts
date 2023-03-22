@@ -5,7 +5,7 @@ describe('isDuplicated', () => {
   test('[正常系] 重複しないチーム名', async () => {
     const mockTeamRepo = {
       findByName: jest.fn().mockResolvedValue(null),
-      findByUserId: jest.fn(),
+      findByParticipantId: jest.fn(),
       getSmallestTeamList: jest.fn(),
       getNextPairId: jest.fn(),
       save: jest.fn(),
@@ -20,7 +20,7 @@ describe('isDuplicated', () => {
     const mockTeam = {};
     const mockTeamRepo = {
       findByName: jest.fn().mockResolvedValue(mockTeam),
-      findByUserId: jest.fn(),
+      findByParticipantId: jest.fn(),
       getSmallestTeamList: jest.fn(),
       getNextPairId: jest.fn(),
       save: jest.fn(),

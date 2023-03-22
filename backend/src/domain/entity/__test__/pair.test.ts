@@ -1,29 +1,29 @@
 import { PairName } from 'src/domain/value-object/pairName';
-import { UserEmail } from 'src/domain/value-object/userEmail';
-import { UserName } from 'src/domain/value-object/userName';
+import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
+import { ParticipantName } from 'src/domain/value-object/participantName';
 import {
   Kyukai,
   Taikai,
-  UserStatus,
+  ParticipantStatus,
   Zaiseki,
-} from 'src/domain/value-object/userStatus';
+} from 'src/domain/value-object/participantStatus';
 import { Pair } from '../pair';
-import { User } from '../user';
+import { Participant } from '../participant';
 
 const createMember = () => {
-  const u1 = User.create(1, {
-    userName: UserName.create('上村 真知子'),
-    email: UserEmail.create('matiko-uemura@bbtec.net'),
+  const u1 = Participant.create(1, {
+    participantName: ParticipantName.create('上村 真知子'),
+    email: ParticipantEmail.create('matiko-uemura@bbtec.net'),
     status: Zaiseki,
   });
-  const u2 = User.create(2, {
-    userName: UserName.create('柴田 嘉彦'),
-    email: UserEmail.create('okihisoy9185@goo.ne.jp'),
+  const u2 = Participant.create(2, {
+    participantName: ParticipantName.create('柴田 嘉彦'),
+    email: ParticipantEmail.create('okihisoy9185@goo.ne.jp'),
     status: Zaiseki,
   });
-  const u3 = User.create(3, {
-    userName: UserName.create('永野 智子'),
-    email: UserEmail.create('tmk.ngn@hi-ho.ne.jp'),
+  const u3 = Participant.create(3, {
+    participantName: ParticipantName.create('永野 智子'),
+    email: ParticipantEmail.create('tmk.ngn@hi-ho.ne.jp'),
     status: Zaiseki,
   });
   return [u1, u2, u3];
@@ -56,9 +56,9 @@ describe('create', () => {
   });
 
   test('[異常系] 4人のペア', () => {
-    const u4 = User.create(3, {
-      userName: UserName.create('松田 秀俊'),
-      email: UserEmail.create('matudaadutam@example.ne.jp'),
+    const u4 = Participant.create(3, {
+      participantName: ParticipantName.create('松田 秀俊'),
+      email: ParticipantEmail.create('matudaadutam@example.ne.jp'),
       status: Zaiseki,
     });
     const member = [...createMember(), u4];
@@ -85,10 +85,10 @@ describe('create', () => {
 });
 
 describe('addMember', () => {
-  const createNewMember = (status: UserStatus) => {
-    return User.create(4, {
-      userName: UserName.create('小柳 晃義'),
-      email: UserEmail.create('trys0216@hi-ho.ne.jp'),
+  const createNewMember = (status: ParticipantStatus) => {
+    return Participant.create(4, {
+      participantName: ParticipantName.create('小柳 晃義'),
+      email: ParticipantEmail.create('trys0216@hi-ho.ne.jp'),
       status,
     });
   };
@@ -173,9 +173,9 @@ describe('isMember', () => {
     const pairName = PairName.create('w');
     const pair = Pair.create(23, { pairName, member });
 
-    const nonMember = User.create(5, {
-      userName: UserName.create('上原 つばさ'),
-      email: UserEmail.create('rhu469919720429@tokyo24.com'),
+    const nonMember = Participant.create(5, {
+      participantName: ParticipantName.create('上原 つばさ'),
+      email: ParticipantEmail.create('rhu469919720429@tokyo24.com'),
       status: Zaiseki,
     });
     expect(pair.isMember(nonMember)).toBeFalsy();
@@ -200,9 +200,9 @@ describe('removeMember', () => {
     const pairName = PairName.create('x');
     const pair = Pair.create(24, { pairName, member });
 
-    const removedUser = User.create(5, {
-      userName: UserName.create('奥村 都義'),
-      email: UserEmail.create('okumura83@eaccess.net'),
+    const removedUser = Participant.create(5, {
+      participantName: ParticipantName.create('奥村 都義'),
+      email: ParticipantEmail.create('okumura83@eaccess.net'),
       status: Zaiseki,
     });
 

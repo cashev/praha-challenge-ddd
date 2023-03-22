@@ -1,17 +1,17 @@
 import { Pair } from 'src/domain/entity/pair';
 import { Team } from 'src/domain/entity/team';
-import { Zaiseki } from 'src/domain/value-object/userStatus';
+import { Zaiseki } from 'src/domain/value-object/participantStatus';
 import { randomChoice } from 'src/util/RandomChoice';
 import { ITeamRepository } from '../domain/repository-interface/team-repository';
-import { IUserRepository } from '../domain/repository-interface/user-repository';
-import { User } from 'src/domain/entity/user';
+import { IParticipantRepository } from '../domain/repository-interface/participant-repository';
+import { Participant } from 'src/domain/entity/participant';
 
 // 休会中, 退会済の参加者が復帰するユースケース
-export class ComebackUserUseCase {
-  private readonly userRepo: IUserRepository;
+export class RejoinTeamUseCase {
+  private readonly userRepo: IParticipantRepository;
   private readonly teamRepo: ITeamRepository;
 
-  constructor(userRepo: IUserRepository, teamRepo: ITeamRepository) {
+  constructor(userRepo: IParticipantRepository, teamRepo: ITeamRepository) {
     this.userRepo = userRepo;
     this.teamRepo = teamRepo;
   }
@@ -26,7 +26,7 @@ export class ComebackUserUseCase {
     user.status = Zaiseki;
     this.userRepo.save(user);
     if (pair.isFullMember()) {
-      const existingUser = randomChoice<User>([...pair.member]);
+      const existingUser = randomChoice<Participant>([...pair.member]);
       pair.removeMember(existingUser);
       const newPair = Pair.create(await this.teamRepo.getNextPairId(), {
         pairName: team.getUnusedPairName(),
@@ -39,7 +39,7 @@ export class ComebackUserUseCase {
     this.teamRepo.save(team);
   }
 
-  private validate(user: User) {
+  private validate(user: Participant) {
     if (user == null) {
       throw new Error('存在しない参加者です。');
     }

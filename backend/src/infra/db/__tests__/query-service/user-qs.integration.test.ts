@@ -1,8 +1,8 @@
 import { prisma } from 'src/testUtil/prisma';
-import { UserQS } from '../../query-service/user-qs';
+import { ParticipantQS } from '../../query-service/user-qs';
 
 describe('user-qs.integration.test', () => {
-  const userQS = new UserQS(prisma);
+  const userQS = new ParticipantQS(prisma);
   beforeAll(async () => {
     await prisma.user.deleteMany({});
   });

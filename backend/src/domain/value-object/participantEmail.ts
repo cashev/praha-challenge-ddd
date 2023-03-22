@@ -1,15 +1,15 @@
 import { ValueObject } from './valueObject';
 
-interface UserEmailProps {
+interface ParticipantEmailProps {
   value: string;
 }
 
-export class UserEmail extends ValueObject<UserEmailProps> {
+export class ParticipantEmail extends ValueObject<ParticipantEmailProps> {
   get value(): string {
     return this.props.value;
   }
 
-  private constructor(props: UserEmailProps) {
+  private constructor(props: ParticipantEmailProps) {
     super(props);
   }
 
@@ -19,10 +19,10 @@ export class UserEmail extends ValueObject<UserEmailProps> {
     return emailRegex.test(value);
   }
 
-  public static create(value: string): UserEmail {
+  public static create(value: string): ParticipantEmail {
     if (!this.isValid(value)) {
       throw new Error('メールアドレスではありません。:' + value);
     }
-    return new UserEmail({ value });
+    return new ParticipantEmail({ value });
   }
 }

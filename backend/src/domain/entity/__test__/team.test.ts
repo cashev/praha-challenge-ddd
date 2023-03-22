@@ -1,46 +1,46 @@
 import { PairName } from 'src/domain/value-object/pairName';
 import { TeamName } from 'src/domain/value-object/teamName';
-import { UserEmail } from 'src/domain/value-object/userEmail';
-import { UserName } from 'src/domain/value-object/userName';
-import { Zaiseki } from 'src/domain/value-object/userStatus';
+import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
+import { ParticipantName } from 'src/domain/value-object/participantName';
+import { Zaiseki } from 'src/domain/value-object/participantStatus';
 import { Pair } from '../pair';
 import { Team } from '../team';
-import { User } from '../user';
+import { Participant } from '../participant';
 
 const createMember = () => {
-  const u1 = User.create(1, {
-    userName: UserName.create('本多 洵子'),
-    email: UserEmail.create('honda_junko@example.jp'),
+  const u1 = Participant.create(1, {
+    participantName: ParticipantName.create('本多 洵子'),
+    email: ParticipantEmail.create('honda_junko@example.jp'),
     status: Zaiseki,
   });
-  const u2 = User.create(2, {
-    userName: UserName.create('堀川 訓'),
-    email: UserEmail.create('satosi1977@infoweb.ne.jp'),
+  const u2 = Participant.create(2, {
+    participantName: ParticipantName.create('堀川 訓'),
+    email: ParticipantEmail.create('satosi1977@infoweb.ne.jp'),
     status: Zaiseki,
   });
-  const u3 = User.create(3, {
-    userName: UserName.create('吉川 永子'),
-    email: UserEmail.create('nagako.yosikawa@infoseek.jp'),
+  const u3 = Participant.create(3, {
+    participantName: ParticipantName.create('吉川 永子'),
+    email: ParticipantEmail.create('nagako.yosikawa@infoseek.jp'),
     status: Zaiseki,
   });
   return [u1, u2, u3];
 };
 
 const createMember2 = () => {
-  const u1 = User.create(1, {
-    userName: UserName.create('長尾 由記彦'),
-    email: UserEmail.create('ykhk20210106@example.co.jp'),
+  const u1 = Participant.create(1, {
+    participantName: ParticipantName.create('長尾 由記彦'),
+    email: ParticipantEmail.create('ykhk20210106@example.co.jp'),
     status: Zaiseki,
   });
-  const u2 = User.create(2, {
-    userName: UserName.create('佐野 晴仁'),
-    email: UserEmail.create('sano1988@sannet.ne.jp'),
+  const u2 = Participant.create(2, {
+    participantName: ParticipantName.create('佐野 晴仁'),
+    email: ParticipantEmail.create('sano1988@sannet.ne.jp'),
     status: Zaiseki,
   });
   return [u1, u2];
 };
 
-const createPairList = (member: User[]) => {
+const createPairList = (member: Participant[]) => {
   const pairName = PairName.create('a');
   return [
     Pair.create(1, {
@@ -111,9 +111,9 @@ describe('isMember', () => {
     const pairList = createPairList(createMember());
     const team = Team.create(1, { teamName: TeamName.create('1'), pairList });
 
-    const u4 = User.create(4, {
-      userName: UserName.create('藤村 和好'),
-      email: UserEmail.create('kazuyosihuzimura@combzmail.jp'),
+    const u4 = Participant.create(4, {
+      participantName: ParticipantName.create('藤村 和好'),
+      email: ParticipantEmail.create('kazuyosihuzimura@combzmail.jp'),
       status: Zaiseki,
     });
     expect(team.isMember(u4)).toBeFalsy();
@@ -122,25 +122,25 @@ describe('isMember', () => {
 
 describe('getSmallestPair', () => {
   const createMember3 = () => {
-    const u1 = User.create(1, {
-      userName: UserName.create('原田 省次郎'),
-      email: UserEmail.create('urzuys71@geocities.com'),
+    const u1 = Participant.create(1, {
+      participantName: ParticipantName.create('原田 省次郎'),
+      email: ParticipantEmail.create('urzuys71@geocities.com'),
       status: Zaiseki,
     });
-    const u2 = User.create(2, {
-      userName: UserName.create('下村 千治'),
-      email: UserEmail.create('sitamura_senzi@plala.or.jp'),
+    const u2 = Participant.create(2, {
+      participantName: ParticipantName.create('下村 千治'),
+      email: ParticipantEmail.create('sitamura_senzi@plala.or.jp'),
       status: Zaiseki,
     });
-    const u3 = User.create(2, {
-      userName: UserName.create('長島 義子'),
-      email: UserEmail.create('ysk_ngsm@sakura.ne.jp'),
+    const u3 = Participant.create(2, {
+      participantName: ParticipantName.create('長島 義子'),
+      email: ParticipantEmail.create('ysk_ngsm@sakura.ne.jp'),
       status: Zaiseki,
     });
     return [u1, u2, u3];
   };
 
-  const createPair = (id: number, name: string, member: User[]) => {
+  const createPair = (id: number, name: string, member: Participant[]) => {
     const pairName = PairName.create(name);
     return Pair.create(id, { pairName, member });
   };

@@ -1,11 +1,11 @@
 import { PairName } from '../value-object/pairName';
-import { Zaiseki } from '../value-object/userStatus';
+import { Zaiseki } from '../value-object/participantStatus';
 import { Entity } from './entity';
-import { User } from './user';
+import { Participant } from './participant';
 
 interface PairProps {
   pairName: PairName;
-  member: User[];
+  member: Participant[];
 }
 
 export class Pair extends Entity<PairProps> {
@@ -21,11 +21,11 @@ export class Pair extends Entity<PairProps> {
     this.props.pairName = PairName;
   }
 
-  get member(): readonly User[] {
+  get member(): readonly Participant[] {
     return this.props.member;
   }
 
-  addMember(user: User) {
+  addMember(user: Participant) {
     if (this.isFullMember()) {
       throw new Error('ペアは3名までです。');
     }
@@ -38,7 +38,7 @@ export class Pair extends Entity<PairProps> {
     this.props.member.push(user);
   }
 
-  removeMember(user: User) {
+  removeMember(user: Participant) {
     const index = this.member.indexOf(user);
     if (index < 0) {
       throw new Error('この参加者はペアの一員ではありません。');
@@ -46,7 +46,7 @@ export class Pair extends Entity<PairProps> {
     this.props.member.splice(index, 1);
   }
 
-  isMember(user: User): boolean {
+  isMember(user: Participant): boolean {
     return this.member.some((u) => u.id === user.id);
   }
 
@@ -58,7 +58,7 @@ export class Pair extends Entity<PairProps> {
     super(id, props);
   }
 
-  private static validate(member: User[]) {
+  private static validate(member: Participant[]) {
     if (member.length < 2 || member.length > 3) {
       throw new Error('ペアは2名または3名です。: ' + member.length);
     }

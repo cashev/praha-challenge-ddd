@@ -1,4 +1,4 @@
-export class UserDto {
+export class ParticipantDto {
   public readonly id: number;
   public readonly name: string;
   public readonly email: string;
@@ -18,6 +18,6 @@ export class UserDto {
   }
 }
 
-export interface IUserQS {
-  getAll(): Promise<UserDto[]>;
+export interface IParticipantQS {
+  getAll(): Promise<ParticipantDto[]>;
 }
