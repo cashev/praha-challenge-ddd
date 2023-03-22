@@ -17,15 +17,26 @@ export class ComebackUserUseCase {
   }
 
   async do(userId: number) {
-    const userDto = await this.userRepo.find(userId);
-    this.validate(userDto);
+    const user = await this.userRepo.find(userId);
+    this.validate(user);
 
     const team = await this.getSmallestTeam();
-    // const pair = await this.getSmallestPair(team.id);
+    const pair = team.getSmallestPair();
 
-    // if (pair.isFullMember()) {
-    //   // todo
-    // }
+    user.status = Zaiseki;
+    this.userRepo.save(user);
+    if (pair.isFullMember()) {
+      const existingUser = randomChoice<User>([...pair.member]);
+      pair.removeMember(existingUser);
+      const newPair = Pair.create(await this.teamRepo.getNextPairId(), {
+        pairName: team.getUnusedPairName(),
+        member: [existingUser, user],
+      });
+      team.addPair(newPair);
+    } else {
+      pair.addMember(user);
+    }
+    this.teamRepo.save(team);
   }
 
   private validate(user: User) {
