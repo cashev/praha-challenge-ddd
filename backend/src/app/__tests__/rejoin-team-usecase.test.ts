@@ -22,8 +22,6 @@ describe('do', () => {
   };
   const createMockTeamRepo = (team: Team[] | null) => {
     return {
-      findByName: jest.fn(),
-      findByParticipantId: jest.fn(),
       getSmallestTeamList: jest.fn().mockResolvedValue(team),
       getNextPairId: jest.fn(),
       save: jest.fn(),
