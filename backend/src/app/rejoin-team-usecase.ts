@@ -8,42 +8,42 @@ import { Participant } from 'src/domain/entity/participant';
 
 // 休会中, 退会済の参加者が復帰するユースケース
 export class RejoinTeamUseCase {
-  private readonly userRepo: IParticipantRepository;
+  private readonly participantRepo: IParticipantRepository;
   private readonly teamRepo: ITeamRepository;
 
-  constructor(userRepo: IParticipantRepository, teamRepo: ITeamRepository) {
-    this.userRepo = userRepo;
+  constructor(participantRepo: IParticipantRepository, teamRepo: ITeamRepository) {
+    this.participantRepo = participantRepo;
     this.teamRepo = teamRepo;
   }
 
-  async do(userId: number) {
-    const user = await this.userRepo.find(userId);
-    this.validate(user);
+  async do(participantId: number) {
+    const participant = await this.participantRepo.find(participantId);
+    this.validate(participant);
 
     const team = await this.getSmallestTeam();
     const pair = team.getSmallestPair();
 
-    user.status = Zaiseki;
-    this.userRepo.save(user);
+    participant.status = Zaiseki;
+    this.participantRepo.save(participant);
     if (pair.isFullMember()) {
       const existingUser = randomChoice<Participant>([...pair.member]);
       pair.removeMember(existingUser);
       const newPair = Pair.create(await this.teamRepo.getNextPairId(), {
         pairName: team.getUnusedPairName(),
-        member: [existingUser, user],
+        member: [existingUser, participant],
       });
       team.addPair(newPair);
     } else {
-      pair.addMember(user);
+      pair.addMember(participant);
     }
     this.teamRepo.save(team);
   }
 
-  private validate(user: Participant) {
-    if (user == null) {
+  private validate(participant: Participant) {
+    if (participant == null) {
       throw new Error('存在しない参加者です。');
     }
-    if (user.status === Zaiseki) {
+    if (participant.status === Zaiseki) {
       throw new Error('在籍中の参加者です。');
     }
   }
@@ -52,16 +52,4 @@ export class RejoinTeamUseCase {
     const teams = await this.teamRepo.getSmallestTeamList();
     return randomChoice<Team>(teams);
   }
-
-  // private async createNextPairName(basePairName: PairName): Promise<PairName> {
-  //   const pairService = new PairService(this.pairRepo);
-  //   let tmp = String.fromCharCode(basePairName.value.charCodeAt(0) + 1);
-  //   while(pairService.isDuplicated(PairName.create(tmp))) {
-  //     tmp = tmp === 'z' ? 'a' : String.fromCharCode(tmp.charCodeAt(0) + 1);
-  //     if (tmp == basePairName.value) {
-  //       throw new Error('使用可能なペア名がありません。')
-  //     }
-  //   }
-  //   return PairName.create(tmp);
-  // }
 }
