@@ -25,9 +25,6 @@ describe('do', () => {
       const users = [u1, u2, u3];
       return Promise.resolve(users);
     }
-    findById(id: number): Promise<UserDto> {
-      return Promise.resolve(u1);
-    }
   })();
 
   test('[正常系]', async () => {
