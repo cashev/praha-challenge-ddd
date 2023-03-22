@@ -11,7 +11,10 @@ export class RejoinTeamUseCase {
   private readonly participantRepo: IParticipantRepository;
   private readonly teamRepo: ITeamRepository;
 
-  constructor(participantRepo: IParticipantRepository, teamRepo: ITeamRepository) {
+  constructor(
+    participantRepo: IParticipantRepository,
+    teamRepo: ITeamRepository,
+  ) {
     this.participantRepo = participantRepo;
     this.teamRepo = teamRepo;
   }
