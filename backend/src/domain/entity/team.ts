@@ -4,6 +4,7 @@ import { Zaiseki } from '../value-object/participantStatus';
 import { Entity } from './entity';
 import { Pair } from './pair';
 import { Participant } from './participant';
+import { ITeamRepository } from '../repository-interface/team-repository';
 
 interface TeamProps {
   teamName: TeamName;
@@ -38,6 +39,38 @@ export class Team extends Entity<TeamProps> {
     this.props.pairList.push(newPair);
   }
 
+  async removeMember(participant: Participant, teamRepo: ITeamRepository) {
+    if (!this.isMember(participant)) {
+      throw new Error('メンバーではありません');
+    }
+    const pair = this.pairList.find((pair) => pair.isMember(participant))!;
+    if (pair.isFullMember()) {
+      pair.removeMember(participant);
+    } else {
+      const anotherParticipant = pair?.member.find(
+        (p) => !p.equals(participant),
+      )!;
+      this.removePair(pair);
+      const anotherPair = this.getSmallestPair();
+      if (anotherPair.isFullMember()) {
+        const existingUser = this.randomChoice<Participant>([...anotherPair.member]);
+        anotherPair.removeMember(existingUser);
+        const newPair = Pair.create(await teamRepo.getNextPairId(), {
+          pairName: this.getUnusedPairName(),
+          member: [existingUser, anotherParticipant],
+        });
+        this.addPair(newPair);
+      } else {
+        anotherPair.addMember(anotherParticipant);
+      }
+    }
+  }
+
+  private removePair(pair: Pair) {
+    const index = this.pairList.findIndex((p) => p.id === pair.id);
+    this.props.pairList.splice(index, 1);
+  }
+
   get member(): readonly Participant[] {
     return this.props.pairList.flatMap((pair) => pair.member);
   }
@@ -47,7 +80,7 @@ export class Team extends Entity<TeamProps> {
   }
 
   getSmallestPair(): Pair {
-    return this.pairList.reduce((a, b) =>
+    return this.props.pairList.reduce((a, b) =>
       a.member.length <= b.member.length ? a : b,
     );
   }
@@ -69,6 +102,10 @@ export class Team extends Entity<TeamProps> {
       return c;
     }
     throw new Error('利用可能なペア名がありません。');
+  }
+
+  private randomChoice<T>(list: T[]) {
+    return list[Math.floor(Math.random() * list.length)];
   }
 
   private constructor(id: number, props: TeamProps) {
