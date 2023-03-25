@@ -39,7 +39,7 @@ export class Team extends Entity<TeamProps> {
     this.props.pairList.push(newPair);
   }
 
-  async removeMember(participant: Participant, teamRepo: ITeamRepository) {
+  async removeParticipant(participant: Participant, teamRepo: ITeamRepository) {
     if (!this.isMember(participant)) {
       throw new Error('メンバーではありません');
     }

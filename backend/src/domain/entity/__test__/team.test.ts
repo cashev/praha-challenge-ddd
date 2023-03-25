@@ -77,14 +77,14 @@ describe('create', () => {
   });
 });
 
-describe('removeMember', () => {
+describe('removeParticipant', () => {
   test('[正常系] 3人のペアからメンバーを取り除く', async () => {
     const member = createMember();
     const pairList = createPairList(member);
     const team = Team.create(1, { teamName: TeamName.create('123'), pairList });
     const removeParticipant = member[0];
 
-    await team.removeMember(removeParticipant, createMockTeamRepo(null));
+    await team.removeParticipant(removeParticipant, createMockTeamRepo(null));
     expect(team.pairList[0].member).toEqual(member.slice(1));
   });
 
@@ -105,7 +105,7 @@ describe('removeMember', () => {
     });
     const removeParticipant = member[0];
 
-    await team.removeMember(removeParticipant, createMockTeamRepo(null));
+    await team.removeParticipant(removeParticipant, createMockTeamRepo(null));
     expect(team.pairList.length).toBe(1);
     expect(team.pairList[0].member.length).toBe(3);
     expect(team.pairList[0].member).toEqual([...member2, member[1]]);
@@ -130,7 +130,7 @@ describe('removeMember', () => {
     });
     const removeParticipant = member[0];
 
-    await team.removeMember(removeParticipant, createMockTeamRepo(3));
+    await team.removeParticipant(removeParticipant, createMockTeamRepo(3));
     expect(team.pairList.length).toBe(2);
     expect(team.pairList[0].member).toEqual([...member2.slice(1)]);
     expect(team.pairList[1].member).toEqual([member2[0], member[1]]);
@@ -146,7 +146,7 @@ describe('removeMember', () => {
       status: Kyukai,
     });
 
-    expect(() => team.removeMember(removeParticipant, createMockTeamRepo(null))).rejects.toThrow();
+    expect(() => team.removeParticipant(removeParticipant, createMockTeamRepo(null))).rejects.toThrow();
   });
 });
 
