@@ -43,13 +43,13 @@ export class Team extends Entity<TeamProps> {
     if (!this.isMember(participant)) {
       throw new Error('メンバーではありません');
     }
-    const pair = this.pairList.find((pair) => pair.isMember(participant))!;
+    const pair = this.pairList.filter((pair) => pair.isMember(participant))[0];
     if (pair.isFullMember()) {
       pair.removeMember(participant);
     } else {
-      const anotherParticipant = pair?.member.find(
+      const anotherParticipant = pair.member.filter(
         (p) => !p.equals(participant),
-      )!;
+      )[0];
       this.removePair(pair);
       const anotherPair = this.getSmallestPair();
       if (anotherPair.isFullMember()) {
