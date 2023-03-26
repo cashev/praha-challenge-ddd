@@ -146,7 +146,9 @@ describe('removeParticipant', () => {
       status: Kyukai,
     });
 
-    expect(() => team.removeParticipant(removeParticipant, createMockTeamRepo(null))).rejects.toThrow();
+    expect(() =>
+      team.removeParticipant(removeParticipant, createMockTeamRepo(null)),
+    ).rejects.toThrow();
   });
 });
 

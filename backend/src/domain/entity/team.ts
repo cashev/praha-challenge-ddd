@@ -53,7 +53,9 @@ export class Team extends Entity<TeamProps> {
       this.removePair(pair);
       const anotherPair = this.getSmallestPair();
       if (anotherPair.isFullMember()) {
-        const existingUser = this.randomChoice<Participant>([...anotherPair.member]);
+        const existingUser = this.randomChoice<Participant>([
+          ...anotherPair.member,
+        ]);
         anotherPair.removeMember(existingUser);
         const newPair = Pair.create(await teamRepo.getNextPairId(), {
           pairName: this.getUnusedPairName(),
