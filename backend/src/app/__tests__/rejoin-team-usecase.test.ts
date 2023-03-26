@@ -22,7 +22,7 @@ describe('do', () => {
   };
   const createMockTeamRepo = (team: Team[] | null) => {
     return {
-      findByParticipantId:jest.fn(),
+      findByParticipantId: jest.fn(),
       getSmallestTeamList: jest.fn().mockResolvedValue(team),
       getNextPairId: jest.fn(),
       save: jest.fn(),
