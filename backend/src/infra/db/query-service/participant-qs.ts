@@ -12,14 +12,14 @@ export class ParticipantQS implements IParticipantQS {
   }
 
   public async findById(id: number): Promise<ParticipantDto> {
-    const user = await this.prismaClient.user.findUniqueOrThrow({
+    const user = await this.prismaClient.participant.findUniqueOrThrow({
       where: { id },
     });
     return new ParticipantDto({ ...user });
   }
 
   public async getAll(): Promise<ParticipantDto[]> {
-    const users = await this.prismaClient.user.findMany();
-    return users.map((user) => new ParticipantDto({ ...user }));
+    const users = await this.prismaClient.participant.findMany();
+    return users.map((participant) => new ParticipantDto({ ...participant }));
   }
 }
