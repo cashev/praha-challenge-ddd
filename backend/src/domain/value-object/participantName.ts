@@ -1,19 +1,16 @@
-import { ValueObject } from './valueObject';
+import { Brand, BrandedValueObject } from './valueObject';
 
-interface ParticipantNameProps {
-  value: string;
-}
+export type ParticipantNameType = Brand<string, 'ParticipantName'>;
 
-export class ParticipantName extends ValueObject<ParticipantNameProps> {
-  get value(): string {
-    return this.props.value;
-  }
-
-  private constructor(props: ParticipantNameProps) {
-    super(props);
+export class ParticipantName extends BrandedValueObject<
+  string,
+  'ParticipantName'
+> {
+  private constructor(value: string) {
+    super(value as ParticipantNameType);
   }
 
   public static create(value: string): ParticipantName {
-    return new ParticipantName({ value });
+    return new ParticipantName(value);
   }
 }
