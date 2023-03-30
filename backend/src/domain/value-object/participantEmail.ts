@@ -1,16 +1,13 @@
-import { ValueObject } from './valueObject';
+import { Brand, BrandedValueObject } from './valueObject';
 
-interface ParticipantEmailProps {
-  value: string;
-}
+export type ParticipantEmailType = Brand<string, 'ParticipantEmail'>;
 
-export class ParticipantEmail extends ValueObject<ParticipantEmailProps> {
-  get value(): string {
-    return this.props.value;
-  }
-
-  private constructor(props: ParticipantEmailProps) {
-    super(props);
+export class ParticipantEmail extends BrandedValueObject<
+  string,
+  'ParticipantEmail'
+> {
+  private constructor(value: string) {
+    super(value as ParticipantEmailType);
   }
 
   private static isValid(value: string): boolean {
@@ -23,6 +20,6 @@ export class ParticipantEmail extends ValueObject<ParticipantEmailProps> {
     if (!this.isValid(value)) {
       throw new Error('メールアドレスではありません。:' + value);
     }
-    return new ParticipantEmail({ value });
+    return new ParticipantEmail(value);
   }
 }
