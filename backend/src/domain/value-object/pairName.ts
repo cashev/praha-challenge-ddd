@@ -1,8 +1,8 @@
-import { Brand, BrandedValueObject } from './valueObject';
+import { Brand, ValueObject } from './valueObject';
 
 export type PairNameType = Brand<string, 'PairName'>;
 
-export class PairName extends BrandedValueObject<string, 'PairName'> {
+export class PairName extends ValueObject<string, 'PairName'> {
   private constructor(value: string) {
     super(value as PairNameType);
   }
