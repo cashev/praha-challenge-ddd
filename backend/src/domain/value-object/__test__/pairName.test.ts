@@ -1,10 +1,10 @@
-import { PairName } from '../pairName';
+import { PairName, PairNameType } from '../pairName';
 
 describe('create', () => {
   test('[正常系]', () => {
-    const validName = 'a';
+    const validName = 'a' as PairNameType;
     const pairName = PairName.create(validName);
-    expect(pairName.value).toEqual(validName);
+    expect(pairName.getValue()).toEqual(validName);
   });
 
   test('[異常系] ペア名に数字は使えない', () => {

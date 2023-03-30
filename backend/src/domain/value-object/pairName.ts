@@ -1,16 +1,10 @@
-import { ValueObject } from './valueObject';
+import { Brand, BrandedValueObject } from './valueObject';
 
-interface PairNameProps {
-  value: string;
-}
+export type PairNameType = Brand<string, 'PairName'>;
 
-export class PairName extends ValueObject<PairNameProps> {
-  get value(): string {
-    return this.props.value;
-  }
-
-  private constructor(props: PairNameProps) {
-    super(props);
+export class PairName extends BrandedValueObject<string, 'PairName'> {
+  private constructor(value: string) {
+    super(value as PairNameType);
   }
 
   private static validate(value: string) {
@@ -24,6 +18,6 @@ export class PairName extends ValueObject<PairNameProps> {
 
   public static create(value: string): PairName {
     this.validate(value);
-    return new PairName({ value });
+    return new PairName(value);
   }
 }

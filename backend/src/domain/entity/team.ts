@@ -89,7 +89,7 @@ export class Team extends Entity<TeamProps> {
 
   getUnusedPairName(): PairName {
     const pairNameSet = new Set(
-      this.pairList.map((pair) => pair.pairName.value),
+      this.pairList.map((pair) => pair.pairName.getValue()),
     );
     const unusedName = this.findUnusedName(pairNameSet);
     return PairName.create(unusedName);
