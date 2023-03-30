@@ -4,7 +4,7 @@ describe('create', () => {
   test('[正常系]', () => {
     const validTeamName = '123';
     const teamName = TeamName.create(validTeamName);
-    expect(teamName.value).toBe(validTeamName);
+    expect(teamName.getValue()).toBe(validTeamName);
   });
 
   test('[異常系]チーム名が4文字であればエラー', () => {
