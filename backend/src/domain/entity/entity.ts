@@ -1,8 +1,10 @@
+import { Brand } from '../value-object/valueObject';
+
 const isEntity = (v: any): v is Entity<any, any> => {
   return v instanceof Entity;
 };
 
-export abstract class Entity<T, U> {
+export abstract class Entity<T extends Brand<any, any>, U> {
   protected readonly _id: T;
   protected readonly props: U;
 
