@@ -2,7 +2,11 @@ import { PairName } from 'src/domain/value-object/pairName';
 import { TeamName } from 'src/domain/value-object/teamName';
 import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
 import { ParticipantName } from 'src/domain/value-object/participantName';
-import { Kyukai, Zaiseki } from 'src/domain/value-object/participantStatus';
+import {
+  Kyukai,
+  Taikai,
+  Zaiseki,
+} from 'src/domain/value-object/participantStatus';
 import { Pair } from '../pair';
 import { Team } from '../team';
 import { Participant } from '../participant';
@@ -74,6 +78,82 @@ describe('create', () => {
     const teamName = TeamName.create('123');
 
     expect(() => Team.create(1, { teamName, pairList })).toThrow();
+  });
+});
+
+describe('addParticipant', () => {
+  test('[正常系] 既存のペアに参加する', async () => {
+    jest.spyOn(global.Math, 'random').mockReturnValue(0);
+
+    const member = createMember();
+    const pair1 = Pair.create(1, {
+      pairName: PairName.create('a'),
+      member: member.slice(1),
+    });
+    const member2 = createMember2();
+    const pair2 = Pair.create(2, {
+      pairName: PairName.create('b'),
+      member: member2,
+    });
+    const team = Team.create(1, {
+      teamName: TeamName.create('123'),
+      pairList: [pair1, pair2],
+    });
+    const newParticipant = member[0];
+
+    team.addParticipant(newParticipant, createMockTeamRepo(null));
+
+    expect(team.pairList[0].member).toEqual([
+      ...member.slice(1),
+      newParticipant,
+    ]);
+  });
+
+  test('[正常系] 既存のペアを分割して参加する', async () => {
+    jest.spyOn(global.Math, 'random').mockReturnValue(0);
+    const member = createMember();
+    const pairList = createPairList(member);
+    const team = Team.create(1, {
+      teamName: TeamName.create('123'),
+      pairList,
+    });
+    const newParticipant = createMember2()[0];
+
+    await team.addParticipant(newParticipant, createMockTeamRepo(10));
+
+    expect(team.pairList.length).toBe(2);
+    expect(team.pairList[0].member).toEqual([...member.slice(1)]);
+    expect(team.pairList[1].member).toEqual([member[0], newParticipant]);
+  });
+
+  test('[異常系] 休会中の参加者', async () => {
+    const member = createMember();
+    const pairList = createPairList(member);
+    const team = Team.create(1, {
+      teamName: TeamName.create('123'),
+      pairList,
+    });
+    const newParticipant = createMember2()[0];
+    newParticipant.status = Kyukai;
+
+    expect(
+      team.addParticipant(newParticipant, createMockTeamRepo(10)),
+    ).rejects.toThrow();
+  });
+
+  test('[異常系] 退会済の参加者', async () => {
+    const member = createMember();
+    const pairList = createPairList(member);
+    const team = Team.create(1, {
+      teamName: TeamName.create('123'),
+      pairList,
+    });
+    const newParticipant = createMember2()[0];
+    newParticipant.status = Taikai;
+
+    expect(
+      team.addParticipant(newParticipant, createMockTeamRepo(10)),
+    ).rejects.toThrow();
   });
 });
 

@@ -42,6 +42,27 @@ export class Team extends Entity<TeamIdType, TeamProps> {
     this.props.pairList.push(newPair);
   }
 
+  async addParticipant(participant: Participant, teamRepo: ITeamRepository) {
+    if (participant.status != Zaiseki) {
+      throw new Error('在籍中ではない参加者です');
+    }
+
+    const pair = this.getSmallestPair();
+    if (pair.isFullMember()) {
+      // ペアを分割する
+      const anotherMember = this.randomChoice<Participant>([...pair.member]);
+      pair.removeMember(anotherMember);
+
+      const newPair = Pair.create(await teamRepo.getNextPairId(), {
+        pairName: this.getUnusedPairName(),
+        member: [anotherMember, participant],
+      });
+      this.addPair(newPair);
+    } else {
+      pair.addMember(participant);
+    }
+  }
+
   async removeParticipant(participant: Participant, teamRepo: ITeamRepository) {
     if (!this.isMember(participant)) {
       throw new Error('メンバーではありません');

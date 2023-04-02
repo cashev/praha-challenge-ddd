@@ -1,4 +1,3 @@
-import { Pair } from 'src/domain/entity/pair';
 import { Team } from 'src/domain/entity/team';
 import { Zaiseki } from 'src/domain/value-object/participantStatus';
 import { randomChoice } from 'src/util/RandomChoice';
@@ -23,23 +22,12 @@ export class RejoinTeamUseCase {
     const participant = await this.participantRepo.find(participantId);
     this.validate(participant);
 
-    const team = await this.getSmallestTeam();
-    const pair = team.getSmallestPair();
-
     participant.status = Zaiseki;
-    this.participantRepo.save(participant);
-    if (pair.isFullMember()) {
-      const existingUser = randomChoice<Participant>([...pair.member]);
-      pair.removeMember(existingUser);
-      const newPair = Pair.create(await this.teamRepo.getNextPairId(), {
-        pairName: team.getUnusedPairName(),
-        member: [existingUser, participant],
-      });
-      team.addPair(newPair);
-    } else {
-      pair.addMember(participant);
-    }
+    const team = await this.getSmallestTeam();
+    team.addParticipant(participant, this.teamRepo);
+
     this.teamRepo.save(team);
+    this.participantRepo.save(participant);
   }
 
   private validate(participant: Participant) {
