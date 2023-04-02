@@ -1,17 +1,20 @@
 import { Done, TaskStatusValue } from '../value-object/taskStatusValue';
+import { Brand } from '../value-object/valueObject';
 import { Entity } from './entity';
+
+type TaskStatusIdType = Brand<number, 'TaskStatus'>;
 
 interface TaskStatusProps {
   status: TaskStatusValue;
 }
 
-export class TaskStatus extends Entity<TaskStatusProps> {
-  private constructor(id: number, props: TaskStatusProps) {
+export class TaskStatus extends Entity<TaskStatusIdType, TaskStatusProps> {
+  private constructor(id: TaskStatusIdType, props: TaskStatusProps) {
     super(id, props);
   }
 
   public static create(id: number, props: TaskStatusProps): TaskStatus {
-    return new TaskStatus(id, props);
+    return new TaskStatus(id as TaskStatusIdType, props);
   }
 
   get status(): TaskStatusValue {

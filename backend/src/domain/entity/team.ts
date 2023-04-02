@@ -5,14 +5,17 @@ import { Entity } from './entity';
 import { Pair } from './pair';
 import { Participant } from './participant';
 import { ITeamRepository } from '../repository-interface/team-repository';
+import { Brand } from '../value-object/valueObject';
+
+type TeamIdType = Brand<number, 'TeamId'>;
 
 interface TeamProps {
   teamName: TeamName;
   pairList: Pair[];
 }
 
-export class Team extends Entity<TeamProps> {
-  get id(): number {
+export class Team extends Entity<TeamIdType, TeamProps> {
+  get id(): TeamIdType {
     return this._id;
   }
 
@@ -110,7 +113,7 @@ export class Team extends Entity<TeamProps> {
     return list[Math.floor(Math.random() * list.length)];
   }
 
-  private constructor(id: number, props: TeamProps) {
+  private constructor(id: TeamIdType, props: TeamProps) {
     super(id, props);
   }
 
@@ -126,6 +129,6 @@ export class Team extends Entity<TeamProps> {
   public static create(id: number, props: TeamProps): Team {
     this.validate(props.pairList.flatMap((pair) => pair.member));
     props.pairList = [...props.pairList];
-    return new Team(id, props);
+    return new Team(id as TeamIdType, props);
   }
 }

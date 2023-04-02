@@ -1,7 +1,10 @@
 import { ParticipantEmail } from '../value-object/participantEmail';
 import { ParticipantName } from '../value-object/participantName';
 import { ParticipantStatus } from '../value-object/participantStatus';
+import { Brand } from '../value-object/valueObject';
 import { Entity } from './entity';
+
+type ParticipantIdType = Brand<number, 'ParticipantId'>;
 
 interface ParticipantProps {
   participantName: ParticipantName;
@@ -9,7 +12,7 @@ interface ParticipantProps {
   status: ParticipantStatus;
 }
 
-export class Participant extends Entity<ParticipantProps> {
+export class Participant extends Entity<ParticipantIdType, ParticipantProps> {
   get id(): number {
     return this._id;
   }
@@ -38,11 +41,11 @@ export class Participant extends Entity<ParticipantProps> {
     this.props.status = status;
   }
 
-  private constructor(id: number, props: ParticipantProps) {
+  private constructor(id: ParticipantIdType, props: ParticipantProps) {
     super(id, props);
   }
 
   public static create(id: number, props: ParticipantProps): Participant {
-    return new Participant(id, props);
+    return new Participant(id as ParticipantIdType, props);
   }
 }

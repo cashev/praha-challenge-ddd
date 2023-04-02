@@ -1,15 +1,18 @@
 import { PairName } from '../value-object/pairName';
 import { Zaiseki } from '../value-object/participantStatus';
+import { Brand } from '../value-object/valueObject';
 import { Entity } from './entity';
 import { Participant } from './participant';
+
+type PairIdType = Brand<number, 'PairId'>;
 
 interface PairProps {
   pairName: PairName;
   member: Participant[];
 }
 
-export class Pair extends Entity<PairProps> {
-  get id(): number {
+export class Pair extends Entity<PairIdType, PairProps> {
+  get id(): PairIdType {
     return this._id;
   }
 
@@ -54,7 +57,7 @@ export class Pair extends Entity<PairProps> {
     return this.member.length === 3;
   }
 
-  private constructor(id: number, props: PairProps) {
+  private constructor(id: PairIdType, props: PairProps) {
     super(id, props);
   }
 
@@ -71,6 +74,6 @@ export class Pair extends Entity<PairProps> {
   public static create(id: number, props: PairProps): Pair {
     this.validate(props.member);
     props.member = [...props.member];
-    return new Pair(id, props);
+    return new Pair(id as PairIdType, props);
   }
 }
