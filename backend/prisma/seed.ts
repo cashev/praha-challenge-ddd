@@ -54,7 +54,7 @@ async function main() {
         }
     });
     const pair = await prisma.pair.upsert({
-        where: { id: 1},
+        where: { id: 1 },
         update: {},
         create: {
             id: 1,
@@ -63,13 +63,13 @@ async function main() {
     });
     await prisma.pair_User.createMany({
         data: [
-            {pairId: 1, participantId: 1},
-            {pairId: 1, participantId: 2},
-            {pairId: 1, participantId: 3},
+            { pairId: 1, participantId: 1 },
+            { pairId: 1, participantId: 2 },
+            { pairId: 1, participantId: 3 },
         ],
     })
     const team = await prisma.team.upsert({
-        where: { id: 1},
+        where: { id: 1 },
         update: {},
         create: {
             id: 1,
@@ -77,7 +77,7 @@ async function main() {
         },
     });
     await prisma.team_Pair.create({
-        data: { teamId: 1, pairId: 1},
+        data: { teamId: 1, pairId: 1 },
     });
 }
 
