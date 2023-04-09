@@ -17,6 +17,7 @@ describe('do', () => {
   const createMockParticipantRepo = (participant: Participant | null) => {
     return {
       find: jest.fn().mockResolvedValue(participant),
+      getNextId: jest.fn(),
       save: jest.fn(),
     };
   };

@@ -18,6 +18,7 @@ describe('do', () => {
   ) => {
     return {
       find: jest.fn().mockResolvedValue(participant),
+      getNextId: jest.fn(),
       save: jest.fn(),
     };
   };
