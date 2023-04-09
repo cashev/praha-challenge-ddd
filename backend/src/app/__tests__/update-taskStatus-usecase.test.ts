@@ -14,6 +14,7 @@ describe('do', () => {
       find: jest.fn().mockResolvedValue(taskStatus),
       getNextIdAndSetNext: jest.fn(),
       save: jest.fn(),
+      saveAll: jest.fn(),
     };
 
     const usecase = new UpdateTaskStatusUseCase(mockTaskStatusRepo);
@@ -31,6 +32,7 @@ describe('do', () => {
       find: jest.fn().mockResolvedValue(taskStatus),
       getNextIdAndSetNext: jest.fn(),
       save: jest.fn(),
+      saveAll: jest.fn(),
     };
 
     const usecase = new UpdateTaskStatusUseCase(mockTaskStatusRepo);
@@ -48,6 +50,7 @@ describe('do', () => {
       find: jest.fn().mockResolvedValue(taskStatus),
       getNextIdAndSetNext: jest.fn(),
       save: jest.fn(),
+      saveAll: jest.fn(),
     };
 
     const usecase = new UpdateTaskStatusUseCase(mockTaskStatusRepo);
@@ -65,6 +68,7 @@ describe('do', () => {
       find: jest.fn().mockResolvedValue(taskStatus),
       getNextIdAndSetNext: jest.fn(),
       save: jest.fn(),
+      saveAll: jest.fn(),
     };
 
     const usecase = new UpdateTaskStatusUseCase(mockTaskStatusRepo);
@@ -81,6 +85,7 @@ describe('do', () => {
       find: jest.fn().mockResolvedValue(taskStatus),
       getNextIdAndSetNext: jest.fn(),
       save: jest.fn(),
+      saveAll: jest.fn(),
     };
 
     const usecase = new UpdateTaskStatusUseCase(mockTaskStatusRepo);
