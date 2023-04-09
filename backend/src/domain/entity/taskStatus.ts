@@ -1,10 +1,14 @@
 import { Done, TaskStatusValue } from '../value-object/taskStatusValue';
 import { Brand } from '../value-object/valueObject';
 import { Entity } from './entity';
+import { ParticipantIdType } from './participant';
 
-type TaskStatusIdType = Brand<number, 'TaskStatus'>;
+type TaskStatusIdType = Brand<number, 'TaskStatusId'>;
+export type TaskIdType = Brand<number, 'TaskId'>;
 
 interface TaskStatusProps {
+  participantId: ParticipantIdType;
+  taskId: TaskIdType;
   status: TaskStatusValue;
 }
 
