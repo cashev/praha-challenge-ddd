@@ -21,6 +21,18 @@ export class TaskStatus extends Entity<TaskStatusIdType, TaskStatusProps> {
     return new TaskStatus(id as TaskStatusIdType, props);
   }
 
+  get id(): TaskStatusIdType {
+    return this._id;
+  }
+
+  get participantId(): ParticipantIdType {
+    return this.props.participantId;
+  }
+
+  get taskId(): TaskIdType {
+    return this.props.taskId;
+  }
+
   get status(): TaskStatusValue {
     return this.props.status;
   }
