@@ -4,7 +4,7 @@ import { ParticipantStatus } from '../value-object/participantStatus';
 import { Brand } from '../value-object/valueObject';
 import { Entity } from './entity';
 
-type ParticipantIdType = Brand<number, 'ParticipantId'>;
+export type ParticipantIdType = Brand<number, 'ParticipantId'>;
 
 interface ParticipantProps {
   participantName: ParticipantName;
