@@ -1,7 +1,6 @@
 import { Pair } from 'src/domain/entity/pair';
 import { Participant } from 'src/domain/entity/participant';
 import { Team } from 'src/domain/entity/team';
-import { IParticipantRepository } from 'src/domain/repository-interface/participant-repository';
 import { PairName } from 'src/domain/value-object/pairName';
 import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
 import { ParticipantName } from 'src/domain/value-object/participantName';
@@ -45,12 +44,12 @@ describe('do', () => {
   const createMockTaskQS = () => {
     const ret = [];
     for (let i = 1; i <= 80; i++) {
-        const dto = new TaskDto({
-            id: i,
-            title: i.toString(),
-            content: i.toString(),
-        });
-        ret.push(dto);
+      const dto = new TaskDto({
+        id: i,
+        title: i.toString(),
+        content: i.toString(),
+      });
+      ret.push(dto);
     }
     return {
       getAll: jest.fn().mockResolvedValue(ret),
