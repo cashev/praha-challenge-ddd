@@ -20,6 +20,9 @@ export class RejoinTeamUseCase {
 
   async do(participantId: number) {
     const participant = await this.participantRepo.find(participantId);
+    if (participant == null) {
+      throw new Error();
+    }
     this.validate(participant);
 
     participant.status = Zaiseki;
