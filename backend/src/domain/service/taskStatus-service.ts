@@ -11,7 +11,7 @@ export class TaskStatusService {
   }
 
   async createTaskStatusForNewParticipant(
-    participantId: number,
+    participantId: string,
     taskIds: number[],
   ): Promise<TaskStatus[]> {
     const startId = await this.taskStatusRepo.getNextIdAndSetNext(

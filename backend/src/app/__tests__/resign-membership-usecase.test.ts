@@ -34,12 +34,12 @@ describe('do', () => {
     };
   };
   const createTwoMember = () => {
-    const p11 = Participant.create(11, {
+    const p11 = Participant.create('11', {
       participantName: ParticipantName.create('小谷 絵里'),
       email: ParticipantEmail.create('re8142@example.ne.jp'),
       status: Zaiseki,
     });
-    const p12 = Participant.create(12, {
+    const p12 = Participant.create('12', {
       participantName: ParticipantName.create('酒井 幹也'),
       email: ParticipantEmail.create('ayikim@ybb.ne.jp'),
       status: Zaiseki,
@@ -47,17 +47,17 @@ describe('do', () => {
     return [p11, p12];
   };
   const createThreeMember = () => {
-    const p21 = Participant.create(21, {
+    const p21 = Participant.create('21', {
       participantName: ParticipantName.create('足立 里香'),
       email: ParticipantEmail.create('adati568@dti.ad.jp'),
       status: Zaiseki,
     });
-    const p22 = Participant.create(22, {
+    const p22 = Participant.create('22', {
       participantName: ParticipantName.create('西村 和好'),
       email: ParticipantEmail.create('syzk76@plala.or.jp'),
       status: Zaiseki,
     });
-    const p23 = Participant.create(23, {
+    const p23 = Participant.create('23', {
       participantName: ParticipantName.create('内田 嘉邦'),
       email: ParticipantEmail.create('inukisoy1974@gmail.com'),
       status: Zaiseki,
@@ -137,7 +137,7 @@ describe('do', () => {
   });
 
   test('[異常系] 休会中の参加者', async () => {
-    const participant = Participant.create(32, {
+    const participant = Participant.create('32', {
       participantName: ParticipantName.create('白石 道和'),
       email: ParticipantEmail.create('siraisi1920902@mail.goo.ne.jp'),
       status: Kyukai,
@@ -153,7 +153,7 @@ describe('do', () => {
   });
 
   test('[異常系] 退会済の参加者', async () => {
-    const participant = Participant.create(33, {
+    const participant = Participant.create('33', {
       participantName: ParticipantName.create('山村 偉生'),
       email: ParticipantEmail.create('hideoyamamura@freeml.co.jp'),
       status: Taikai,

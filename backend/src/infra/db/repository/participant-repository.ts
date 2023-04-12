@@ -22,7 +22,7 @@ export class ParticipantRepository implements IParticipantRepository {
     if (result == null) {
       return null;
     }
-    return Participant.create(result.id, {
+    return Participant.create(result.id.toString(), {
       participantName: ParticipantName.create(result.name),
       email: ParticipantEmail.create(result.email),
       status: createUserStatus(result.status),
@@ -33,14 +33,14 @@ export class ParticipantRepository implements IParticipantRepository {
   }
   async save(participant: Participant): Promise<void> {
     await this.prismaClient.participant.upsert({
-      where: { id: participant.id },
+      where: { id: Number(participant.id) },
       update: {
         name: participant.participantName.getValue(),
         email: participant.email.getValue(),
         status: getValue(participant.status),
       },
       create: {
-        id: participant.id,
+        id: Number(participant.id),
         name: participant.participantName.getValue(),
         email: participant.email.getValue(),
         status: getValue(participant.status),

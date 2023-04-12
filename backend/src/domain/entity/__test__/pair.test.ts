@@ -11,17 +11,17 @@ import { Pair } from '../pair';
 import { Participant } from '../participant';
 
 const createMember = () => {
-  const u1 = Participant.create(1, {
+  const u1 = Participant.create('1', {
     participantName: ParticipantName.create('上村 真知子'),
     email: ParticipantEmail.create('matiko-uemura@bbtec.net'),
     status: Zaiseki,
   });
-  const u2 = Participant.create(2, {
+  const u2 = Participant.create('2', {
     participantName: ParticipantName.create('柴田 嘉彦'),
     email: ParticipantEmail.create('okihisoy9185@goo.ne.jp'),
     status: Zaiseki,
   });
-  const u3 = Participant.create(3, {
+  const u3 = Participant.create('3', {
     participantName: ParticipantName.create('永野 智子'),
     email: ParticipantEmail.create('tmk.ngn@hi-ho.ne.jp'),
     status: Zaiseki,
@@ -56,7 +56,7 @@ describe('create', () => {
   });
 
   test('[異常系] 4人のペア', () => {
-    const u4 = Participant.create(3, {
+    const u4 = Participant.create('3', {
       participantName: ParticipantName.create('松田 秀俊'),
       email: ParticipantEmail.create('matudaadutam@example.ne.jp'),
       status: Zaiseki,
@@ -86,7 +86,7 @@ describe('create', () => {
 
 describe('addMember', () => {
   const createNewMember = (status: ParticipantStatus) => {
-    return Participant.create(4, {
+    return Participant.create('4', {
       participantName: ParticipantName.create('小柳 晃義'),
       email: ParticipantEmail.create('trys0216@hi-ho.ne.jp'),
       status,
@@ -173,7 +173,7 @@ describe('isMember', () => {
     const pairName = PairName.create('w');
     const pair = Pair.create(23, { pairName, member });
 
-    const nonMember = Participant.create(5, {
+    const nonMember = Participant.create('5', {
       participantName: ParticipantName.create('上原 つばさ'),
       email: ParticipantEmail.create('rhu469919720429@tokyo24.com'),
       status: Zaiseki,
@@ -200,7 +200,7 @@ describe('removeMember', () => {
     const pairName = PairName.create('x');
     const pair = Pair.create(24, { pairName, member });
 
-    const removedUser = Participant.create(5, {
+    const removedUser = Participant.create('5', {
       participantName: ParticipantName.create('奥村 都義'),
       email: ParticipantEmail.create('okumura83@eaccess.net'),
       status: Zaiseki,

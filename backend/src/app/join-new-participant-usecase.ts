@@ -9,6 +9,7 @@ import { Zaiseki } from 'src/domain/value-object/participantStatus';
 import { randomChoice } from 'src/util/RandomChoice';
 import { ITaskQS } from './query-service-interface/task-qs';
 import { TaskStatusService } from 'src/domain/service/taskStatus-service';
+import { createRandomIdString } from 'src/util/random';
 
 export class JoinNewParticipantUsecase {
   private participantRepo: IParticipantRepository;
@@ -31,7 +32,7 @@ export class JoinNewParticipantUsecase {
   // 参加者を新規追加するユースケース
   async do(name: string, email: string) {
     const newParticipant = Participant.create(
-      await this.participantRepo.getNextId(),
+      createRandomIdString(),
       {
         participantName: ParticipantName.create(name),
         email: ParticipantEmail.create(email),

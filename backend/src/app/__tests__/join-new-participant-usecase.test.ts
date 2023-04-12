@@ -18,7 +18,6 @@ describe('do', () => {
   ) => {
     return {
       find: jest.fn().mockResolvedValue(participant),
-      getNextId: jest.fn().mockResolvedValue(nextId),
       save: jest.fn(),
     };
   };
@@ -56,17 +55,17 @@ describe('do', () => {
     };
   };
   const createThreeMember = () => {
-    const p21 = Participant.create(21, {
+    const p21 = Participant.create('21', {
       participantName: ParticipantName.create('足立 里香'),
       email: ParticipantEmail.create('adati568@dti.ad.jp'),
       status: Zaiseki,
     });
-    const p22 = Participant.create(22, {
+    const p22 = Participant.create('22', {
       participantName: ParticipantName.create('西村 和好'),
       email: ParticipantEmail.create('syzk76@plala.or.jp'),
       status: Zaiseki,
     });
-    const p23 = Participant.create(23, {
+    const p23 = Participant.create('23', {
       participantName: ParticipantName.create('内田 嘉邦'),
       email: ParticipantEmail.create('inukisoy1974@gmail.com'),
       status: Zaiseki,

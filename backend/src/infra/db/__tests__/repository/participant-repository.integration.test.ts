@@ -83,7 +83,7 @@ describe('participant-repository.integration.test', () => {
       await prisma.participant.deleteMany({});
     });
     test('[正常系] insert', async () => {
-      const participant = Participant.create(p2.id, {
+      const participant = Participant.create(p2.id.toString(), {
         participantName: ParticipantName.create(p2.name),
         email: ParticipantEmail.create(p2.email),
         status: createUserStatus(p2.status),
@@ -101,7 +101,7 @@ describe('participant-repository.integration.test', () => {
       }
     });
     test('[正常系] update', async () => {
-      const participant = Participant.create(p3.id, {
+      const participant = Participant.create(p3.id.toString(), {
         participantName: ParticipantName.create(p3.name),
         email: ParticipantEmail.create(p3.email),
         status: createUserStatus(p3.status),

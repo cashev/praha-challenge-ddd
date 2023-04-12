@@ -19,7 +19,7 @@ describe('createAllTaskStatusForNewParticipant', () => {
     }
     const service = new TaskStatusService(mockTaskStatusRepo());
     const result = await service.createTaskStatusForNewParticipant(
-      4 as ParticipantIdType,
+      '4' as ParticipantIdType,
       taskIds,
     );
     expect(result.length).toBe(80);
@@ -27,7 +27,7 @@ describe('createAllTaskStatusForNewParticipant', () => {
     expect(Math.min(...result.map((ts) => ts.id as number))).toBe(321);
     expect(Math.max(...result.map((ts) => ts.id as number))).toBe(400);
     expect(new Set(result.map((ts) => ts.id)).size).toBe(80);
-    expect(result.every((ts) => ts.participantId === 4)).toBeTruthy();
+    expect(result.every((ts) => ts.participantId === '4')).toBeTruthy();
     expect(Math.min(...result.map((ts) => ts.taskId as number))).toBe(1);
     expect(Math.max(...result.map((ts) => ts.taskId as number))).toBe(80);
     expect(new Set(result.map((ts) => ts.taskId)).size).toBe(80);

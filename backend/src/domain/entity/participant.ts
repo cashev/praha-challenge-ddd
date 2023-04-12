@@ -4,7 +4,7 @@ import { ParticipantStatus } from '../value-object/participantStatus';
 import { Brand } from '../value-object/valueObject';
 import { Entity } from './entity';
 
-export type ParticipantIdType = Brand<number, 'ParticipantId'>;
+export type ParticipantIdType = Brand<string, 'ParticipantId'>;
 
 interface ParticipantProps {
   participantName: ParticipantName;
@@ -13,7 +13,7 @@ interface ParticipantProps {
 }
 
 export class Participant extends Entity<ParticipantIdType, ParticipantProps> {
-  get id(): number {
+  get id(): string {
     return this._id;
   }
 
@@ -45,7 +45,7 @@ export class Participant extends Entity<ParticipantIdType, ParticipantProps> {
     super(id, props);
   }
 
-  public static create(id: number, props: ParticipantProps): Participant {
+  public static create(id: string, props: ParticipantProps): Participant {
     return new Participant(id as ParticipantIdType, props);
   }
 }

@@ -17,7 +17,6 @@ describe('do', () => {
   const createMockParticipantRepo = (participant: Participant | null) => {
     return {
       find: jest.fn().mockResolvedValue(participant),
-      getNextId: jest.fn(),
       save: jest.fn(),
     };
   };
@@ -30,24 +29,24 @@ describe('do', () => {
     };
   };
   const createParticipant = (status: ParticipantStatus) => {
-    return Participant.create(1, {
+    return Participant.create('1', {
       participantName: ParticipantName.create('川島 佐十郎'),
       email: ParticipantEmail.create('sjurp8200331@combzmail.jp'),
       status,
     });
   };
   const createMember = () => {
-    const p11 = Participant.create(11, {
+    const p11 = Participant.create('11', {
       participantName: ParticipantName.create('大内 真志'),
       email: ParticipantEmail.create('isasam171@nifty.com'),
       status: Zaiseki,
     });
-    const p12 = Participant.create(12, {
+    const p12 = Participant.create('12', {
       participantName: ParticipantName.create('沼田 義武'),
       email: ParticipantEmail.create('yositake-numata@nifty.jp'),
       status: Zaiseki,
     });
-    const p13 = Participant.create(13, {
+    const p13 = Participant.create('13', {
       participantName: ParticipantName.create('中川 火呂絵'),
       email: ParticipantEmail.create('hre-nkgw@example.ad.jp'),
       status: Zaiseki,
@@ -55,17 +54,17 @@ describe('do', () => {
     return [p11, p12, p13];
   };
   const createMember2 = () => {
-    const p21 = Participant.create(11, {
+    const p21 = Participant.create('11', {
       participantName: ParticipantName.create('小倉 敬史'),
       email: ParticipantEmail.create('tks@infoseek.jp'),
       status: Zaiseki,
     });
-    const p22 = Participant.create(12, {
+    const p22 = Participant.create('12', {
       participantName: ParticipantName.create('井口 晴生'),
       email: ParticipantEmail.create('haruo1112@comeon.to'),
       status: Zaiseki,
     });
-    const p23 = Participant.create(13, {
+    const p23 = Participant.create('13', {
       participantName: ParticipantName.create('谷川 善二'),
       email: ParticipantEmail.create('zenzi-yagawa@dti.ne.jp'),
       status: Zaiseki,
