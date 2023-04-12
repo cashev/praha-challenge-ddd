@@ -10,7 +10,7 @@ export class ParticipantByTaskStatusQS implements IParticipantByTaskStatusQS {
   }
 
   async getWithPagination(
-    taskIds: number[],
+    taskIds: string[],
     status: string,
     skip: number,
     take: number,

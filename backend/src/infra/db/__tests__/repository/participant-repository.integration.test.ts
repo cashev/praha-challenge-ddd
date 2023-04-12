@@ -12,31 +12,31 @@ import {
 describe('participant-repository.integration.test', () => {
   const participantRepository = new ParticipantRepository(prisma);
   const p1 = {
-    id: 1,
+    id: '1',
     name: '今井 光善',
     email: 'imai1979@example.gr.jp',
     status: '在籍中',
   };
   const p2 = {
-    id: 2,
+    id: '2',
     name: '平山 直秋',
     email: 'naoaki.hirayama@comeon.to',
     status: '在籍中',
   };
   const p3 = {
-    id: 3,
+    id: '3',
     name: '瀬戸 哲子',
     email: 'otes1981@dion.ne.jp',
     status: '在籍中',
   };
   const p4 = {
-    id: 4,
+    id: '4',
     name: '神谷 真琴',
     email: 'sntnmktcomeon@comeon.to',
     status: '休会中',
   };
   const p5 = {
-    id: 5,
+    id: '5',
     name: '福岡 慶太郎',
     email: 'hukuoka-keitarou@so-net.ne.jp',
     status: '退会済',
@@ -57,7 +57,7 @@ describe('participant-repository.integration.test', () => {
       await prisma.participant.deleteMany({});
     });
     test('', async () => {
-      const result = await participantRepository.find(3);
+      const result = await participantRepository.find('3');
       if (result == null) {
         throw new Error();
       }
@@ -65,14 +65,6 @@ describe('participant-repository.integration.test', () => {
       expect(result.email.getValue()).toEqual(p3.email);
       expect(getValue(result.status)).toEqual(p3.status);
     });
-  });
-
-  describe('getNextId', () => {
-    // test('', async () => {
-    //   await prisma.$queryRaw`select setval('Participant_id_seq', 5)`;
-    //   const result = await participantRepository.getNextId();
-    //   expect(result).toBe(6);
-    // });
   });
 
   describe('save', () => {

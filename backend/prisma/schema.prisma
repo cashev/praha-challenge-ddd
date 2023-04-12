@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Participant {
-  id         Int          @id @default(autoincrement())
+  id         String       @id
   name       String
   email      String       @unique
   status     String
@@ -20,48 +20,48 @@ model Participant {
 }
 
 model Task {
-  id         Int          @id @default(autoincrement())
+  id         String       @id
   title      String
   content    String
   TaskStatus TaskStatus[]
 }
 
 model TaskStatus {
-  id            Int         @id @default(autoincrement())
+  id            String      @id
   Participant   Participant @relation(fields: [participantId], references: [id])
-  participantId Int
+  participantId String
   task          Task        @relation(fields: [taskId], references: [id])
-  taskId        Int
+  taskId        String
   status        String
 }
 
 model Pair_User {
   pair          Pair        @relation(fields: [pairId], references: [id])
-  pairId        Int
+  pairId        String
   participant   Participant @relation(fields: [participantId], references: [id])
-  participantId Int         @unique
+  participantId String      @unique
 
   @@unique([pairId, participantId])
 }
 
 model Pair {
-  id     Int         @id @default(autoincrement())
+  id     String      @id
   name   String
   member Pair_User[]
   team   Team_Pair[]
 }
 
 model Team_Pair {
-  team   Team @relation(fields: [teamId], references: [id])
-  teamId Int
-  pair   Pair @relation(fields: [pairId], references: [id])
-  pairId Int  @unique
+  team   Team   @relation(fields: [teamId], references: [id])
+  teamId String
+  pair   Pair   @relation(fields: [pairId], references: [id])
+  pairId String @unique
 
   @@unique([teamId, pairId])
 }
 
 model Team {
-  id       Int         @id @default(autoincrement())
+  id       String      @id
   name     String
   pairList Team_Pair[]
 }

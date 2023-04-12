@@ -6,19 +6,19 @@ import { GetAllParticipantUseCase } from '../get-all-participant-usecase';
 
 describe('do', () => {
   const u1 = new ParticipantDto({
-    id: 1,
+    id: '1',
     name: '永野 哲哉',
     email: 'tty-ngn19800814@dion.ne.jp',
     status: '在籍',
   });
   const u2 = new ParticipantDto({
-    id: 2,
+    id: '2',
     name: '江口 隆吉',
     email: 'egt572@asp.home.ne.jp',
     status: '在籍',
   });
   const u3 = new ParticipantDto({
-    id: 3,
+    id: '3',
     name: '柳沢 朋美',
     email: 'tmmyngsw@ybb.ne.jp',
     status: '在籍',

@@ -22,9 +22,7 @@ describe('do', () => {
       save: jest.fn(),
     };
   };
-  const createMockTeamRepo = (
-    team: Team | null = null,
-  ) => {
+  const createMockTeamRepo = (team: Team | null = null) => {
     return {
       findByParticipantId: jest.fn().mockResolvedValue(team),
       getSmallestTeamList: jest.fn(),
@@ -87,7 +85,7 @@ describe('do', () => {
       mockParticipantRepo,
       mockTeamRepo,
     );
-    await usecase.do(21);
+    await usecase.do('21');
 
     expect(team.isMember(removeParticipant)).toBeFalsy();
     expect(removeParticipant.status).toEqual(Kyukai);
@@ -117,7 +115,7 @@ describe('do', () => {
       mockParticipantRepo,
       mockTeamRepo,
     );
-    await usecase.do(21);
+    await usecase.do('21');
 
     expect(team.isMember(removeParticipant)).toBeFalsy();
     expect(removeParticipant.status).toEqual(Kyukai);
@@ -131,7 +129,7 @@ describe('do', () => {
       mockParticipantRepo,
       mockTeamRepo,
     );
-    expect(() => usecase.do(31)).rejects.toThrow();
+    expect(() => usecase.do('31')).rejects.toThrow();
   });
 
   test('[異常系] 休会中の参加者', async () => {
@@ -147,7 +145,7 @@ describe('do', () => {
       mockParticipantRepo,
       mockTeamRepo,
     );
-    expect(() => usecase.do(32)).rejects.toThrow();
+    expect(() => usecase.do('32')).rejects.toThrow();
   });
 
   test('[異常系] 退会済の参加者', async () => {
@@ -163,6 +161,6 @@ describe('do', () => {
       mockParticipantRepo,
       mockTeamRepo,
     );
-    expect(() => usecase.do(33)).rejects.toThrow();
+    expect(() => usecase.do('33')).rejects.toThrow();
   });
 });

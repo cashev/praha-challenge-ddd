@@ -1,7 +1,7 @@
 import { Team } from 'src/domain/entity/team';
 
 export interface ITeamRepository {
-  findByParticipantId(participantId: number): Promise<Team>;
+  findByParticipantId(participantId: string): Promise<Team>;
   getSmallestTeamList(): Promise<Team[]>;
   save(team: Team): Promise<Team>;
 }

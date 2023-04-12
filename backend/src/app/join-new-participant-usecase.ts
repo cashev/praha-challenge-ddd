@@ -31,18 +31,15 @@ export class JoinNewParticipantUsecase {
 
   // 参加者を新規追加するユースケース
   async do(name: string, email: string) {
-    const newParticipant = Participant.create(
-      createRandomIdString(),
-      {
-        participantName: ParticipantName.create(name),
-        email: ParticipantEmail.create(email),
-        status: Zaiseki,
-      },
-    );
+    const newParticipant = Participant.create(createRandomIdString(), {
+      participantName: ParticipantName.create(name),
+      email: ParticipantEmail.create(email),
+      status: Zaiseki,
+    });
     await this.participantRepo.save(newParticipant);
     // チームへ参加
     const team = randomChoice<Team>(await this.teamRepo.getSmallestTeamList());
-    team.addParticipant(newParticipant, this.teamRepo);
+    team.addParticipant(newParticipant);
     this.teamRepo.save(team);
     // タスクを割り当て
     const taskIds = (await this.taskQS.getAll()).map((t) => t.id);

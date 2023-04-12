@@ -18,7 +18,7 @@ export class RejoinTeamUseCase {
     this.teamRepo = teamRepo;
   }
 
-  async do(participantId: number) {
+  async do(participantId: string) {
     const participant = await this.participantRepo.find(participantId);
     if (participant == null) {
       throw new Error();
@@ -27,7 +27,7 @@ export class RejoinTeamUseCase {
 
     participant.status = Zaiseki;
     const team = await this.getSmallestTeam();
-    team.addParticipant(participant, this.teamRepo);
+    team.addParticipant(participant);
 
     this.teamRepo.save(team);
     this.participantRepo.save(participant);

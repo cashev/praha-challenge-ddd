@@ -22,7 +22,7 @@ export class GetParticipantResponse {
 
 class ParticipantData {
   @ApiProperty()
-  id: number;
+  id: string;
   @ApiProperty()
   name: string;
   @ApiProperty()
@@ -31,7 +31,7 @@ class ParticipantData {
   status: string;
 
   public constructor(params: {
-    id: number;
+    id: string;
     name: string;
     email: string;
     status: string;

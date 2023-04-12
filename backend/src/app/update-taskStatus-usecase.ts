@@ -8,7 +8,7 @@ export class UpdateTaskStatusUseCase {
     this.taskStatusRepo = taskStatusRepo;
   }
 
-  async do(participantId: number, taskId: number, status: string) {
+  async do(participantId: string, taskId: string, status: string) {
     const newStatus = createTaskStatusValue(status);
     const taskStatus = await this.taskStatusRepo.find(participantId, taskId);
     taskStatus.status = newStatus;

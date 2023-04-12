@@ -1,11 +1,11 @@
 export class ParticipantDto {
-  public readonly id: number;
+  public readonly id: string;
   public readonly name: string;
   public readonly email: string;
   public readonly status: string;
 
   public constructor(props: {
-    id: number;
+    id: string;
     name: string;
     email: string;
     status: string;

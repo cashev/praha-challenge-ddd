@@ -2,7 +2,7 @@ import { ParticipantDto } from './participant-qs';
 
 export interface IParticipantByTaskStatusQS {
   getWithPagination(
-    taskIds: number[],
+    taskIds: string[],
     status: string,
     skip: number,
     take: number,

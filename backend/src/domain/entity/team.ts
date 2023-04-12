@@ -4,7 +4,6 @@ import { Zaiseki } from '../value-object/participantStatus';
 import { Entity } from './entity';
 import { Pair } from './pair';
 import { Participant } from './participant';
-import { ITeamRepository } from '../repository-interface/team-repository';
 import { Brand } from '../value-object/valueObject';
 import { createRandomIdString } from 'src/util/random';
 
@@ -43,7 +42,7 @@ export class Team extends Entity<TeamIdType, TeamProps> {
     this.props.pairList.push(newPair);
   }
 
-  async addParticipant(participant: Participant, teamRepo: ITeamRepository) {
+  async addParticipant(participant: Participant) {
     if (participant.status != Zaiseki) {
       throw new Error('在籍中ではない参加者です');
     }
@@ -64,7 +63,7 @@ export class Team extends Entity<TeamIdType, TeamProps> {
     }
   }
 
-  async removeParticipant(participant: Participant, teamRepo: ITeamRepository) {
+  async removeParticipant(participant: Participant) {
     if (!this.isMember(participant)) {
       throw new Error('メンバーではありません');
     }

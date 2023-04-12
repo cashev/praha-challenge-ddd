@@ -3,15 +3,15 @@ import { GetAllTeamUseCase } from '../get-all-team-usecase';
 
 describe('do', () => {
   const t1 = new TeamDto({
-    id: 1,
+    id: '1',
     name: '1',
   });
   const t2 = new TeamDto({
-    id: 2,
+    id: '2',
     name: '2',
   });
   const t3 = new TeamDto({
-    id: 3,
+    id: '3',
     name: '3',
   });
 

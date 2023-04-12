@@ -10,7 +10,6 @@ export class TaskQS implements ITaskQS {
 
   public async getAll(): Promise<TaskDto[]> {
     const tasks = await this.prismaClient.task.findMany();
-    // return tasks.map((task) => new TaskDto({ ...task }));
-    return tasks.map(task => new TaskDto({id: task.id.toString(), title: task.title, content: task.content}));
+    return tasks.map((task) => new TaskDto({ ...task }));
   }
 }

@@ -15,7 +15,7 @@ export class ParticipantRepository implements IParticipantRepository {
     this.prismaClient = prismaClient;
   }
 
-  async find(id: number): Promise<Participant | null> {
+  async find(id: string): Promise<Participant | null> {
     const result = await this.prismaClient.participant.findUnique({
       where: { id },
     });
@@ -33,14 +33,14 @@ export class ParticipantRepository implements IParticipantRepository {
   }
   async save(participant: Participant): Promise<void> {
     await this.prismaClient.participant.upsert({
-      where: { id: Number(participant.id) },
+      where: { id: participant.id },
       update: {
         name: participant.participantName.getValue(),
         email: participant.email.getValue(),
         status: getValue(participant.status),
       },
       create: {
-        id: Number(participant.id),
+        id: participant.id,
         name: participant.participantName.getValue(),
         email: participant.email.getValue(),
         status: getValue(participant.status),

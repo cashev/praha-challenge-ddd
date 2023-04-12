@@ -15,7 +15,7 @@ export class SuspendMembershipUsecase {
     this.teamRepo = teamRepo;
   }
 
-  async do(participantId: number) {
+  async do(participantId: string) {
     const participant = await this.participantRepo.find(participantId);
     if (participant == null) {
       throw new Error('存在しない参加者です。');
@@ -26,7 +26,7 @@ export class SuspendMembershipUsecase {
 
     const team = await this.teamRepo.findByParticipantId(participantId);
     participant.status = Kyukai;
-    team.removeParticipant(participant, this.teamRepo);
+    team.removeParticipant(participant);
 
     this.teamRepo.save(team);
     this.participantRepo.save(participant);

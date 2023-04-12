@@ -18,11 +18,11 @@ export class GetTeamResponse {
 
 class TeamData {
   @ApiProperty()
-  id: number;
+  id: string;
   @ApiProperty()
   name: string;
 
-  public constructor(params: { id: number; name: string }) {
+  public constructor(params: { id: string; name: string }) {
     this.id = params.id;
     this.name = params.name;
   }

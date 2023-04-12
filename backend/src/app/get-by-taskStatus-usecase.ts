@@ -8,7 +8,7 @@ export class GetByTaskStatusUsecase {
     this.qs = qs;
   }
 
-  async do(taskIds: number[], status: string, page = 0) {
+  async do(taskIds: string[], status: string, page = 0) {
     const skip = PARTICIPANT_TAKE_PER_PAGE * page;
     return await this.qs.getWithPagination(
       taskIds,

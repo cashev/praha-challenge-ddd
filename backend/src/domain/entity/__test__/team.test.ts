@@ -54,15 +54,6 @@ const createPairList = (member: Participant[]) => {
   ];
 };
 
-const createMockTeamRepo = (pairId: number | null) => {
-  return {
-    findByParticipantId: jest.fn(),
-    getSmallestTeamList: jest.fn(),
-    getNextPairId: jest.fn().mockResolvedValue(pairId),
-    save: jest.fn(),
-  };
-};
-
 describe('create', () => {
   test('[正常系] チームの参加者が3人', () => {
     const pairList = createPairList(createMember());
@@ -101,7 +92,7 @@ describe('addParticipant', () => {
     });
     const newParticipant = member[0];
 
-    team.addParticipant(newParticipant, createMockTeamRepo(null));
+    team.addParticipant(newParticipant);
 
     expect(team.pairList[0].member).toEqual([
       ...member.slice(1),
@@ -119,7 +110,7 @@ describe('addParticipant', () => {
     });
     const newParticipant = createMember2()[0];
 
-    await team.addParticipant(newParticipant, createMockTeamRepo(10));
+    await team.addParticipant(newParticipant);
 
     expect(team.pairList.length).toBe(2);
     expect(team.pairList[0].member).toEqual([...member.slice(1)]);
@@ -136,9 +127,7 @@ describe('addParticipant', () => {
     const newParticipant = createMember2()[0];
     newParticipant.status = Kyukai;
 
-    expect(
-      team.addParticipant(newParticipant, createMockTeamRepo(10)),
-    ).rejects.toThrow();
+    expect(team.addParticipant(newParticipant)).rejects.toThrow();
   });
 
   test('[異常系] 退会済の参加者', async () => {
@@ -151,9 +140,7 @@ describe('addParticipant', () => {
     const newParticipant = createMember2()[0];
     newParticipant.status = Taikai;
 
-    expect(
-      team.addParticipant(newParticipant, createMockTeamRepo(10)),
-    ).rejects.toThrow();
+    expect(team.addParticipant(newParticipant)).rejects.toThrow();
   });
 });
 
@@ -161,10 +148,13 @@ describe('removeParticipant', () => {
   test('[正常系] 3人のペアからメンバーを取り除く', async () => {
     const member = createMember();
     const pairList = createPairList(member);
-    const team = Team.create('1', { teamName: TeamName.create('123'), pairList });
+    const team = Team.create('1', {
+      teamName: TeamName.create('123'),
+      pairList,
+    });
     const removeParticipant = member[0];
 
-    await team.removeParticipant(removeParticipant, createMockTeamRepo(null));
+    await team.removeParticipant(removeParticipant);
     expect(team.pairList[0].member).toEqual(member.slice(1));
   });
 
@@ -185,7 +175,7 @@ describe('removeParticipant', () => {
     });
     const removeParticipant = member[0];
 
-    await team.removeParticipant(removeParticipant, createMockTeamRepo(null));
+    await team.removeParticipant(removeParticipant);
     expect(team.pairList.length).toBe(1);
     expect(team.pairList[0].member.length).toBe(3);
     expect(team.pairList[0].member).toEqual([...member2, member[1]]);
@@ -210,7 +200,7 @@ describe('removeParticipant', () => {
     });
     const removeParticipant = member[0];
 
-    await team.removeParticipant(removeParticipant, createMockTeamRepo(3));
+    await team.removeParticipant(removeParticipant);
     expect(team.pairList.length).toBe(2);
     expect(team.pairList[0].member).toEqual([...member2.slice(1)]);
     expect(team.pairList[1].member).toEqual([member2[0], member[1]]);
@@ -226,9 +216,7 @@ describe('removeParticipant', () => {
       status: Kyukai,
     });
 
-    expect(() =>
-      team.removeParticipant(removeParticipant, createMockTeamRepo(null)),
-    ).rejects.toThrow();
+    expect(() => team.removeParticipant(removeParticipant)).rejects.toThrow();
   });
 });
 

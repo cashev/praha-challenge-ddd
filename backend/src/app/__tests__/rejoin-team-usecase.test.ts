@@ -90,7 +90,7 @@ describe('do', () => {
       mockParticipantRepo,
       mockTeamRepo,
     );
-    await participantcase.do(1);
+    await participantcase.do('1');
 
     expect(pair1.member).toEqual([...member, newParticipant]);
   });
@@ -112,7 +112,7 @@ describe('do', () => {
       mockParticipantRepo,
       mockTeamRepo,
     );
-    await participantcase.do(1);
+    await participantcase.do('1');
 
     expect(team.pairList.length).toBe(2);
     expect(pair1.member).toEqual(member.slice(1));
@@ -124,7 +124,7 @@ describe('do', () => {
     const mockTeamRepo = createMockTeamRepo(null);
     const useCase = new RejoinTeamUseCase(mockParticipantRepo, mockTeamRepo);
 
-    expect(useCase.do(1)).rejects.toThrow();
+    expect(useCase.do('1')).rejects.toThrow();
   });
 
   test('[異常系] 在籍中の参加者', async () => {
@@ -133,6 +133,6 @@ describe('do', () => {
     const mockTeamRepo = createMockTeamRepo(null);
     const useCase = new RejoinTeamUseCase(mockParticipantRepo, mockTeamRepo);
 
-    expect(useCase.do(1)).rejects.toThrow();
+    expect(useCase.do('1')).rejects.toThrow();
   });
 });

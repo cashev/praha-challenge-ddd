@@ -1,4 +1,3 @@
-import { ITaskStatusRepository } from '../repository-interface/taskStatus-repository';
 import { TaskIdType, TaskStatus } from '../entity/taskStatus';
 import { Yet } from '../value-object/taskStatusValue';
 import { ParticipantIdType } from '../entity/participant';

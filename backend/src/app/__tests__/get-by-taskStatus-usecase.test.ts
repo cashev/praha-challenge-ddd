@@ -4,73 +4,73 @@ import { ParticipantDto } from '../query-service-interface/participant-qs';
 
 describe('do', () => {
   const p1 = new ParticipantDto({
-    id: 1,
+    id: '1',
     name: '寺田 陽子',
     email: 'terada1979@example.ac.jp',
     status: '在籍中',
   });
   const p2 = new ParticipantDto({
-    id: 2,
+    id: '2',
     name: '大森 定二',
     email: 'sdz82@dion.ne.jp',
     status: '在籍中',
   });
   const p3 = new ParticipantDto({
-    id: 3,
+    id: '3',
     name: '藤村 美喜夫',
     email: 'mko_hzmr@ath.cx',
     status: '在籍中',
   });
   const p4 = new ParticipantDto({
-    id: 4,
+    id: '4',
     name: '神谷 玲一',
     email: 'itiier018@so-net.ne.jp',
     status: '在籍中',
   });
   const p5 = new ParticipantDto({
-    id: 5,
+    id: '5',
     name: '岸本 成美',
     email: 'mrn@example.ac.jp',
     status: '在籍中',
   });
   const p6 = new ParticipantDto({
-    id: 6,
+    id: '6',
     name: '土屋 麻樹',
     email: 'maki.tutiya@example.ne.jp',
     status: '在籍中',
   });
   const p7 = new ParticipantDto({
-    id: 7,
+    id: '7',
     name: '青柳 松次郎',
     email: 'matuzirou1986@rakuten.co.jp',
     status: '在籍中',
   });
   const p8 = new ParticipantDto({
-    id: 8,
+    id: '8',
     name: '大山 友美',
     email: 'tmm-oymmyo-mmt@infoweb.ne.jp',
     status: '在籍中',
   });
   const p9 = new ParticipantDto({
-    id: 9,
+    id: '9',
     name: '小谷 幸美',
     email: 'ntk4413414@excite.com',
     status: '在籍中',
   });
   const p10 = new ParticipantDto({
-    id: 10,
+    id: '10',
     name: '根岸 保平',
     email: 'isigen732@dti.ne.jp',
     status: '在籍中',
   });
   const p11 = new ParticipantDto({
-    id: 11,
+    id: '11',
     name: '黒沢 兼一',
     email: 'kurosawa.kanekazu@gmail.com',
     status: '在籍中',
   });
   const p12 = new ParticipantDto({
-    id: 12,
+    id: '12',
     name: '石山 るり子',
     email: 'krr7920230114@hi-ho.ne.jp',
     status: '在籍中',
@@ -79,7 +79,7 @@ describe('do', () => {
 
   const mockQS = new (class implements IParticipantByTaskStatusQS {
     getWithPagination(
-      taskIds: number[],
+      taskIds: string[],
       status: string,
       skip: number,
       take: number,

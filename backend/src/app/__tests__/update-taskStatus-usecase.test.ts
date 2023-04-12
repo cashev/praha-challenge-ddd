@@ -18,7 +18,7 @@ describe('do', () => {
     };
 
     const usecase = new UpdateTaskStatusUseCase(mockTaskStatusRepo);
-    await usecase.do(1, 1, 'レビュー待ち');
+    await usecase.do('1', '1', 'レビュー待ち');
     expect(taskStatus.status).toBe(Waiting);
   });
 
@@ -36,7 +36,7 @@ describe('do', () => {
     };
 
     const usecase = new UpdateTaskStatusUseCase(mockTaskStatusRepo);
-    await usecase.do(1, 1, '完了');
+    await usecase.do('1', '1', '完了');
     expect(taskStatus.status).toBe(Done);
   });
 
@@ -54,7 +54,7 @@ describe('do', () => {
     };
 
     const usecase = new UpdateTaskStatusUseCase(mockTaskStatusRepo);
-    await usecase.do(1, 1, '完了');
+    await usecase.do('1', '1', '完了');
     expect(taskStatus.status).toBe(Done);
   });
 
@@ -72,7 +72,7 @@ describe('do', () => {
     };
 
     const usecase = new UpdateTaskStatusUseCase(mockTaskStatusRepo);
-    await expect(usecase.do(1, 1, '未着手')).rejects.toThrow();
+    await expect(usecase.do('1', '1', '未着手')).rejects.toThrow();
   });
 
   test('[異常系] 完了->レビュー待ち', async () => {
@@ -89,6 +89,6 @@ describe('do', () => {
     };
 
     const usecase = new UpdateTaskStatusUseCase(mockTaskStatusRepo);
-    await expect(usecase.do(1, 1, 'レビュー待ち')).rejects.toThrow();
+    await expect(usecase.do('1', '1', 'レビュー待ち')).rejects.toThrow();
   });
 });

@@ -11,7 +11,7 @@ export class ParticipantQS implements IParticipantQS {
     this.prismaClient = prismaClient;
   }
 
-  public async findById(id: number): Promise<ParticipantDto> {
+  public async findById(id: string): Promise<ParticipantDto> {
     const user = await this.prismaClient.participant.findUniqueOrThrow({
       where: { id },
     });

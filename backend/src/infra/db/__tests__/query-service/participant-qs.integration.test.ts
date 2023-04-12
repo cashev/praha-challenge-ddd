@@ -11,7 +11,7 @@ describe('user-qs.integration.test', () => {
   });
 
   describe('', () => {
-    const p1 = { id: 1, name: 'a', email: 'b', status: 'c' };
+    const p1 = { id: '1', name: 'a', email: 'b', status: 'c' };
     beforeAll(async () => {
       await prisma.participant.create({ data: p1 });
     });

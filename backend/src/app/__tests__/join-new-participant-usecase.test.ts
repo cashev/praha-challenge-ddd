@@ -14,7 +14,6 @@ import { TaskDto } from '../query-service-interface/task-qs';
 describe('do', () => {
   const createMockParticipantRepo = (
     participant: Participant | null = null,
-    nextId: number,
   ) => {
     return {
       find: jest.fn().mockResolvedValue(participant),
@@ -90,7 +89,7 @@ describe('do', () => {
     const team = createTeam();
     const tsList: TaskStatus[] = [];
     const usecase = new JoinNewParticipantUsecase(
-      createMockParticipantRepo(null, 4),
+      createMockParticipantRepo(null),
       createMockTeamRepo([team]),
       createMockTaskStatusRepo(241, tsList),
       createMockTaskQS(),
