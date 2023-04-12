@@ -46,7 +46,7 @@ export class JoinNewParticipantUsecase {
     this.teamRepo.save(team);
     // タスクを割り当て
     const taskIds = (await this.taskQS.getAll()).map((t) => t.id);
-    const tsService = new TaskStatusService(this.taskStatusRepo);
+    const tsService = new TaskStatusService();
     const taskStatusList = await tsService.createTaskStatusForNewParticipant(
       newParticipant.id,
       taskIds,

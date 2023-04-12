@@ -25,7 +25,6 @@ describe('do', () => {
     return {
       findByParticipantId: jest.fn(),
       getSmallestTeamList: jest.fn().mockResolvedValue(team),
-      getNextPairId: jest.fn().mockResolvedValue(2),
       save: jest.fn(),
     };
   };
@@ -44,7 +43,7 @@ describe('do', () => {
     const ret = [];
     for (let i = 1; i <= 80; i++) {
       const dto = new TaskDto({
-        id: i,
+        id: i.toString(),
         title: i.toString(),
         content: i.toString(),
       });
@@ -73,14 +72,14 @@ describe('do', () => {
     return [p21, p22, p23];
   };
   const createPair = () => {
-    const pair = Pair.create(1, {
+    const pair = Pair.create('1', {
       pairName: PairName.create('a'),
       member: createThreeMember(),
     });
     return [pair];
   };
   const createTeam = () => {
-    const team = Team.create(1, {
+    const team = Team.create('1', {
       teamName: TeamName.create('123'),
       pairList: createPair(),
     });

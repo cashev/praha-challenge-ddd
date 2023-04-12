@@ -3,8 +3,8 @@ import { Brand } from '../value-object/valueObject';
 import { Entity } from './entity';
 import { ParticipantIdType } from './participant';
 
-type TaskStatusIdType = Brand<number, 'TaskStatusId'>;
-export type TaskIdType = Brand<number, 'TaskId'>;
+type TaskStatusIdType = Brand<string, 'TaskStatusId'>;
+export type TaskIdType = Brand<string, 'TaskId'>;
 
 interface TaskStatusProps {
   participantId: ParticipantIdType;
@@ -17,7 +17,7 @@ export class TaskStatus extends Entity<TaskStatusIdType, TaskStatusProps> {
     super(id, props);
   }
 
-  public static create(id: number, props: TaskStatusProps): TaskStatus {
+  public static create(id: string, props: TaskStatusProps): TaskStatus {
     return new TaskStatus(id as TaskStatusIdType, props);
   }
 

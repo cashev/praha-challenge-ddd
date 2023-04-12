@@ -34,7 +34,7 @@ describe('create', () => {
     const member = createMember().splice(0, 2);
     const pairName = PairName.create('a');
 
-    const pair = Pair.create(1, { pairName, member });
+    const pair = Pair.create('1', { pairName, member });
     expect(pair.pairName).toEqual(pairName);
     expect(pair.member).toEqual(member);
   });
@@ -43,7 +43,7 @@ describe('create', () => {
     const member = createMember();
     const pairName = PairName.create('b');
 
-    const pair = Pair.create(2, { pairName, member });
+    const pair = Pair.create('2', { pairName, member });
     expect(pair.pairName).toEqual(pairName);
     expect(pair.member).toEqual(member);
   });
@@ -52,7 +52,7 @@ describe('create', () => {
     const member = createMember().splice(0, 1);
     const pairName = PairName.create('c');
 
-    expect(() => Pair.create(3, { pairName, member })).toThrow();
+    expect(() => Pair.create('3', { pairName, member })).toThrow();
   });
 
   test('[異常系] 4人のペア', () => {
@@ -64,7 +64,7 @@ describe('create', () => {
     const member = [...createMember(), u4];
     const pairName = PairName.create('d');
 
-    expect(() => Pair.create(4, { pairName, member })).toThrow();
+    expect(() => Pair.create('4', { pairName, member })).toThrow();
   });
 
   test('[異常系] 休会中の参加者が含まれる', () => {
@@ -72,7 +72,7 @@ describe('create', () => {
     member[0].status = Kyukai;
     const pairName = PairName.create('e');
 
-    expect(() => Pair.create(5, { pairName, member })).toThrow();
+    expect(() => Pair.create('5', { pairName, member })).toThrow();
   });
 
   test('[異常系] 退会済の参加者が含まれる', () => {
@@ -80,7 +80,7 @@ describe('create', () => {
     member[1].status = Taikai;
     const pairName = PairName.create('f');
 
-    expect(() => Pair.create(6, { pairName, member })).toThrow();
+    expect(() => Pair.create('6', { pairName, member })).toThrow();
   });
 });
 
@@ -96,7 +96,7 @@ describe('addMember', () => {
   test('[正常系] 2名のペアには追加できる', () => {
     const member = createMember().slice(0, 2);
     const pairName = PairName.create('k');
-    const pair = Pair.create(11, { pairName, member });
+    const pair = Pair.create('11', { pairName, member });
     const newMember = createNewMember(Zaiseki);
 
     pair.addMember(newMember);
@@ -106,7 +106,7 @@ describe('addMember', () => {
   test('[異常系] 3名のペアには追加できない', () => {
     const member = createMember();
     const pairName = PairName.create('l');
-    const pair = Pair.create(12, { pairName, member });
+    const pair = Pair.create('12', { pairName, member });
     const newMember = createNewMember(Zaiseki);
 
     expect(() => pair.addMember(newMember)).toThrow();
@@ -115,7 +115,7 @@ describe('addMember', () => {
   test('[異常系] 休会中の参加者は追加できない', () => {
     const member = createMember().slice(0, 2);
     const pairName = PairName.create('m');
-    const pair = Pair.create(13, { pairName, member });
+    const pair = Pair.create('13', { pairName, member });
     const newMember = createNewMember(Kyukai);
 
     expect(() => pair.addMember(newMember)).toThrow();
@@ -124,7 +124,7 @@ describe('addMember', () => {
   test('[異常系] 退会済の参加者は追加できない', () => {
     const member = createMember().slice(0, 2);
     const pairName = PairName.create('n');
-    const pair = Pair.create(14, { pairName, member });
+    const pair = Pair.create('14', { pairName, member });
     const newMember = createNewMember(Taikai);
 
     expect(() => pair.addMember(newMember)).toThrow();
@@ -133,7 +133,7 @@ describe('addMember', () => {
   test('[異常系] 既にペアの一員の参加者は追加できない', () => {
     const member = createMember().slice(0, 2);
     const pairName = PairName.create('o');
-    const pair = Pair.create(15, { pairName, member });
+    const pair = Pair.create('15', { pairName, member });
     const newMember = member[0];
 
     expect(() => pair.addMember(newMember)).toThrow();
@@ -144,7 +144,7 @@ describe('isFullMember', () => {
   test('[正常系] 2名のペアの場合、False', () => {
     const member = createMember().slice(0, 2);
     const pairName = PairName.create('u');
-    const pair = Pair.create(21, { pairName, member });
+    const pair = Pair.create('21', { pairName, member });
 
     expect(pair.isFullMember()).toBeFalsy();
   });
@@ -152,7 +152,7 @@ describe('isFullMember', () => {
   test('[正常系] 3名のペアの場合、True', () => {
     const member = createMember();
     const pairName = PairName.create('v');
-    const pair = Pair.create(22, { pairName, member });
+    const pair = Pair.create('22', { pairName, member });
 
     expect(pair.isFullMember()).toBeTruthy();
   });
@@ -162,7 +162,7 @@ describe('isMember', () => {
   test('[正常系] 引数の参加者がペアの一員の場合、True', () => {
     const member = createMember();
     const pairName = PairName.create('w');
-    const pair = Pair.create(23, { pairName, member });
+    const pair = Pair.create('23', { pairName, member });
 
     const memberUser = member[0];
     expect(pair.isMember(memberUser)).toBeTruthy();
@@ -171,7 +171,7 @@ describe('isMember', () => {
   test('[正常系] 引数の参加者がペアの一員でない場合、False', () => {
     const member = createMember();
     const pairName = PairName.create('w');
-    const pair = Pair.create(23, { pairName, member });
+    const pair = Pair.create('23', { pairName, member });
 
     const nonMember = Participant.create('5', {
       participantName: ParticipantName.create('上原 つばさ'),
@@ -186,7 +186,7 @@ describe('removeMember', () => {
   test('[正常系] ペアの一員であればremoveできる', () => {
     const member = createMember();
     const pairName = PairName.create('x');
-    const pair = Pair.create(24, { pairName, member });
+    const pair = Pair.create('24', { pairName, member });
 
     const removedUser = member[0];
     const newMember = member.splice(1);
@@ -198,7 +198,7 @@ describe('removeMember', () => {
   test('[異常系] ペアの一員でない場合、removeできない', () => {
     const member = createMember();
     const pairName = PairName.create('x');
-    const pair = Pair.create(24, { pairName, member });
+    const pair = Pair.create('24', { pairName, member });
 
     const removedUser = Participant.create('5', {
       participantName: ParticipantName.create('奥村 都義'),

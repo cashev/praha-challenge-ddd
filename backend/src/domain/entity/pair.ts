@@ -4,7 +4,7 @@ import { Brand } from '../value-object/valueObject';
 import { Entity } from './entity';
 import { Participant } from './participant';
 
-type PairIdType = Brand<number, 'PairId'>;
+type PairIdType = Brand<string, 'PairId'>;
 
 interface PairProps {
   pairName: PairName;
@@ -71,7 +71,7 @@ export class Pair extends Entity<PairIdType, PairProps> {
     }
   }
 
-  public static create(id: number, props: PairProps): Pair {
+  public static create(id: string, props: PairProps): Pair {
     this.validate(props.member);
     props.member = [...props.member];
     return new Pair(id as PairIdType, props);

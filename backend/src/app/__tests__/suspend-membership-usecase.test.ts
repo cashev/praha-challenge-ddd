@@ -24,12 +24,10 @@ describe('do', () => {
   };
   const createMockTeamRepo = (
     team: Team | null = null,
-    nextPiarId: number | null = null,
   ) => {
     return {
       findByParticipantId: jest.fn().mockResolvedValue(team),
       getSmallestTeamList: jest.fn(),
-      getNextPairId: jest.fn().mockResolvedValue(nextPiarId),
       save: jest.fn(),
     };
   };
@@ -68,15 +66,15 @@ describe('do', () => {
   test('[正常系] 3人のペアからメンバーを取り除く', async () => {
     const twoMember = createTwoMember();
     const threeMember = createThreeMember();
-    const twoPair = Pair.create(1, {
+    const twoPair = Pair.create('1', {
       pairName: PairName.create('a'),
       member: twoMember,
     });
-    const threePair = Pair.create(2, {
+    const threePair = Pair.create('2', {
       pairName: PairName.create('b'),
       member: threeMember,
     });
-    const team = Team.create(1, {
+    const team = Team.create('1', {
       teamName: TeamName.create('1'),
       pairList: [twoPair, threePair],
     });
@@ -98,15 +96,15 @@ describe('do', () => {
   test('[正常系] 2人のペアからメンバーを取り除く', async () => {
     const twoMember1 = createTwoMember();
     const twoMember2 = createThreeMember().slice(0, 2);
-    const twoPair = Pair.create(1, {
+    const twoPair = Pair.create('1', {
       pairName: PairName.create('a'),
       member: twoMember1,
     });
-    const threePair = Pair.create(2, {
+    const threePair = Pair.create('2', {
       pairName: PairName.create('b'),
       member: twoMember2,
     });
-    const team = Team.create(1, {
+    const team = Team.create('1', {
       teamName: TeamName.create('1'),
       pairList: [twoPair, threePair],
     });

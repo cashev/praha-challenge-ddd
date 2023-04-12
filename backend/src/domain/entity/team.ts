@@ -6,8 +6,9 @@ import { Pair } from './pair';
 import { Participant } from './participant';
 import { ITeamRepository } from '../repository-interface/team-repository';
 import { Brand } from '../value-object/valueObject';
+import { createRandomIdString } from 'src/util/random';
 
-type TeamIdType = Brand<number, 'TeamId'>;
+type TeamIdType = Brand<string, 'TeamId'>;
 
 interface TeamProps {
   teamName: TeamName;
@@ -53,7 +54,7 @@ export class Team extends Entity<TeamIdType, TeamProps> {
       const anotherMember = this.randomChoice<Participant>([...pair.member]);
       pair.removeMember(anotherMember);
 
-      const newPair = Pair.create(await teamRepo.getNextPairId(), {
+      const newPair = Pair.create(createRandomIdString(), {
         pairName: this.getUnusedPairName(),
         member: [anotherMember, participant],
       });
@@ -81,7 +82,7 @@ export class Team extends Entity<TeamIdType, TeamProps> {
           ...anotherPair.member,
         ]);
         anotherPair.removeMember(existingUser);
-        const newPair = Pair.create(await teamRepo.getNextPairId(), {
+        const newPair = Pair.create(createRandomIdString(), {
           pairName: this.getUnusedPairName(),
           member: [existingUser, anotherParticipant],
         });
@@ -147,7 +148,7 @@ export class Team extends Entity<TeamIdType, TeamProps> {
     }
   }
 
-  public static create(id: number, props: TeamProps): Team {
+  public static create(id: string, props: TeamProps): Team {
     this.validate(props.pairList.flatMap((pair) => pair.member));
     props.pairList = [...props.pairList];
     return new Team(id as TeamIdType, props);

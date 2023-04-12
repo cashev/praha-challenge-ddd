@@ -2,25 +2,16 @@ import { ITaskStatusRepository } from '../repository-interface/taskStatus-reposi
 import { TaskIdType, TaskStatus } from '../entity/taskStatus';
 import { Yet } from '../value-object/taskStatusValue';
 import { ParticipantIdType } from '../entity/participant';
+import { createRandomIdString } from 'src/util/random';
 
 export class TaskStatusService {
-  private taskStatusRepo: ITaskStatusRepository;
-
-  constructor(taskStatusRepo: ITaskStatusRepository) {
-    this.taskStatusRepo = taskStatusRepo;
-  }
-
   async createTaskStatusForNewParticipant(
     participantId: string,
-    taskIds: number[],
+    taskIds: string[],
   ): Promise<TaskStatus[]> {
-    const startId = await this.taskStatusRepo.getNextIdAndSetNext(
-      taskIds.length,
-    );
     const ret = [];
     for (let i = 0; i < taskIds.length; i++) {
-      const id = startId + i;
-      const taskStatus = TaskStatus.create(id, {
+      const taskStatus = TaskStatus.create(createRandomIdString(), {
         participantId: participantId as ParticipantIdType,
         taskId: taskIds[i] as TaskIdType,
         status: Yet,

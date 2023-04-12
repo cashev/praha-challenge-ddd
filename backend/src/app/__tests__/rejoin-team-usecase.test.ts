@@ -24,7 +24,6 @@ describe('do', () => {
     return {
       findByParticipantId: jest.fn(),
       getSmallestTeamList: jest.fn().mockResolvedValue(team),
-      getNextPairId: jest.fn(),
       save: jest.fn(),
     };
   };
@@ -74,12 +73,12 @@ describe('do', () => {
 
   test('[正常系] 既存のペアに参加する', async () => {
     const member = createMember().slice(0, 2);
-    const pair1 = Pair.create(1, { pairName: PairName.create('a'), member });
-    const pair2 = Pair.create(2, {
+    const pair1 = Pair.create('1', { pairName: PairName.create('a'), member });
+    const pair2 = Pair.create('2', {
       pairName: PairName.create('b'),
       member: createMember2(),
     });
-    const team = Team.create(1, {
+    const team = Team.create('1', {
       teamName: TeamName.create('1'),
       pairList: [pair1, pair2],
     });
@@ -100,8 +99,8 @@ describe('do', () => {
     jest.spyOn(global.Math, 'random').mockReturnValue(0);
 
     const member = createMember();
-    const pair1 = Pair.create(1, { pairName: PairName.create('a'), member });
-    const team = Team.create(1, {
+    const pair1 = Pair.create('1', { pairName: PairName.create('a'), member });
+    const team = Team.create('1', {
       teamName: TeamName.create('1'),
       pairList: [pair1],
     });

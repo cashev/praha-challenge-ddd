@@ -5,9 +5,9 @@ import { ParticipantIdType } from 'src/domain/entity/participant';
 
 describe('do', () => {
   test('[正常系] 未着手->レビュー待ち', async () => {
-    const taskStatus = TaskStatus.create(1, {
+    const taskStatus = TaskStatus.create('1', {
       participantId: '1' as ParticipantIdType,
-      taskId: 1 as TaskIdType,
+      taskId: '1' as TaskIdType,
       status: Yet,
     });
     const mockTaskStatusRepo = {
@@ -23,9 +23,9 @@ describe('do', () => {
   });
 
   test('[正常系] レビュー待ち->完了', async () => {
-    const taskStatus = TaskStatus.create(1, {
+    const taskStatus = TaskStatus.create('1', {
       participantId: '1' as ParticipantIdType,
-      taskId: 1 as TaskIdType,
+      taskId: '1' as TaskIdType,
       status: Waiting,
     });
     const mockTaskStatusRepo = {
@@ -41,9 +41,9 @@ describe('do', () => {
   });
 
   test('[正常系] 未着手->完了', async () => {
-    const taskStatus = TaskStatus.create(1, {
+    const taskStatus = TaskStatus.create('1', {
       participantId: '1' as ParticipantIdType,
-      taskId: 1 as TaskIdType,
+      taskId: '1' as TaskIdType,
       status: Yet,
     });
     const mockTaskStatusRepo = {
@@ -59,9 +59,9 @@ describe('do', () => {
   });
 
   test('[異常系] 完了->未着手', async () => {
-    const taskStatus = TaskStatus.create(1, {
+    const taskStatus = TaskStatus.create('1', {
       participantId: '1' as ParticipantIdType,
-      taskId: 1 as TaskIdType,
+      taskId: '1' as TaskIdType,
       status: Done,
     });
     const mockTaskStatusRepo = {
@@ -76,9 +76,9 @@ describe('do', () => {
   });
 
   test('[異常系] 完了->レビュー待ち', async () => {
-    const taskStatus = TaskStatus.create(1, {
+    const taskStatus = TaskStatus.create('1', {
       participantId: '1' as ParticipantIdType,
-      taskId: 1 as TaskIdType,
+      taskId: '1' as TaskIdType,
       status: Done,
     });
     const mockTaskStatusRepo = {
