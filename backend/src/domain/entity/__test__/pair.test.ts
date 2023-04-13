@@ -2,8 +2,6 @@ import { PairName } from 'src/domain/value-object/pairName';
 import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
 import { ParticipantName } from 'src/domain/value-object/participantName';
 import {
-  Kyukai,
-  Taikai,
   ParticipantStatus,
   Zaiseki,
 } from 'src/domain/value-object/participantStatus';
@@ -11,22 +9,6 @@ import { Pair } from '../pair';
 import { Participant, ParticipantIdType } from '../participant';
 
 const createMember = () => {
-  const u1 = Participant.create('1', {
-    participantName: ParticipantName.create('上村 真知子'),
-    email: ParticipantEmail.create('matiko-uemura@bbtec.net'),
-    status: Zaiseki,
-  });
-  const u2 = Participant.create('2', {
-    participantName: ParticipantName.create('柴田 嘉彦'),
-    email: ParticipantEmail.create('okihisoy9185@goo.ne.jp'),
-    status: Zaiseki,
-  });
-  const u3 = Participant.create('3', {
-    participantName: ParticipantName.create('永野 智子'),
-    email: ParticipantEmail.create('tmk.ngn@hi-ho.ne.jp'),
-    status: Zaiseki,
-  });
-  // return [u1, u2, u3];
   const p1 = '1' as ParticipantIdType;
   const p2 = '2' as ParticipantIdType;
   const p3 = '3' as ParticipantIdType;

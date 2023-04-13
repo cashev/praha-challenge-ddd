@@ -1,8 +1,7 @@
 import { PairName } from '../value-object/pairName';
-import { Zaiseki } from '../value-object/participantStatus';
 import { Brand } from '../value-object/valueObject';
 import { Entity } from './entity';
-import { Participant, ParticipantIdType } from './participant';
+import { ParticipantIdType } from './participant';
 
 type PairIdType = Brand<string, 'PairId'>;
 

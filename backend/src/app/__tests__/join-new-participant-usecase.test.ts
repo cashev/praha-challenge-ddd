@@ -2,9 +2,6 @@ import { Pair } from 'src/domain/entity/pair';
 import { Participant, ParticipantIdType } from 'src/domain/entity/participant';
 import { Team } from 'src/domain/entity/team';
 import { PairName } from 'src/domain/value-object/pairName';
-import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
-import { ParticipantName } from 'src/domain/value-object/participantName';
-import { Zaiseki } from 'src/domain/value-object/participantStatus';
 import { TeamName } from 'src/domain/value-object/teamName';
 import { JoinNewParticipantUsecase } from '../join-new-participant-usecase';
 import { TaskStatus } from 'src/domain/entity/taskStatus';
@@ -53,21 +50,6 @@ describe('do', () => {
     };
   };
   const createThreeMember = () => {
-    // const p21 = Participant.create('21', {
-    //   participantName: ParticipantName.create('足立 里香'),
-    //   email: ParticipantEmail.create('adati568@dti.ad.jp'),
-    //   status: Zaiseki,
-    // });
-    // const p22 = Participant.create('22', {
-    //   participantName: ParticipantName.create('西村 和好'),
-    //   email: ParticipantEmail.create('syzk76@plala.or.jp'),
-    //   status: Zaiseki,
-    // });
-    // const p23 = Participant.create('23', {
-    //   participantName: ParticipantName.create('内田 嘉邦'),
-    //   email: ParticipantEmail.create('inukisoy1974@gmail.com'),
-    //   status: Zaiseki,
-    // });
     const p21 = '21' as ParticipantIdType;
     const p22 = '22' as ParticipantIdType;
     const p23 = '23' as ParticipantIdType;
