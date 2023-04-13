@@ -8,7 +8,7 @@ import {
   Zaiseki,
 } from 'src/domain/value-object/participantStatus';
 import { Pair } from '../pair';
-import { Participant } from '../participant';
+import { Participant, ParticipantIdType } from '../participant';
 
 const createMember = () => {
   const u1 = Participant.create('1', {
@@ -26,7 +26,11 @@ const createMember = () => {
     email: ParticipantEmail.create('tmk.ngn@hi-ho.ne.jp'),
     status: Zaiseki,
   });
-  return [u1, u2, u3];
+  // return [u1, u2, u3];
+  const p1 = '1' as ParticipantIdType;
+  const p2 = '2' as ParticipantIdType;
+  const p3 = '3' as ParticipantIdType;
+  return [p1, p2, p3];
 };
 
 describe('create', () => {
@@ -56,31 +60,11 @@ describe('create', () => {
   });
 
   test('[異常系] 4人のペア', () => {
-    const u4 = Participant.create('3', {
-      participantName: ParticipantName.create('松田 秀俊'),
-      email: ParticipantEmail.create('matudaadutam@example.ne.jp'),
-      status: Zaiseki,
-    });
-    const member = [...createMember(), u4];
+    const p4 = '4' as ParticipantIdType;
+    const member = [...createMember(), p4];
     const pairName = PairName.create('d');
 
     expect(() => Pair.create('4', { pairName, member })).toThrow();
-  });
-
-  test('[異常系] 休会中の参加者が含まれる', () => {
-    const member = createMember();
-    member[0].status = Kyukai;
-    const pairName = PairName.create('e');
-
-    expect(() => Pair.create('5', { pairName, member })).toThrow();
-  });
-
-  test('[異常系] 退会済の参加者が含まれる', () => {
-    const member = createMember();
-    member[1].status = Taikai;
-    const pairName = PairName.create('f');
-
-    expect(() => Pair.create('6', { pairName, member })).toThrow();
   });
 });
 
@@ -99,8 +83,8 @@ describe('addMember', () => {
     const pair = Pair.create('11', { pairName, member });
     const newMember = createNewMember(Zaiseki);
 
-    pair.addMember(newMember);
-    expect(pair.member).toEqual([...member, newMember]);
+    pair.addMember(newMember.id);
+    expect(pair.member).toEqual([...member, newMember.id]);
   });
 
   test('[異常系] 3名のペアには追加できない', () => {
@@ -109,25 +93,7 @@ describe('addMember', () => {
     const pair = Pair.create('12', { pairName, member });
     const newMember = createNewMember(Zaiseki);
 
-    expect(() => pair.addMember(newMember)).toThrow();
-  });
-
-  test('[異常系] 休会中の参加者は追加できない', () => {
-    const member = createMember().slice(0, 2);
-    const pairName = PairName.create('m');
-    const pair = Pair.create('13', { pairName, member });
-    const newMember = createNewMember(Kyukai);
-
-    expect(() => pair.addMember(newMember)).toThrow();
-  });
-
-  test('[異常系] 退会済の参加者は追加できない', () => {
-    const member = createMember().slice(0, 2);
-    const pairName = PairName.create('n');
-    const pair = Pair.create('14', { pairName, member });
-    const newMember = createNewMember(Taikai);
-
-    expect(() => pair.addMember(newMember)).toThrow();
+    expect(() => pair.addMember(newMember.id)).toThrow();
   });
 
   test('[異常系] 既にペアの一員の参加者は追加できない', () => {
@@ -178,7 +144,7 @@ describe('isMember', () => {
       email: ParticipantEmail.create('rhu469919720429@tokyo24.com'),
       status: Zaiseki,
     });
-    expect(pair.isMember(nonMember)).toBeFalsy();
+    expect(pair.isMember(nonMember.id)).toBeFalsy();
   });
 });
 
@@ -206,6 +172,6 @@ describe('removeMember', () => {
       status: Zaiseki,
     });
 
-    expect(() => pair.removeMember(removedUser)).toThrow();
+    expect(() => pair.removeMember(removedUser.id)).toThrow();
   });
 });

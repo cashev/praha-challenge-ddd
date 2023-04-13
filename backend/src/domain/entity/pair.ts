@@ -2,13 +2,13 @@ import { PairName } from '../value-object/pairName';
 import { Zaiseki } from '../value-object/participantStatus';
 import { Brand } from '../value-object/valueObject';
 import { Entity } from './entity';
-import { Participant } from './participant';
+import { Participant, ParticipantIdType } from './participant';
 
 type PairIdType = Brand<string, 'PairId'>;
 
 interface PairProps {
   pairName: PairName;
-  member: Participant[];
+  member: ParticipantIdType[];
 }
 
 export class Pair extends Entity<PairIdType, PairProps> {
@@ -20,37 +20,30 @@ export class Pair extends Entity<PairIdType, PairProps> {
     return this.props.pairName;
   }
 
-  set pairName(PairName: PairName) {
-    this.props.pairName = PairName;
-  }
-
-  get member(): readonly Participant[] {
+  get member(): readonly ParticipantIdType[] {
     return this.props.member;
   }
 
-  addMember(user: Participant) {
+  addMember(participantId: ParticipantIdType) {
     if (this.isFullMember()) {
       throw new Error('ペアは3名までです。');
     }
-    if (user.status != Zaiseki) {
-      throw new Error('参加者が在籍中ではありません。');
-    }
-    if (this.isMember(user)) {
+    if (this.isMember(participantId)) {
       throw new Error('既存のメンバーです。');
     }
-    this.props.member.push(user);
+    this.props.member.push(participantId);
   }
 
-  removeMember(user: Participant) {
-    const index = this.member.indexOf(user);
+  removeMember(participantId: ParticipantIdType) {
+    const index = this.member.indexOf(participantId);
     if (index < 0) {
       throw new Error('この参加者はペアの一員ではありません。');
     }
     this.props.member.splice(index, 1);
   }
 
-  isMember(user: Participant): boolean {
-    return this.member.some((u) => u.id === user.id);
+  isMember(participantId: ParticipantIdType): boolean {
+    return this.member.some((id) => id === participantId);
   }
 
   isFullMember(): boolean {
@@ -61,13 +54,9 @@ export class Pair extends Entity<PairIdType, PairProps> {
     super(id, props);
   }
 
-  private static validate(member: Participant[]) {
+  private static validate(member: ParticipantIdType[]) {
     if (member.length < 2 || member.length > 3) {
       throw new Error('ペアは2名または3名です。: ' + member.length);
-    }
-
-    if (member.some((user) => user.status !== Zaiseki)) {
-      throw new Error('在籍中ではない参加者が含まれています。');
     }
   }
 

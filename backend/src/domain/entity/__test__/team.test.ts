@@ -49,7 +49,7 @@ const createPairList = (member: Participant[]) => {
   return [
     Pair.create('1', {
       pairName,
-      member,
+      member: member.map((p) => p.id),
     }),
   ];
 };
@@ -79,12 +79,12 @@ describe('addParticipant', () => {
     const member = createMember();
     const pair1 = Pair.create('1', {
       pairName: PairName.create('a'),
-      member: member.slice(1),
+      member: member.slice(1).map((p) => p.id),
     });
     const member2 = createMember2();
     const pair2 = Pair.create('2', {
       pairName: PairName.create('b'),
-      member: member2,
+      member: member2.map((p) => p.id),
     });
     const team = Team.create('1', {
       teamName: TeamName.create('123'),
@@ -95,8 +95,8 @@ describe('addParticipant', () => {
     team.addParticipant(newParticipant);
 
     expect(team.pairList[0].member).toEqual([
-      ...member.slice(1),
-      newParticipant,
+      ...member.slice(1).map((p) => p.id),
+      newParticipant.id,
     ]);
   });
 
@@ -113,8 +113,10 @@ describe('addParticipant', () => {
     await team.addParticipant(newParticipant);
 
     expect(team.pairList.length).toBe(2);
-    expect(team.pairList[0].member).toEqual([...member.slice(1)]);
-    expect(team.pairList[1].member).toEqual([member[0], newParticipant]);
+    expect(team.pairList[0].member).toEqual([
+      ...member.slice(1).map((p) => p.id),
+    ]);
+    expect(team.pairList[1].member).toEqual([member[0].id, newParticipant.id]);
   });
 
   test('[異常系] 休会中の参加者', async () => {
@@ -155,19 +157,19 @@ describe('removeParticipant', () => {
     const removeParticipant = member[0];
 
     await team.removeParticipant(removeParticipant);
-    expect(team.pairList[0].member).toEqual(member.slice(1));
+    expect(team.pairList[0].member).toEqual(member.slice(1).map((p) => p.id));
   });
 
   test('[正常系] 2人のペアからメンバーを取り除き、2人のペアに合流する', async () => {
     const member = createMember().slice(1);
     const pair1 = Pair.create('1', {
       pairName: PairName.create('a'),
-      member,
+      member: member.map((p) => p.id),
     });
     const member2 = createMember2();
     const pair2 = Pair.create('2', {
       pairName: PairName.create('b'),
-      member: member2,
+      member: member2.map((p) => p.id),
     });
     const team = Team.create('1', {
       teamName: TeamName.create('123'),
@@ -178,7 +180,10 @@ describe('removeParticipant', () => {
     await team.removeParticipant(removeParticipant);
     expect(team.pairList.length).toBe(1);
     expect(team.pairList[0].member.length).toBe(3);
-    expect(team.pairList[0].member).toEqual([...member2, member[1]]);
+    expect(team.pairList[0].member).toEqual([
+      ...member2.map((p) => p.id),
+      member[1].id,
+    ]);
   });
 
   test('[正常系] 2人のペアからメンバーを取り除き、3人のペアに合流する', async () => {
@@ -187,12 +192,12 @@ describe('removeParticipant', () => {
     const member = createMember2();
     const pair1 = Pair.create('1', {
       pairName: PairName.create('a'),
-      member,
+      member: member.map((p) => p.id),
     });
     const member2 = createMember();
     const pair2 = Pair.create('2', {
       pairName: PairName.create('b'),
-      member: member2,
+      member: member2.map((p) => p.id),
     });
     const team = Team.create('1', {
       teamName: TeamName.create('123'),
@@ -202,8 +207,10 @@ describe('removeParticipant', () => {
 
     await team.removeParticipant(removeParticipant);
     expect(team.pairList.length).toBe(2);
-    expect(team.pairList[0].member).toEqual([...member2.slice(1)]);
-    expect(team.pairList[1].member).toEqual([member2[0], member[1]]);
+    expect(team.pairList[0].member).toEqual([
+      ...member2.slice(1).map((p) => p.id),
+    ]);
+    expect(team.pairList[1].member).toEqual([member2[0].id, member[1].id]);
   });
 
   test('[異常系] 非メンバーを取り除く', async () => {
@@ -228,7 +235,7 @@ describe('addPair', () => {
 
     const newPair = Pair.create('2', {
       pairName: PairName.create('b'),
-      member: createMember2(),
+      member: createMember2().map((p) => p.id),
     });
     team.addPair(newPair);
 
@@ -242,7 +249,7 @@ describe('addPair', () => {
 
     const newPair = Pair.create('2', {
       pairName: PairName.create('a'),
-      member: createMember2(),
+      member: createMember2().map((p) => p.id),
     });
 
     expect(() => team.addPair(newPair)).toThrow();
@@ -294,7 +301,7 @@ describe('getSmallestPair', () => {
 
   const createPair = (id: string, name: string, member: Participant[]) => {
     const pairName = PairName.create(name);
-    return Pair.create(id, { pairName, member });
+    return Pair.create(id, { pairName, member: member.map((p) => p.id) });
   };
 
   test('[正常系] 1つ目が最小のペアの場合', () => {
@@ -338,11 +345,11 @@ describe('getUnusedPairName', () => {
   test('[正常系] aとbが使われている場合、c', async () => {
     const p1 = Pair.create('1', {
       pairName: PairName.create('a'),
-      member: createMember(),
+      member: createMember().map((p) => p.id),
     });
     const p2 = Pair.create('2', {
       pairName: PairName.create('b'),
-      member: createMember(),
+      member: createMember().map((p) => p.id),
     });
     const team = Team.create('1', {
       teamName: TeamName.create('1'),
@@ -354,11 +361,11 @@ describe('getUnusedPairName', () => {
   test('[正常系] aとcが使われている場合、b', () => {
     const p1 = Pair.create('1', {
       pairName: PairName.create('a'),
-      member: createMember(),
+      member: createMember().map((p) => p.id),
     });
     const p3 = Pair.create('3', {
       pairName: PairName.create('c'),
-      member: createMember(),
+      member: createMember().map((p) => p.id),
     });
     const team = Team.create('1', {
       teamName: TeamName.create('1'),
@@ -370,7 +377,7 @@ describe('getUnusedPairName', () => {
   test('[正常系] bだけが使われている場合、a', () => {
     const p2 = Pair.create('2', {
       pairName: PairName.create('b'),
-      member: createMember(),
+      member: createMember().map((p) => p.id),
     });
     const team = Team.create('1', {
       teamName: TeamName.create('1'),
@@ -384,157 +391,157 @@ describe('getUnusedPairName', () => {
     pairList.push(
       Pair.create('1', {
         pairName: PairName.create('a'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('2', {
         pairName: PairName.create('b'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('3', {
         pairName: PairName.create('c'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('4', {
         pairName: PairName.create('d'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('5', {
         pairName: PairName.create('e'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('6', {
         pairName: PairName.create('f'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('7', {
         pairName: PairName.create('g'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('8', {
         pairName: PairName.create('h'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('9', {
         pairName: PairName.create('i'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('10', {
         pairName: PairName.create('j'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('11', {
         pairName: PairName.create('k'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('12', {
         pairName: PairName.create('l'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('13', {
         pairName: PairName.create('m'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('14', {
         pairName: PairName.create('n'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('15', {
         pairName: PairName.create('o'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('16', {
         pairName: PairName.create('p'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('17', {
         pairName: PairName.create('q'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('18', {
         pairName: PairName.create('r'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('19', {
         pairName: PairName.create('s'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('20', {
         pairName: PairName.create('t'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('21', {
         pairName: PairName.create('u'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('22', {
         pairName: PairName.create('v'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('23', {
         pairName: PairName.create('w'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('24', {
         pairName: PairName.create('x'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('25', {
         pairName: PairName.create('y'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     pairList.push(
       Pair.create('26', {
         pairName: PairName.create('z'),
-        member: createMember(),
+        member: createMember().map((p) => p.id),
       }),
     );
     const team = Team.create('1', {

@@ -1,5 +1,5 @@
 import { Pair } from 'src/domain/entity/pair';
-import { Participant } from 'src/domain/entity/participant';
+import { Participant, ParticipantIdType } from 'src/domain/entity/participant';
 import { Team } from 'src/domain/entity/team';
 import { PairName } from 'src/domain/value-object/pairName';
 import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
@@ -30,34 +30,14 @@ describe('do', () => {
     };
   };
   const createTwoMember = () => {
-    const p11 = Participant.create('11', {
-      participantName: ParticipantName.create('小谷 絵里'),
-      email: ParticipantEmail.create('re8142@example.ne.jp'),
-      status: Zaiseki,
-    });
-    const p12 = Participant.create('12', {
-      participantName: ParticipantName.create('酒井 幹也'),
-      email: ParticipantEmail.create('ayikim@ybb.ne.jp'),
-      status: Zaiseki,
-    });
+    const p11 = '11' as ParticipantIdType;
+    const p12 = '12' as ParticipantIdType;
     return [p11, p12];
   };
   const createThreeMember = () => {
-    const p21 = Participant.create('21', {
-      participantName: ParticipantName.create('足立 里香'),
-      email: ParticipantEmail.create('adati568@dti.ad.jp'),
-      status: Zaiseki,
-    });
-    const p22 = Participant.create('22', {
-      participantName: ParticipantName.create('西村 和好'),
-      email: ParticipantEmail.create('syzk76@plala.or.jp'),
-      status: Zaiseki,
-    });
-    const p23 = Participant.create('23', {
-      participantName: ParticipantName.create('内田 嘉邦'),
-      email: ParticipantEmail.create('inukisoy1974@gmail.com'),
-      status: Zaiseki,
-    });
+    const p21 = '21' as ParticipantIdType;
+    const p22 = '22' as ParticipantIdType;
+    const p23 = '23' as ParticipantIdType;
     return [p21, p22, p23];
   };
 
@@ -77,7 +57,11 @@ describe('do', () => {
       pairList: [twoPair, threePair],
     });
 
-    const removeParticipant = threeMember[0];
+    const removeParticipant = Participant.create('21', {
+      participantName: ParticipantName.create('足立 里香'),
+      email: ParticipantEmail.create('adati568@dti.ad.jp'),
+      status: Zaiseki,
+    });
     const mockParticipantRepo = createMockParticipantRepo(removeParticipant);
     const mockTeamRepo = createMockTeamRepo(team);
 
@@ -107,7 +91,11 @@ describe('do', () => {
       pairList: [twoPair, threePair],
     });
 
-    const removeParticipant = twoMember2[0];
+    const removeParticipant = Participant.create('21', {
+      participantName: ParticipantName.create('足立 里香'),
+      email: ParticipantEmail.create('adati568@dti.ad.jp'),
+      status: Zaiseki,
+    });
     const mockParticipantRepo = createMockParticipantRepo(removeParticipant);
     const mockTeamRepo = createMockTeamRepo(team);
 

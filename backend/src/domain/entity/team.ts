@@ -3,7 +3,7 @@ import { TeamName } from '../value-object/teamName';
 import { Zaiseki } from '../value-object/participantStatus';
 import { Entity } from './entity';
 import { Pair } from './pair';
-import { Participant } from './participant';
+import { Participant, ParticipantIdType } from './participant';
 import { Brand } from '../value-object/valueObject';
 import { createRandomIdString } from 'src/util/random';
 
@@ -50,16 +50,18 @@ export class Team extends Entity<TeamIdType, TeamProps> {
     const pair = this.getSmallestPair();
     if (pair.isFullMember()) {
       // ペアを分割する
-      const anotherMember = this.randomChoice<Participant>([...pair.member]);
+      const anotherMember = this.randomChoice<ParticipantIdType>([
+        ...pair.member,
+      ]);
       pair.removeMember(anotherMember);
 
       const newPair = Pair.create(createRandomIdString(), {
         pairName: this.getUnusedPairName(),
-        member: [anotherMember, participant],
+        member: [anotherMember, participant.id],
       });
       this.addPair(newPair);
     } else {
-      pair.addMember(participant);
+      pair.addMember(participant.id);
     }
   }
 
@@ -67,17 +69,19 @@ export class Team extends Entity<TeamIdType, TeamProps> {
     if (!this.isMember(participant)) {
       throw new Error('メンバーではありません');
     }
-    const pair = this.pairList.filter((pair) => pair.isMember(participant))[0];
+    const pair = this.pairList.filter((pair) =>
+      pair.isMember(participant.id),
+    )[0];
     if (pair.isFullMember()) {
-      pair.removeMember(participant);
+      pair.removeMember(participant.id);
     } else {
       const anotherParticipant = pair.member.filter(
-        (p) => !p.equals(participant),
+        (p) => p != participant.id,
       )[0];
       this.removePair(pair);
       const anotherPair = this.getSmallestPair();
       if (anotherPair.isFullMember()) {
-        const existingUser = this.randomChoice<Participant>([
+        const existingUser = this.randomChoice<ParticipantIdType>([
           ...anotherPair.member,
         ]);
         anotherPair.removeMember(existingUser);
@@ -97,12 +101,12 @@ export class Team extends Entity<TeamIdType, TeamProps> {
     this.props.pairList.splice(index, 1);
   }
 
-  get member(): readonly Participant[] {
+  get member(): readonly ParticipantIdType[] {
     return this.props.pairList.flatMap((pair) => pair.member);
   }
 
   isMember(user: Participant): boolean {
-    return this.member.some((u) => u.id === user.id);
+    return this.member.some((id) => id === user.id);
   }
 
   getSmallestPair(): Pair {
@@ -138,12 +142,9 @@ export class Team extends Entity<TeamIdType, TeamProps> {
     super(id, props);
   }
 
-  private static validate(member: Participant[]) {
+  private static validate(member: ParticipantIdType[]) {
     if (member.length < 3) {
       throw new Error('チームの参加者は3名以上です。: ' + member.length);
-    }
-    if (member.some((user) => user.status !== Zaiseki)) {
-      throw new Error('在籍中ではない参加者が含まれています。');
     }
   }
 

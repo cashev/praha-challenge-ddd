@@ -1,6 +1,6 @@
 import { Pair } from 'src/domain/entity/pair';
 import { Team } from 'src/domain/entity/team';
-import { Participant } from 'src/domain/entity/participant';
+import { Participant, ParticipantIdType } from 'src/domain/entity/participant';
 import { PairName } from 'src/domain/value-object/pairName';
 import { TeamName } from 'src/domain/value-object/teamName';
 import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
@@ -35,39 +35,15 @@ describe('do', () => {
     });
   };
   const createMember = () => {
-    const p11 = Participant.create('11', {
-      participantName: ParticipantName.create('大内 真志'),
-      email: ParticipantEmail.create('isasam171@nifty.com'),
-      status: Zaiseki,
-    });
-    const p12 = Participant.create('12', {
-      participantName: ParticipantName.create('沼田 義武'),
-      email: ParticipantEmail.create('yositake-numata@nifty.jp'),
-      status: Zaiseki,
-    });
-    const p13 = Participant.create('13', {
-      participantName: ParticipantName.create('中川 火呂絵'),
-      email: ParticipantEmail.create('hre-nkgw@example.ad.jp'),
-      status: Zaiseki,
-    });
+    const p11 = '11' as ParticipantIdType;
+    const p12 = '12' as ParticipantIdType;
+    const p13 = '13' as ParticipantIdType;
     return [p11, p12, p13];
   };
   const createMember2 = () => {
-    const p21 = Participant.create('11', {
-      participantName: ParticipantName.create('小倉 敬史'),
-      email: ParticipantEmail.create('tks@infoseek.jp'),
-      status: Zaiseki,
-    });
-    const p22 = Participant.create('12', {
-      participantName: ParticipantName.create('井口 晴生'),
-      email: ParticipantEmail.create('haruo1112@comeon.to'),
-      status: Zaiseki,
-    });
-    const p23 = Participant.create('13', {
-      participantName: ParticipantName.create('谷川 善二'),
-      email: ParticipantEmail.create('zenzi-yagawa@dti.ne.jp'),
-      status: Zaiseki,
-    });
+    const p21 = '21' as ParticipantIdType;
+    const p22 = '21' as ParticipantIdType;
+    const p23 = '21' as ParticipantIdType;
     return [p21, p22, p23];
   };
 
@@ -92,7 +68,7 @@ describe('do', () => {
     );
     await participantcase.do('1');
 
-    expect(pair1.member).toEqual([...member, newParticipant]);
+    expect(pair1.member).toEqual([...member, newParticipant.id]);
   });
 
   test('[正常系] 既存のペアを分割して参加する', async () => {
@@ -116,7 +92,7 @@ describe('do', () => {
 
     expect(team.pairList.length).toBe(2);
     expect(pair1.member).toEqual(member.slice(1));
-    expect(team.pairList[1].member).toEqual([member[0], newParticipant]);
+    expect(team.pairList[1].member).toEqual([member[0], newParticipant.id]);
   });
 
   test('[異常系] 存在しない参加者', async () => {

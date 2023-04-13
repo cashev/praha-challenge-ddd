@@ -13,7 +13,7 @@ interface ParticipantProps {
 }
 
 export class Participant extends Entity<ParticipantIdType, ParticipantProps> {
-  get id(): string {
+  get id(): ParticipantIdType {
     return this._id;
   }
 
