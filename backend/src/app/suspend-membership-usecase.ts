@@ -25,6 +25,9 @@ export class SuspendMembershipUsecase {
     }
 
     const team = await this.teamRepo.findByParticipantId(participantId);
+    if (team == null) {
+      throw new Error();
+    }
     participant.status = Kyukai;
     team.removeParticipant(participant);
 

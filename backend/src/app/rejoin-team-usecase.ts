@@ -27,6 +27,9 @@ export class RejoinTeamUseCase {
 
     participant.status = Zaiseki;
     const team = await this.getSmallestTeam();
+    if (team == null) {
+      throw new Error();
+    }
     team.addParticipant(participant);
 
     this.teamRepo.save(team);
@@ -42,8 +45,9 @@ export class RejoinTeamUseCase {
     }
   }
 
-  private async getSmallestTeam(): Promise<Team> {
+  private async getSmallestTeam(): Promise<Team | null> {
     const teams = await this.teamRepo.getSmallestTeamList();
+    if (teams == null) {return null}
     return randomChoice<Team>(teams);
   }
 }

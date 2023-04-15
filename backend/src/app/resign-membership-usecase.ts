@@ -25,6 +25,9 @@ export class ResignMembershipUsecase {
     }
 
     const team = await this.teamRepo.findByParticipantId(participantId);
+    if (team == null) {
+      throw new Error();
+    }
     participant.status = Taikai;
     team.removeParticipant(participant);
 

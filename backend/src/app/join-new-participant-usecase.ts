@@ -38,7 +38,11 @@ export class JoinNewParticipantUsecase {
     });
     await this.participantRepo.save(newParticipant);
     // チームへ参加
-    const team = randomChoice<Team>(await this.teamRepo.getSmallestTeamList());
+    const teams = await this.teamRepo.getSmallestTeamList();
+    if (teams == null) {
+      throw new Error();
+    }
+    const team = randomChoice<Team>(teams);
     team.addParticipant(newParticipant);
     this.teamRepo.save(team);
     // タスクを割り当て

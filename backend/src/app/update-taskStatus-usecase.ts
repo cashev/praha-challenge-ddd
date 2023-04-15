@@ -11,6 +11,9 @@ export class UpdateTaskStatusUseCase {
   async do(participantId: string, taskId: string, status: string) {
     const newStatus = createTaskStatusValue(status);
     const taskStatus = await this.taskStatusRepo.find(participantId, taskId);
+    if (taskStatus == null) {
+      throw new Error();
+    }
     taskStatus.status = newStatus;
     await this.taskStatusRepo.save(taskStatus);
   }
