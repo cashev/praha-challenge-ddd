@@ -61,7 +61,7 @@ async function main() {
             name: 'a',
         },
     });
-    await prisma.pair_User.createMany({
+    await prisma.pair_Participant.createMany({
         data: [
             { pairId: '1', participantId: '1' },
             { pairId: '1', participantId: '2' },
