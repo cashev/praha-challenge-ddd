@@ -11,12 +11,12 @@ datasource db {
 }
 
 model Participant {
-  id         String       @id
+  id         String            @id
   name       String
-  email      String       @unique
+  email      String            @unique
   status     String
   TaskStatus TaskStatus[]
-  pair       Pair_User?
+  pair       Pair_Participant?
 }
 
 model Task {
@@ -35,7 +35,7 @@ model TaskStatus {
   status        String
 }
 
-model Pair_User {
+model Pair_Participant {
   pair          Pair        @relation(fields: [pairId], references: [id])
   pairId        String
   participant   Participant @relation(fields: [participantId], references: [id])
@@ -45,9 +45,9 @@ model Pair_User {
 }
 
 model Pair {
-  id     String      @id
+  id     String             @id
   name   String
-  member Pair_User[]
+  member Pair_Participant[]
   team   Team_Pair[]
 }
 
