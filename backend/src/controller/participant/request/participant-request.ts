@@ -1,5 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsIn, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsIn, IsNotEmpty } from 'class-validator';
+
+export class PostParticipantRequest {
+  @ApiProperty()
+  @IsNotEmpty()
+  readonly name: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsEmail()
+  readonly email: string;
+}
 
 export class PatchParticipantRequest {
   @ApiProperty()
