@@ -4,7 +4,7 @@
 
 このRepositoryはPrAha Challengeの課題の成果物です。  
 
-PrAha Challengeを題材としたRest API Serverです。  
+PrAha Challengeを題材として、参加者の在籍状況, チーム/ペアのメンバー, 課題の進捗を管理するRest API Serverです。  
 
 ### 動かし方
 
