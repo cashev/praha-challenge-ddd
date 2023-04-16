@@ -7,16 +7,9 @@ export class GetParticipantResponse {
 
   public constructor(params: { participantDtos: ParticipantDto[] }) {
     const { participantDtos } = params;
-    this.participantData = participantDtos.map(
-      ({ id, name, email, status }) => {
-        return new ParticipantData({
-          id,
-          name,
-          email,
-          status,
-        });
-      },
-    );
+    this.participantData = participantDtos.map((dto) => {
+      return new ParticipantData({ ...dto });
+    });
   }
 }
 
