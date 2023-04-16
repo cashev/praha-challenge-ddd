@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsNotEmpty, IsNumber } from 'class-validator';
 
-export class TaskStatusPostRequest {
+export class PostTaskStatusRequest {
   @ApiProperty()
   @IsNotEmpty()
   readonly taskIds: string[];

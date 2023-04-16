@@ -4,7 +4,7 @@ import { ParticipantByTaskStatusQS } from 'src/infra/db/query-service/participan
 import { GetByTaskStatusUsecase } from 'src/app/get-by-taskStatus-usecase';
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { TaskStatusPostRequest } from './request/task-status-request';
+import { PostTaskStatusRequest } from './request/task-status-request';
 
 @Controller({
   path: '/taskStatus',
@@ -14,7 +14,7 @@ export class TaskStatusController {
   @ApiResponse({ status: 200, type: GetByTaskStatusResponse })
   async getByTaskStatus(
     @Body()
-    taskStatusPostRequest: TaskStatusPostRequest,
+    taskStatusPostRequest: PostTaskStatusRequest,
   ): Promise<GetByTaskStatusResponse> {
     const prisma = new PrismaClient();
     const qs = new ParticipantByTaskStatusQS(prisma);
