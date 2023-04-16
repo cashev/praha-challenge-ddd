@@ -16,6 +16,7 @@
     "migrate:dev": "dotenv -e .local.env -- prisma migrate dev --preview-feature",
     "migrate:test": "dotenv -e .test.env -- prisma migrate reset --force --preview-feature",
     "model-generate": "prisma generate",
+    "seed": "dotenv -e .local.env -- ts-node prisma/seed.ts",
     "test": "dotenv -e .test.env -- jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
@@ -29,10 +30,12 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^6.2.1",
     "@prisma/client": "^4.12.0",
+    "class-validator": "^0.14.0",
     "dotenv": "^16.0.3",
     "fp-ts": "^2.13.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
+    "uuid": "^9.0.0",
     "uuidv4": "^6.2.13"
   },
   "devDependencies": {
