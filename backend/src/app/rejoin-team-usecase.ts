@@ -47,7 +47,9 @@ export class RejoinTeamUseCase {
 
   private async getSmallestTeam(): Promise<Team | null> {
     const teams = await this.teamRepo.getSmallestTeamList();
-    if (teams == null) {return null}
+    if (teams == null) {
+      return null;
+    }
     return randomChoice<Team>(teams);
   }
 }

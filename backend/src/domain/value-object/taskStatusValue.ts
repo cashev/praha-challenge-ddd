@@ -22,3 +22,14 @@ export function createTaskStatusValue(status: string): TaskStatusValue {
     '不正な値です。未着手, レビュー待ち, 完了を指定してください。: ' + status,
   );
 }
+
+export const convertToString = (taskStatus: TaskStatusValue) => {
+  switch (taskStatus) {
+    case Yet:
+      return TaskStatusValues.Yet;
+    case Waiting:
+      return TaskStatusValues.Waiting;
+    case Done:
+      return TaskStatusValues.Done;
+  }
+};
