@@ -26,5 +26,5 @@ npm run seed
 ローカルDBを使ってアプリケーションを起動する
 
 ``` sh
-npm run start:dev
+npm run dev
 ```
