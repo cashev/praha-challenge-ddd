@@ -1,73 +1,75 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# 機能
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## API Reference
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### 参加者
 
-## Description
+#### 参加者の一覧を取得する
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+全ての参加者を取得します。  
 
-## Installation
+GET `/participant`  
 
-```bash
-$ npm install
-```
+#### 参加者を新規追加する
 
-## Running the app
+参加者を新規に追加、チーム, ペアにアサインし、課題進捗を登録します。
 
-```bash
-# development
-$ npm run start
+POST `/participant`  
 
-# watch mode
-$ npm run start:dev
+Request Body  
 
-# production mode
-$ npm run start:prod
-```
+- name: 名前
+- email: メールアドレス
 
-## Test
+#### 参加者の在籍ステータスを更新する
 
-```bash
-# unit tests
-$ npm run test
+参加者の在籍ステータスを更新します。  
+参加者が在籍中になった場合、自動的にチーム, ペアにアサインします。
+参加者が在籍中以外になった場合、自動的にチーム, ペアから取り除かれます。
 
-# e2e tests
-$ npm run test:e2e
+PATCH `/participant`  
 
-# test coverage
-$ npm run test:cov
-```
+Request Body
 
-## Support
+- participantId: 対象の参加者id
+- status: 参加者ステータス: ["在籍中", "休会中", "退会済"]のいづれか
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### チーム
 
-## Stay in touch
+#### チームの一覧を取得する
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+全てのチームを取得します。
 
-## License
+GET `/team`
 
-Nest is [MIT licensed](LICENSE).
+### ペア
+
+全てのペアを取得します。
+
+GET `/pair`
+
+### 課題
+
+#### 課題の一覧を取得する
+
+全ての課題を取得します。
+
+GET `/task`
+
+#### 課題の進捗ステータスを更新する
+
+PATCH `/taskStatus`
+
+- participantId: 対象の参加者id
+- taskId: 対象の課題id 複数指定する場合は
+- status: 参加者ステータス: ["未着手", "レビュー待ち", "完了"]のいづれか
+
+#### 特定の課題(複数可能)が特定の進捗ステータスになっている参加者の一覧を取得する
+
+POST `/taskStatus`
+
+Request Body
+
+- taskIds: 対象の課題id 複数指定する場合は
+- status: 参加者ステータス: ["未着手", "レビュー待ち", "完了"]のいづれか
+- page?: ページ (指定がない場合は1ページ目)
