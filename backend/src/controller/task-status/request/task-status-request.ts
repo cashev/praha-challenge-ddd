@@ -15,3 +15,18 @@ export class PostTaskStatusRequest {
   @IsNumber()
   readonly page: number;
 }
+
+export class PatchTaskStatusRequest {
+  @ApiProperty()
+  @IsNotEmpty()
+  readonly participantId: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  readonly taskId: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsIn(['在籍中', 'レビュー待ち', '完了'])
+  readonly status: string;
+}
