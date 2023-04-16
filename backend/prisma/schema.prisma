@@ -17,6 +17,7 @@ model Participant {
   status     String
   TaskStatus TaskStatus[]
   pair       Pair_Participant?
+  team       Team_Participant?
 }
 
 model Task {
@@ -33,6 +34,8 @@ model TaskStatus {
   task          Task        @relation(fields: [taskId], references: [id])
   taskId        String
   status        String
+
+  @@unique([participantId, taskId])
 }
 
 model Pair_Participant {
@@ -45,10 +48,10 @@ model Pair_Participant {
 }
 
 model Pair {
-  id     String             @id
-  name   String
-  member Pair_Participant[]
-  team   Team_Pair[]
+  id           String             @id
+  name         String
+  participants Pair_Participant[]
+  team         Team_Pair[]
 }
 
 model Team_Pair {
@@ -60,8 +63,18 @@ model Team_Pair {
   @@unique([teamId, pairId])
 }
 
+model Team_Participant {
+  team          Team        @relation(fields: [teamId], references: [id])
+  teamId        String
+  participant   Participant @relation(fields: [participantId], references: [id])
+  participantId String      @unique
+
+  @@unique([teamId, participantId])
+}
+
 model Team {
-  id       String      @id
-  name     String
-  pairList Team_Pair[]
+  id           String             @id
+  name         String
+  pairs        Team_Pair[]
+  participants Team_Participant[]
 }
