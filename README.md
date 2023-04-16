@@ -29,4 +29,4 @@ npm run seed
 npm run dev
 ```
 
-(OpenAPI(Swagger))[http://localhost:3000/openapi]
+[OpenAPI(Swagger)](http://localhost:3000/openapi)
