@@ -313,7 +313,7 @@ describe('getSmallestPair', () => {
       pairList: [p1, p2, p3],
     });
 
-    expect(team.getSmallestPair()).toEqual(p1);
+    expect(team.getSmallestPair()).toEqual([p1]);
   });
 
   test('[正常系] 2つ目が最小のペアの場合', () => {
@@ -325,7 +325,7 @@ describe('getSmallestPair', () => {
       pairList: [p1, p2, p3],
     });
 
-    expect(team.getSmallestPair()).toEqual(p2);
+    expect(team.getSmallestPair()).toEqual([p2]);
   });
 
   test('[正常系] 3つ目が最小のペアの場合', () => {
@@ -337,7 +337,7 @@ describe('getSmallestPair', () => {
       pairList: [p1, p2, p3],
     });
 
-    expect(team.getSmallestPair()).toEqual(p3);
+    expect(team.getSmallestPair()).toEqual([p3]);
   });
 });
 

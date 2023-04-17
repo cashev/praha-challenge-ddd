@@ -83,7 +83,7 @@ export class Team extends Entity<TeamIdType, TeamProps> {
         (p) => p != participant.id,
       )[0];
       this.removePair(pair);
-      const anotherPairs = this.getSmallestPair().filter(p => p.id !== pair.id);
+      const anotherPairs = this.getSmallestPair();
       if (anotherPairs.length == 0) {
         return false;
       }
@@ -102,7 +102,7 @@ export class Team extends Entity<TeamIdType, TeamProps> {
         anotherPair.addMember(anotherParticipant);
       }
     }
-    return false;
+    return true;
   }
 
   private removePair(pair: Pair) {
@@ -119,6 +119,9 @@ export class Team extends Entity<TeamIdType, TeamProps> {
   }
 
   getSmallestPair(): Pair[] {
+    if (this.pairList.every(p => p.isFullMember())) {
+      return this.props.pairList;
+    }
     return this.props.pairList.filter(p => p.member.length === 2);
   }
 

@@ -29,6 +29,11 @@ describe('do', () => {
       save: jest.fn(),
     };
   };
+  const createMockNotificationSender = () => {
+    return {
+      sendToAdmin: jest.fn(),
+    };
+  };
   const createTwoMember = () => {
     const p11 = '11' as ParticipantIdType;
     const p12 = '12' as ParticipantIdType;
@@ -68,6 +73,7 @@ describe('do', () => {
     const usecase = new SuspendMembershipUsecase(
       mockParticipantRepo,
       mockTeamRepo,
+      createMockNotificationSender(),
     );
     await usecase.do('21');
 
@@ -102,6 +108,7 @@ describe('do', () => {
     const usecase = new SuspendMembershipUsecase(
       mockParticipantRepo,
       mockTeamRepo,
+      createMockNotificationSender(),
     );
     await usecase.do('21');
 
@@ -116,6 +123,7 @@ describe('do', () => {
     const usecase = new SuspendMembershipUsecase(
       mockParticipantRepo,
       mockTeamRepo,
+      createMockNotificationSender(),
     );
     expect(() => usecase.do('31')).rejects.toThrow();
   });
@@ -132,6 +140,7 @@ describe('do', () => {
     const usecase = new SuspendMembershipUsecase(
       mockParticipantRepo,
       mockTeamRepo,
+      createMockNotificationSender(),
     );
     expect(() => usecase.do('32')).rejects.toThrow();
   });
@@ -148,6 +157,7 @@ describe('do', () => {
     const usecase = new SuspendMembershipUsecase(
       mockParticipantRepo,
       mockTeamRepo,
+      createMockNotificationSender(),
     );
     expect(() => usecase.do('33')).rejects.toThrow();
   });
