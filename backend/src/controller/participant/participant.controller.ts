@@ -22,6 +22,7 @@ import {
 import { TaskQS } from 'src/infra/db/query-service/task-qs';
 import { TaskStatusRepository } from 'src/infra/db/repository/taskStatus-repository';
 import { JoinNewParticipantUsecase } from 'src/app/join-new-participant-usecase';
+import { NotificationSender } from 'src/infra/notifier/notification-sender';
 
 @Controller({
   path: '/participant',
@@ -69,6 +70,7 @@ export class ParticipantController {
     const prisma = new PrismaClient();
     const participantRepository = new ParticipantRepository(prisma);
     const teamRepository = new TeamRepository(prisma);
+    const notificationSender = new NotificationSender();
 
     const { participantId, status } = patchParticipantRequest;
     switch (createUserStatus(status)) {
@@ -81,12 +83,14 @@ export class ParticipantController {
         await new SuspendMembershipUsecase(
           participantRepository,
           teamRepository,
+          notificationSender,
         ).do(participantId);
         break;
       case Taikai:
         await new ResignMembershipUsecase(
           participantRepository,
           teamRepository,
+          notificationSender,
         ).do(participantId);
         break;
     }

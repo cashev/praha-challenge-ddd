@@ -26,6 +26,11 @@ services:
       POSTGRES_DB: prisma
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
       TZ: "Asia/Tokyo"
+  mail:
+    image: jcalonso/mailhog:latest
+    ports:
+      - "8025:8025"
+      - "1025:1025"
 
 volumes:
   prisma-store:
