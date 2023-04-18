@@ -29,4 +29,5 @@ npm run seed
 npm run dev
 ```
 
-[OpenAPI(Swagger)](http://localhost:3000/openapi)
+OpenAPI(Swagger)を使用しているため以下からリクエストを試すことができます。  
+http://localhost:3000/openapi
