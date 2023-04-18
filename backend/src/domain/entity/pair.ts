@@ -23,6 +23,11 @@ export class Pair extends Entity<PairIdType, PairProps> {
     return this.props.member;
   }
 
+  /**
+   * ペアに参加者を追加します。
+   *
+   * @param participantId 参加者
+   */
   addMember(participantId: ParticipantIdType) {
     if (this.isFullMember()) {
       throw new Error('ペアは3名までです。');
@@ -33,6 +38,11 @@ export class Pair extends Entity<PairIdType, PairProps> {
     this.props.member.push(participantId);
   }
 
+  /**
+   * ペアから参加者を取り除きます。
+   *
+   * @param participantId 参加者
+   */
   removeMember(participantId: ParticipantIdType) {
     const index = this.member.indexOf(participantId);
     if (index < 0) {
@@ -41,10 +51,21 @@ export class Pair extends Entity<PairIdType, PairProps> {
     this.props.member.splice(index, 1);
   }
 
+  /**
+   * 参加者がこのペアに含まれているか判定します。
+   *
+   * @param participantId 参加者
+   * @returns 含まれている場合...true, 含まれていない場合...false
+   */
   isMember(participantId: ParticipantIdType): boolean {
     return this.member.some((id) => id === participantId);
   }
 
+  /**
+   * ペアが最大人数か判定します。
+   *
+   * @returns ペアが最大人数の場合...true, ペアが最大人数ではない場合...false
+   */
   isFullMember(): boolean {
     return this.member.length === 3;
   }
