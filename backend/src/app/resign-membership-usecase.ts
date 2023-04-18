@@ -34,14 +34,28 @@ export class ResignMembershipUsecase {
     if (team == null) {
       throw new Error();
     }
+    if (team.member.length === 3) {
+      // チームの人数が規定の人数を下回る場合、管理者に通知する
+      const notification = Notification.create(createRandomIdString(), {
+        title: 'テスト件名',
+        content: 'テスト内容',
+      });
+      await this.notificationSender.sendToAdmin(notification);
+      throw new Error('');
+    }
+
     participant.status = Taikai;
     const result = await team.removeParticipant(participant);
     if (result == false) {
-      const notification = Notification.create(createRandomIdString(), {title: 'テスト件名', content: 'テスト内容'});
+      //
+      const notification = Notification.create(createRandomIdString(), {
+        title: 'テスト件名',
+        content: 'テスト内容',
+      });
       await this.notificationSender.sendToAdmin(notification);
-      throw new Error('')
+      throw new Error('');
     }
-    
+
     await this.teamRepo.save(team);
     await this.participantRepo.save(participant);
   }

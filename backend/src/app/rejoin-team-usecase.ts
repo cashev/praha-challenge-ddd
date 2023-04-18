@@ -1,6 +1,6 @@
 import { Team } from 'src/domain/entity/team';
 import { Zaiseki } from 'src/domain/value-object/participantStatus';
-import { randomChoice } from 'src/util/RandomChoice';
+import { randomChoice } from 'src/util/random';
 import { ITeamRepository } from '../domain/repository-interface/team-repository';
 import { IParticipantRepository } from '../domain/repository-interface/participant-repository';
 import { Participant } from 'src/domain/entity/participant';

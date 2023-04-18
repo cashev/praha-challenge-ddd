@@ -6,7 +6,7 @@ import { ITeamRepository } from 'src/domain/repository-interface/team-repository
 import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
 import { ParticipantName } from 'src/domain/value-object/participantName';
 import { Zaiseki } from 'src/domain/value-object/participantStatus';
-import { randomChoice } from 'src/util/RandomChoice';
+import { randomChoice } from 'src/util/random';
 import { ITaskQS } from './query-service-interface/task-qs';
 import { TaskStatusService } from 'src/domain/service/taskStatus-service';
 import { createRandomIdString } from 'src/util/random';

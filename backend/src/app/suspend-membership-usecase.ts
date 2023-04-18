@@ -37,9 +37,12 @@ export class SuspendMembershipUsecase {
     participant.status = Kyukai;
     const result = await team.removeParticipant(participant);
     if (result == false) {
-      const notification = Notification.create(createRandomIdString(), {title: 'テスト件名', content: 'テスト内容'});
+      const notification = Notification.create(createRandomIdString(), {
+        title: 'テスト件名',
+        content: 'テスト内容',
+      });
       await this.notificationSender.sendToAdmin(notification);
-      throw new Error('')
+      throw new Error('');
     }
 
     await this.teamRepo.save(team);
