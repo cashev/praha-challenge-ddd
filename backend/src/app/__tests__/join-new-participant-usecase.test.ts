@@ -6,7 +6,7 @@ import { TeamName } from 'src/domain/value-object/teamName';
 import { JoinNewParticipantUsecase } from '../join-new-participant-usecase';
 import { TaskStatus } from 'src/domain/entity/taskStatus';
 import { Yet } from 'src/domain/value-object/taskStatusValue';
-import { TaskDto } from '../query-service-interface/task-qs';
+import { TaskIdDto } from '../query-service-interface/task-qs';
 
 describe('do', () => {
   const createMockParticipantRepo = (
@@ -38,10 +38,8 @@ describe('do', () => {
   const createMockTaskQS = () => {
     const ret = [];
     for (let i = 1; i <= 80; i++) {
-      const dto = new TaskDto({
+      const dto = new TaskIdDto({
         id: i.toString(),
-        title: i.toString(),
-        content: i.toString(),
       });
       ret.push(dto);
     }

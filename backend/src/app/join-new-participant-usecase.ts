@@ -7,50 +7,57 @@ import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
 import { ParticipantName } from 'src/domain/value-object/participantName';
 import { Zaiseki } from 'src/domain/value-object/participantStatus';
 import { randomChoice } from 'src/util/random';
-import { ITaskQS } from './query-service-interface/task-qs';
+import { ITaskIdQS } from './query-service-interface/task-qs';
 import { TaskStatusService } from 'src/domain/service/taskStatus-service';
 import { createRandomIdString } from 'src/util/random';
 
+/**
+ * 参加者を新規追加するユースケース
+ */
 export class JoinNewParticipantUsecase {
   private participantRepo: IParticipantRepository;
   private teamRepo: ITeamRepository;
   private taskStatusRepo: ITaskStatusRepository;
-  private taskQS: ITaskQS;
+  private qs: ITaskIdQS;
 
   constructor(
     participantRepo: IParticipantRepository,
     teamRepo: ITeamRepository,
     taskStatusRepo: ITaskStatusRepository,
-    taskQS: ITaskQS,
+    qs: ITaskIdQS,
   ) {
     this.participantRepo = participantRepo;
     this.teamRepo = teamRepo;
     this.taskStatusRepo = taskStatusRepo;
-    this.taskQS = taskQS;
+    this.qs = qs;
   }
 
-  // 参加者を新規追加するユースケース
+  /**
+   * 参加者を新規追加、チームへ追加、課題の進捗ステータスを作成します。
+   *
+   * @param name 参加者の名前
+   * @param email 参加者のメールアドレス
+   */
   async do(name: string, email: string) {
+    // 参加者を新規参加
     const newParticipant = Participant.create(createRandomIdString(), {
       participantName: ParticipantName.create(name),
       email: ParticipantEmail.create(email),
       status: Zaiseki,
     });
     await this.participantRepo.save(newParticipant);
-    // チームへ参加
+    // 新規参加者をチームに追加する
     const teams = await this.teamRepo.getSmallestTeamList();
-    if (teams == null) {
-      throw new Error();
+    if (teams == null || teams.length == 0) {
+      throw new Error('チームが見つかりませんでした。');
     }
     const team = randomChoice<Team>(teams);
     team.addParticipant(newParticipant);
     this.teamRepo.save(team);
-    // タスクを割り当て
-    const taskIds = (await this.taskQS.getAll()).map((t) => t.id);
-    const tsService = new TaskStatusService();
+    // 各課題について未着手の進捗ステータスを作成する
+    const tsService = new TaskStatusService(this.qs);
     const taskStatusList = await tsService.createTaskStatusForNewParticipant(
       newParticipant.id,
-      taskIds,
     );
     this.taskStatusRepo.saveAll(taskStatusList);
   }

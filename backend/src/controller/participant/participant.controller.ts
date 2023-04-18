@@ -19,7 +19,7 @@ import {
   PatchParticipantRequest,
   PostParticipantRequest,
 } from './request/participant-request';
-import { TaskQS } from 'src/infra/db/query-service/task-qs';
+import { TaskIdQS } from 'src/infra/db/query-service/task-qs';
 import { TaskStatusRepository } from 'src/infra/db/repository/taskStatus-repository';
 import { JoinNewParticipantUsecase } from 'src/app/join-new-participant-usecase';
 import { NotificationSender } from 'src/infra/notifier/notification-sender';
@@ -49,13 +49,13 @@ export class ParticipantController {
     const participantRepository = new ParticipantRepository(prisma);
     const teamRepository = new TeamRepository(prisma);
     const taskStatusRepository = new TaskStatusRepository(prisma);
-    const taskQS = new TaskQS(prisma);
+    const taskIdQS = new TaskIdQS(prisma);
 
     const usecase = new JoinNewParticipantUsecase(
       participantRepository,
       teamRepository,
       taskStatusRepository,
-      taskQS,
+      taskIdQS,
     );
     const { name, email } = postParticipantRequest;
     await usecase.do(name, email);

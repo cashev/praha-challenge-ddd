@@ -14,3 +14,16 @@ export class TaskDto {
 export interface ITaskQS {
   getAll(): Promise<TaskDto[]>;
 }
+
+export class TaskIdDto {
+  public readonly id: string;
+
+  public constructor(props: { id: string }) {
+    const { id } = props;
+    this.id = id;
+  }
+}
+
+export interface ITaskIdQS {
+  getAll(): Promise<TaskIdDto[]>;
+}
