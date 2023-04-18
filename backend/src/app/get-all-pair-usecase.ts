@@ -1,5 +1,8 @@
 import { IPairQS } from './query-service-interface/pair-qs';
 
+/**
+ * 全てのペアを取得するユースケース
+ */
 export class GetAllPairUseCase {
   private readonly pairQS: IPairQS;
 
@@ -8,10 +11,6 @@ export class GetAllPairUseCase {
   }
 
   public async do() {
-    try {
-      return await this.pairQS.getAll();
-    } catch (error) {
-      throw error;
-    }
+    return await this.pairQS.getAll();
   }
 }

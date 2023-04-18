@@ -1,5 +1,8 @@
 import { ITeamQS } from './query-service-interface/team-qs';
 
+/**
+ * 全てのチームを取得するユースケース
+ */
 export class GetAllTeamUseCase {
   private readonly teamQS: ITeamQS;
 
@@ -8,10 +11,6 @@ export class GetAllTeamUseCase {
   }
 
   public async do() {
-    try {
-      return await this.teamQS.getAll();
-    } catch (error) {
-      throw error;
-    }
+    return await this.teamQS.getAll();
   }
 }

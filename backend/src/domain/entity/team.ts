@@ -47,7 +47,7 @@ export class Team extends Entity<TeamIdType, TeamProps> {
    */
   async addParticipant(participant: Participant) {
     if (participant.status != Zaiseki) {
-      throw new Error('在籍中ではない参加者です');
+      throw new Error('在籍中ではない参加者です。');
     }
     // チーム内で最小のペア
     const pair = this.getSmallestPair();

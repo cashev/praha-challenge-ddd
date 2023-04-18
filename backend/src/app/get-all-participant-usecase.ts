@@ -1,5 +1,8 @@
 import { IParticipantQS } from './query-service-interface/participant-qs';
 
+/**
+ * 全ての参加者を取得するユースケース
+ */
 export class GetAllParticipantUseCase {
   private readonly userQS: IParticipantQS;
 
@@ -8,10 +11,6 @@ export class GetAllParticipantUseCase {
   }
 
   public async do() {
-    try {
-      return await this.userQS.getAll();
-    } catch (error) {
-      throw error;
-    }
+    return await this.userQS.getAll();
   }
 }

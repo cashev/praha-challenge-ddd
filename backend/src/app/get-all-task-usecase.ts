@@ -1,5 +1,8 @@
 import { ITaskQS } from './query-service-interface/task-qs';
 
+/**
+ * 全ての課題を取得するユースケース
+ */
 export class GetAllTaskUseCase {
   private readonly taskQS: ITaskQS;
 
@@ -8,10 +11,6 @@ export class GetAllTaskUseCase {
   }
 
   public async do() {
-    try {
-      return await this.taskQS.getAll();
-    } catch (error) {
-      throw error;
-    }
+    return await this.taskQS.getAll();
   }
 }
