@@ -1,75 +1,89 @@
-# API Reference
+# PrAha Challege
 
-## 参加者
+## 構成
 
-### ・参加者の一覧を取得する
+Onion Architectureに基づいて設計しています。  
 
-全ての参加者を取得します。  
+- domain
 
-GET `/participant`  
+  ドメイン層  
+  Entity, ValueObject, Repository-Interface
 
-### ・参加者を新規追加する
+- app
 
-参加者を新規に追加、チーム, ペアにアサインし、課題進捗を登録します。
+  ユースケース層  
+  UseCase, QueryService-Interface
 
-POST `/participant`  
+- infra
 
-Request Body  
+  インフラ層  
+  Repository, QueryService
 
-- name: 名前
-- email: メールアドレス
+- controller
 
-### ・参加者の在籍ステータスを更新する
+  プレゼンテーション層  
+  Controller
 
-参加者の在籍ステータスを更新します。  
-参加者が在籍中になった場合、自動的にチーム, ペアにアサインします。
-参加者が在籍中以外になった場合、自動的にチーム, ペアから取り除かれます。
+---
 
-PATCH `/participant`  
+## API Reference
 
-Request Body
+- 参加者
 
-- participantId: 対象の参加者id
-- status: 参加者ステータス: ["在籍中", "休会中", "退会済"]のいづれか
+  - GET `/participant`  
 
-## チーム
+    全ての参加者を取得します。
 
-### ・チームの一覧を取得する
+  - POST `/participant`  
 
-全てのチームを取得します。
+    参加者を新規に追加、チーム, ペアにアサインし、課題進捗を登録します。
 
-GET `/team`
+    Request Body
+    - name: 名前
+    - email: メールアドレス
 
-## ペア
+  - PATCH `/participant`  
 
-全てのペアを取得します。
+    参加者の在籍ステータスを更新します。  
+    参加者が在籍中になった場合、自動的にチーム, ペアにアサインします。
+    参加者が在籍中以外になった場合、自動的にチーム, ペアから取り除かれます。
 
-GET `/pair`
+    Request Body  
+    - participantId: 対象の参加者id
+    - status: 参加者ステータス: ["在籍中", "休会中", "退会済"]のいづれか
 
-## 課題
+- チーム
 
-### ・課題の一覧を取得する
+  - GET `/team`
 
-全ての課題を取得します。
+    全てのチームを取得します。
 
-GET `/task`
+- ペア
 
-### ・課題の進捗ステータスを更新する
+  - GET `/pair`
 
-PATCH `/taskStatus`
+    全てのペアを取得します。
 
-Request Body  
+- 課題
 
-- participantId: 対象の参加者id
-- taskId: 対象の課題id 複数指定する場合は
-- status: 参加者ステータス: ["未着手", "レビュー待ち", "完了"]のいづれか
+  - GET `/task`
 
-### ・特定の課題(複数可能)が特定の進捗ステータスになっている参加者の一覧を取得する
+    全ての課題を取得します。
 
-POST `/taskStatus`
+  - PATCH `/taskStatus`
 
-Request Body
+    課題の進捗ステータスを更新します。
 
-- taskIds: 対象の課題id 複数指定する場合は
-- status: 参加者ステータス: ["未着手", "レビュー待ち", "完了"]のいづれか
-- page?: ページ (指定がない場合は1ページ目)
+    Request Body  
+    - participantId: 対象の参加者id
+    - taskId: 対象の課題id 複数指定する場合は
+    - status: 参加者ステータス: ["未着手", "レビュー待ち", "完了"]のいづれか
+
+  - POST `/taskStatus`
+
+    特定の課題(複数可能)が特定の進捗ステータスになっている参加者の一覧を取得します。
+
+    Request Body
+    - taskIds: 対象の課題id 複数指定する場合は
+    - status: 参加者ステータス: ["未着手", "レビュー待ち", "完了"]のいづれか
+    - page?: ページ (指定がない場合は1ページ目)
