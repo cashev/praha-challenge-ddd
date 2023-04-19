@@ -162,12 +162,11 @@ export class TeamRepository implements ITeamRepository {
         },
       });
       await tx.pair_Participant.createMany({
-        data: team.pairList
-          .flatMap((pair) => {
-            return pair.member.map((id) => {
-              return { pairId: pair.id, participantId: id };
-            });
-          }),
+        data: team.pairList.flatMap((pair) => {
+          return pair.member.map((id) => {
+            return { pairId: pair.id, participantId: id };
+          });
+        }),
       });
       await tx.team_Pair.deleteMany({
         where: {
@@ -185,9 +184,9 @@ export class TeamRepository implements ITeamRepository {
         },
       });
       await tx.team_Participant.createMany({
-        data: team.pairList.flatMap(pair => {
+        data: team.pairList.flatMap((pair) => {
           return pair.member.map((id) => {
-            return {teamId: team.id, participantId: id};
+            return { teamId: team.id, participantId: id };
           });
         }),
       });
