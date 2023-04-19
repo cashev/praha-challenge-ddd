@@ -85,7 +85,7 @@ export class Team extends Entity<TeamIdType, TeamProps> {
    * @param participant 取り除く参加者
    * @returns true...成功, false...失敗
    */
-  async removeParticipant(participant: Participant): Promise<boolean> {
+  removeParticipant(participant: Participant) {
     if (!this.isMember(participant)) {
       throw new Error('メンバーではありません');
     }
@@ -120,7 +120,6 @@ export class Team extends Entity<TeamIdType, TeamProps> {
         anotherPair.addMember(anotherParticipant);
       }
     }
-    return true;
   }
 
   /**
