@@ -10,6 +10,9 @@ interface PairProps {
   member: ParticipantIdType[];
 }
 
+const MIN_PAIR_MEMBER_SIZE = 2;
+const MAX_PAIR_MEMBER_SIZE = 3;
+
 export class Pair extends Entity<PairIdType, PairProps> {
   get id(): PairIdType {
     return this._id;
@@ -67,7 +70,7 @@ export class Pair extends Entity<PairIdType, PairProps> {
    * @returns ペアが最大人数の場合...true, ペアが最大人数ではない場合...false
    */
   isFullMember(): boolean {
-    return this.member.length === 3;
+    return this.member.length === MAX_PAIR_MEMBER_SIZE;
   }
 
   private constructor(id: PairIdType, props: PairProps) {
@@ -75,7 +78,10 @@ export class Pair extends Entity<PairIdType, PairProps> {
   }
 
   private static validate(member: ParticipantIdType[]) {
-    if (member.length < 2 || member.length > 3) {
+    if (
+      member.length < MIN_PAIR_MEMBER_SIZE ||
+      member.length > MAX_PAIR_MEMBER_SIZE
+    ) {
       throw new Error('ペアは2名または3名です。: ' + member.length);
     }
   }

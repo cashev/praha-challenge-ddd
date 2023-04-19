@@ -16,17 +16,9 @@ export class TeamRepository implements ITeamRepository {
   async findByParticipantId(participantId: string): Promise<Team | null> {
     const result = await this.prismaClient.team.findFirst({
       where: {
-        AND: {
-          pairs: {
-            some: {
-              pair: {
-                participants: {
-                  some: {
-                    participantId,
-                  },
-                },
-              },
-            },
+        participants: {
+          some: {
+            participantId,
           },
         },
       },
@@ -170,15 +162,11 @@ export class TeamRepository implements ITeamRepository {
         },
       });
       await tx.pair_Participant.createMany({
-        data: team.pairList
-          .flatMap((pair) => {
-            return pair.member.map((id) => {
-              return { pairId: pair.id, participantId: id };
-            });
-          })
-          .map((p2) => {
-            return { pairId: p2.pairId, participantId: p2.participantId };
-          }),
+        data: team.pairList.flatMap((pair) => {
+          return pair.member.map((id) => {
+            return { pairId: pair.id, participantId: id };
+          });
+        }),
       });
       await tx.team_Pair.deleteMany({
         where: {
@@ -188,6 +176,18 @@ export class TeamRepository implements ITeamRepository {
       await tx.team_Pair.createMany({
         data: team.pairList.map((pair) => {
           return { teamId: team.id, pairId: pair.id };
+        }),
+      });
+      await tx.team_Participant.deleteMany({
+        where: {
+          teamId: team.id,
+        },
+      });
+      await tx.team_Participant.createMany({
+        data: team.pairList.flatMap((pair) => {
+          return pair.member.map((id) => {
+            return { teamId: team.id, participantId: id };
+          });
         }),
       });
     });

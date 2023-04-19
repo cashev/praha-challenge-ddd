@@ -168,3 +168,38 @@ describe('isMember', () => {
     expect(team.isMember(u4)).toBeFalsy();
   });
 });
+
+describe('canRemoveParticipant', () => {
+  test('[正常系] 参加者が4人であれば、true', () => {
+    const member1 = createMember().slice(1);
+    const pair1 = Pair.create('1', {
+      pairName: PairName.create('a'),
+      member: member1.map((p) => p.id),
+    });
+    const member2 = createMember().slice(1);
+    const pair2 = Pair.create('2', {
+      pairName: PairName.create('b'),
+      member: member2.map((p) => p.id),
+    });
+    const team = Team.create('1', {
+      teamName: TeamName.create('1'),
+      pairList: [pair1, pair2],
+    });
+
+    expect(team.canRemoveParticipant()).toBeTruthy();
+  });
+
+  test('[正常系] 参加者が3人であれば、false', () => {
+    const member1 = createMember();
+    const pair1 = Pair.create('1', {
+      pairName: PairName.create('a'),
+      member: member1.map((p) => p.id),
+    });
+    const team = Team.create('1', {
+      teamName: TeamName.create('1'),
+      pairList: [pair1],
+    });
+
+    expect(team.canRemoveParticipant()).toBeFalsy();
+  });
+});
