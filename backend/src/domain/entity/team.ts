@@ -14,6 +14,8 @@ interface TeamProps {
   pairList: Pair[];
 }
 
+const MIN_TEAM_MEMBER_SIZE = 3;
+
 export class Team extends Entity<TeamIdType, TeamProps> {
   get id(): TeamIdType {
     return this._id;
@@ -65,6 +67,15 @@ export class Team extends Entity<TeamIdType, TeamProps> {
       // 参加者を既存のペアに追加する
       pair.addMember(participant.id);
     }
+  }
+
+  /**
+   * チームから参加者を取り除けるか判定します。
+   *
+   * @returns true...取り除ける, false...取り除けない
+   */
+  canRemoveParticipant(): boolean {
+    return this.member.length > MIN_TEAM_MEMBER_SIZE;
   }
 
   /**
