@@ -21,3 +21,18 @@ export class ParticipantDto {
 export interface IParticipantQS {
   getAll(): Promise<ParticipantDto[]>;
 }
+
+export class ParticipantNameDto {
+  public readonly id: string;
+  public readonly name: string;
+
+  public constructor(props: { id: string; name: string }) {
+    const { id, name } = props;
+    this.id = id;
+    this.name = name;
+  }
+}
+
+export interface IParticipantNameQS {
+  getNames(ids: string[]): Promise<ParticipantNameDto[]>;
+}

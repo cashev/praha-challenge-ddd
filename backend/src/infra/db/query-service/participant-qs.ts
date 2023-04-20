@@ -1,7 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 import {
+  IParticipantNameQS,
   IParticipantQS,
   ParticipantDto,
+  ParticipantNameDto,
 } from 'src/app/query-service-interface/participant-qs';
 
 export class ParticipantQS implements IParticipantQS {
@@ -11,15 +13,29 @@ export class ParticipantQS implements IParticipantQS {
     this.prismaClient = prismaClient;
   }
 
-  public async findById(id: string): Promise<ParticipantDto> {
-    const user = await this.prismaClient.participant.findUniqueOrThrow({
-      where: { id },
-    });
-    return new ParticipantDto({ ...user });
-  }
-
   public async getAll(): Promise<ParticipantDto[]> {
     const users = await this.prismaClient.participant.findMany();
     return users.map((participant) => new ParticipantDto({ ...participant }));
+  }
+}
+
+export class ParticipantNameQS implements IParticipantNameQS {
+  private prismaClient: PrismaClient;
+
+  public constructor(prismaClient: PrismaClient) {
+    this.prismaClient = prismaClient;
+  }
+
+  public async getNames(ids: string[]): Promise<ParticipantNameDto[]> {
+    const users = await this.prismaClient.participant.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+    return users.map(
+      (participant) => new ParticipantNameDto({ ...participant }),
+    );
   }
 }

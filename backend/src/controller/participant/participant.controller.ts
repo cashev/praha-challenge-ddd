@@ -2,7 +2,10 @@ import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { PrismaClient } from '@prisma/client';
 import { GetAllParticipantUseCase } from 'src/app/get-all-participant-usecase';
-import { ParticipantQS } from 'src/infra/db/query-service/participant-qs';
+import {
+  ParticipantNameQS,
+  ParticipantQS,
+} from 'src/infra/db/query-service/participant-qs';
 import { GetParticipantResponse } from './response/participant-response';
 import { ParticipantRepository } from 'src/infra/db/repository/participant-repository';
 import { TeamRepository } from 'src/infra/db/repository/team-repository';
@@ -71,6 +74,7 @@ export class ParticipantController {
     const participantRepository = new ParticipantRepository(prisma);
     const teamRepository = new TeamRepository(prisma);
     const notificationSender = new NotificationSender();
+    const participantNameQS = new ParticipantNameQS(prisma);
 
     const { participantId, status } = patchParticipantRequest;
     switch (createUserStatus(status)) {
@@ -84,6 +88,7 @@ export class ParticipantController {
           participantRepository,
           teamRepository,
           notificationSender,
+          participantNameQS,
         ).do(participantId);
         break;
       case Taikai:
@@ -91,6 +96,7 @@ export class ParticipantController {
           participantRepository,
           teamRepository,
           notificationSender,
+          participantNameQS,
         ).do(participantId);
         break;
     }

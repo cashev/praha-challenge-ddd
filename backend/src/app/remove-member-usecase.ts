@@ -7,6 +7,8 @@ import {
   Zaiseki,
 } from 'src/domain/value-object/participantStatus';
 import { createRandomIdString } from 'src/util/random';
+import { IParticipantNameQS } from './query-service-interface/participant-qs';
+import { ParticipantName } from 'src/domain/value-object/participantName';
 
 /**
  * チームから参加者を取り除くユースケースです。
@@ -15,20 +17,23 @@ export class RemoveMemberUsecase {
   private readonly participantRepo: IParticipantRepository;
   private readonly teamRepo: ITeamRepository;
   private readonly notificationSender: INotificationSender;
+  private readonly participantNameQS: IParticipantNameQS;
 
   constructor(
     participantRepo: IParticipantRepository,
     teamRepo: ITeamRepository,
     notificationSender: INotificationSender,
+    participantNameQS: IParticipantNameQS,
   ) {
     this.participantRepo = participantRepo;
     this.teamRepo = teamRepo;
     this.notificationSender = notificationSender;
+    this.participantNameQS = participantNameQS;
   }
 
   /**
-   * 指定された参加者をチームから取り除き、指定された在籍ステースタへ更新します。    
-   * 参加者が抜けてペアが1人になる場合、チーム内でペアを再編成します。    
+   * 指定された参加者をチームから取り除き、指定された在籍ステースタへ更新します。
+   * 参加者が抜けてペアが1人になる場合、チーム内でペアを再編成します。
    * チームメンバーが最低人数を下回る場合、管理者へ通知します。
    *
    * @param participantId 取り除く参加者id
@@ -54,13 +59,16 @@ export class RemoveMemberUsecase {
     }
     if (team.canRemoveParticipant() == false) {
       // チームの人数が規定の人数を下回る場合、管理者に通知する
-      // TOOD 件名, 本文
-      // どの参加者
-      // チーム名
-      // チームの参加者名
+      const participantNames = await this.participantNameQS.getNames([
+        ...team.member,
+      ]);
       const notification = Notification.create(createRandomIdString(), {
-        title: 'テスト件名',
-        content: 'テスト内容',
+        targetParticipantName: participant.participantName,
+        newStatus,
+        teamName: team.teamName,
+        teamMemberNames: participantNames.map((dto) =>
+          ParticipantName.create(dto.name),
+        ),
       });
       await this.notificationSender.sendToAdmin(notification);
       throw new Error('');
