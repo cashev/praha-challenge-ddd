@@ -2,6 +2,7 @@ import { TaskIdType, TaskStatus } from 'src/domain/entity/taskStatus';
 import { Yet, Waiting, Done } from 'src/domain/value-object/taskStatusValue';
 import { UpdateTaskStatusUseCase } from '../update-taskStatus-usecase';
 import { ParticipantIdType } from 'src/domain/entity/participant';
+import { some } from 'fp-ts/lib/Option';
 
 describe('do', () => {
   test('[正常系] 未着手->レビュー待ち', async () => {
@@ -11,7 +12,7 @@ describe('do', () => {
       status: Yet,
     });
     const mockTaskStatusRepo = {
-      find: jest.fn().mockResolvedValue(taskStatus),
+      find: jest.fn().mockResolvedValue(some(taskStatus)),
       getNextIdAndSetNext: jest.fn(),
       save: jest.fn(),
       saveAll: jest.fn(),
@@ -29,7 +30,7 @@ describe('do', () => {
       status: Waiting,
     });
     const mockTaskStatusRepo = {
-      find: jest.fn().mockResolvedValue(taskStatus),
+      find: jest.fn().mockResolvedValue(some(taskStatus)),
       getNextIdAndSetNext: jest.fn(),
       save: jest.fn(),
       saveAll: jest.fn(),
@@ -47,7 +48,7 @@ describe('do', () => {
       status: Yet,
     });
     const mockTaskStatusRepo = {
-      find: jest.fn().mockResolvedValue(taskStatus),
+      find: jest.fn().mockResolvedValue(some(taskStatus)),
       getNextIdAndSetNext: jest.fn(),
       save: jest.fn(),
       saveAll: jest.fn(),
@@ -65,7 +66,7 @@ describe('do', () => {
       status: Done,
     });
     const mockTaskStatusRepo = {
-      find: jest.fn().mockResolvedValue(taskStatus),
+      find: jest.fn().mockResolvedValue(some(taskStatus)),
       getNextIdAndSetNext: jest.fn(),
       save: jest.fn(),
       saveAll: jest.fn(),
@@ -82,7 +83,7 @@ describe('do', () => {
       status: Done,
     });
     const mockTaskStatusRepo = {
-      find: jest.fn().mockResolvedValue(taskStatus),
+      find: jest.fn().mockResolvedValue(some(taskStatus)),
       getNextIdAndSetNext: jest.fn(),
       save: jest.fn(),
       saveAll: jest.fn(),

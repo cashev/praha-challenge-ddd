@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { Option, none, some } from 'fp-ts/lib/Option';
 import { ParticipantIdType } from 'src/domain/entity/participant';
 import { TaskIdType, TaskStatus } from 'src/domain/entity/taskStatus';
 import { ITaskStatusRepository } from 'src/domain/repository-interface/taskStatus-repository';
@@ -17,7 +18,7 @@ export class TaskStatusRepository implements ITaskStatusRepository {
   async find(
     participantId: string,
     taskId: string,
-  ): Promise<TaskStatus | null> {
+  ): Promise<Option<TaskStatus>> {
     const result = await this.prismaClient.taskStatus.findFirst({
       where: {
         participantId,
@@ -25,13 +26,14 @@ export class TaskStatusRepository implements ITaskStatusRepository {
       },
     });
     if (result == null) {
-      return null;
+      return none;
     }
-    return TaskStatus.create(result.id, {
+    const taskStatus = TaskStatus.create(result.id, {
       participantId: result.participantId as ParticipantIdType,
       taskId: result.taskId as TaskIdType,
       status: createTaskStatusValue(result.status),
     });
+    return some(taskStatus);
   }
 
   async save(taskStatus: TaskStatus): Promise<void> {

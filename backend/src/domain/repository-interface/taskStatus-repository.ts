@@ -1,3 +1,4 @@
+import { Option } from 'fp-ts/lib/Option';
 import { TaskStatus } from 'src/domain/entity/taskStatus';
 
 export interface ITaskStatusRepository {
@@ -7,7 +8,7 @@ export interface ITaskStatusRepository {
    * @param participantId 参加者id
    * @param taskId 課題id
    */
-  find(participantId: string, taskId: string): Promise<TaskStatus | null>;
+  find(participantId: string, taskId: string): Promise<Option<TaskStatus>>;
   /**
    * 課題進捗ステータスを保存します。
    *

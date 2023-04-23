@@ -12,6 +12,7 @@ import {
   Yet,
   convertToString,
 } from 'src/domain/value-object/taskStatusValue';
+import { isNone } from 'fp-ts/lib/Option';
 
 describe('taskStatus-repository.integration.test', () => {
   const taskStatusRepository = new TaskStatusRepository(prisma);
@@ -45,10 +46,11 @@ describe('taskStatus-repository.integration.test', () => {
 
     test('[正常系]', async () => {
       const result = await taskStatusRepository.find('001', 'T001');
-      if (result == null) {
+      if (isNone(result)) {
         throw new Error();
       }
-      expect(result.status).toEqual(Done);
+      const taskStatus = result.value;
+      expect(taskStatus.status).toEqual(Done);
     });
   });
 
@@ -69,10 +71,11 @@ describe('taskStatus-repository.integration.test', () => {
       await taskStatusRepository.save(taskStatus);
 
       const result = await taskStatusRepository.find('001', 'T003');
-      if (result == null) {
+      if (isNone(result)) {
         throw new Error();
       }
-      expect(result.status).toEqual(Done);
+      const tsResult = result.value;
+      expect(tsResult.status).toEqual(Done);
     });
   });
 
