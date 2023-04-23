@@ -10,6 +10,7 @@ import { randomChoice } from 'src/util/random';
 import { ITaskIdQS } from './query-service-interface/task-qs';
 import { TaskStatusService } from 'src/domain/service/taskStatus-service';
 import { createRandomIdString } from 'src/util/random';
+import { isNone } from 'fp-ts/lib/Option';
 
 /**
  * 参加者を新規追加するユースケース
@@ -47,8 +48,12 @@ export class JoinNewParticipantUsecase {
     });
     await this.participantRepo.save(newParticipant);
     // 新規参加者をチームに追加する
-    const teams = await this.teamRepo.getSmallestTeamList();
-    if (teams == null || teams.length == 0) {
+    const tResult = await this.teamRepo.getSmallestTeamList();
+    if (isNone(tResult)) {
+      throw new Error('チームが見つかりませんでした。');
+    }
+    const teams = tResult.value;
+    if (teams.length == 0) {
       throw new Error('チームが見つかりませんでした。');
     }
     const team = randomChoice<Team>(teams);

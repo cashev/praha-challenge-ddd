@@ -11,7 +11,7 @@ import {
 } from 'src/domain/value-object/participantStatus';
 import { TeamName } from 'src/domain/value-object/teamName';
 import { ResignMembershipUsecase } from '../resign-membership-usecase';
-import { some } from 'fp-ts/lib/Option';
+import { Option, none, some } from 'fp-ts/lib/Option';
 
 describe('do', () => {
   const createMockParticipantRepo = (
@@ -23,7 +23,7 @@ describe('do', () => {
       save: jest.fn(),
     };
   };
-  const createMockTeamRepo = (team: Team | null = null) => {
+  const createMockTeamRepo = (team: Option<Team> = none) => {
     return {
       findByParticipantId: jest.fn().mockResolvedValue(team),
       getSmallestTeamList: jest.fn(),
@@ -74,7 +74,7 @@ describe('do', () => {
       status: Zaiseki,
     });
     const mockParticipantRepo = createMockParticipantRepo(removeParticipant);
-    const mockTeamRepo = createMockTeamRepo(team);
+    const mockTeamRepo = createMockTeamRepo(some(team));
 
     const usecase = new ResignMembershipUsecase(
       mockParticipantRepo,
@@ -110,7 +110,7 @@ describe('do', () => {
       status: Zaiseki,
     });
     const mockParticipantRepo = createMockParticipantRepo(removeParticipant);
-    const mockTeamRepo = createMockTeamRepo(team);
+    const mockTeamRepo = createMockTeamRepo(some(team));
 
     const usecase = new ResignMembershipUsecase(
       mockParticipantRepo,

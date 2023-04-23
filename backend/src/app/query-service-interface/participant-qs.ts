@@ -39,7 +39,7 @@ export class ParticipantNameDto {
 export interface IParticipantNameQS {
   /**
    * 指定した参加者idの参加者名を取得します。
-   * 
+   *
    * @param ids 参加者idのリスト
    */
   getNames(ids: string[]): Promise<ParticipantNameDto[]>;

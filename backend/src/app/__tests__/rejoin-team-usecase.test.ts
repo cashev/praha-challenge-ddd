@@ -21,7 +21,7 @@ describe('do', () => {
       save: jest.fn(),
     };
   };
-  const createMockTeamRepo = (team: Team[] | null) => {
+  const createMockTeamRepo = (team: Option<Team[]> = none) => {
     return {
       findByParticipantId: jest.fn(),
       getSmallestTeamList: jest.fn().mockResolvedValue(team),
@@ -62,7 +62,7 @@ describe('do', () => {
     const newParticipant = createParticipant(Kyukai);
 
     const mockParticipantRepo = createMockParticipantRepo(some(newParticipant));
-    const mockTeamRepo = createMockTeamRepo([team]);
+    const mockTeamRepo = createMockTeamRepo(some([team]));
     const participantcase = new RejoinTeamUseCase(
       mockParticipantRepo,
       mockTeamRepo,
@@ -84,7 +84,7 @@ describe('do', () => {
     const newParticipant = createParticipant(Taikai);
 
     const mockParticipantRepo = createMockParticipantRepo(some(newParticipant));
-    const mockTeamRepo = createMockTeamRepo([team]);
+    const mockTeamRepo = createMockTeamRepo(some([team]));
     const participantcase = new RejoinTeamUseCase(
       mockParticipantRepo,
       mockTeamRepo,
@@ -98,7 +98,7 @@ describe('do', () => {
 
   test('[異常系] 存在しない参加者', async () => {
     const mockParticipantRepo = createMockParticipantRepo(none);
-    const mockTeamRepo = createMockTeamRepo(null);
+    const mockTeamRepo = createMockTeamRepo();
     const useCase = new RejoinTeamUseCase(mockParticipantRepo, mockTeamRepo);
 
     expect(useCase.do('1')).rejects.toThrow();
@@ -107,7 +107,7 @@ describe('do', () => {
   test('[異常系] 在籍中の参加者', async () => {
     const participant = createParticipant(Zaiseki);
     const mockParticipantRepo = createMockParticipantRepo(some(participant));
-    const mockTeamRepo = createMockTeamRepo(null);
+    const mockTeamRepo = createMockTeamRepo();
     const useCase = new RejoinTeamUseCase(mockParticipantRepo, mockTeamRepo);
 
     expect(useCase.do('1')).rejects.toThrow();

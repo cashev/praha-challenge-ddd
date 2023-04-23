@@ -55,10 +55,11 @@ export class RemoveMemberUsecase {
       throw new Error('在籍中ではない参加者です。');
     }
 
-    const team = await this.teamRepo.findByParticipantId(participantId);
-    if (team == null) {
+    const tResult = await this.teamRepo.findByParticipantId(participantId);
+    if (isNone(tResult)) {
       throw new Error();
     }
+    const team = tResult.value;
     if (team.canRemoveParticipant() == false) {
       // チームの人数が規定の人数を下回る場合、管理者に通知する
       const participantNames = await this.participantNameQS.getNames([

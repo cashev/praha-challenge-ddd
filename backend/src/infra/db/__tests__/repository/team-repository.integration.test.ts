@@ -13,6 +13,7 @@ import { TeamName } from 'src/domain/value-object/teamName';
 import { Pair } from 'src/domain/entity/pair';
 import { PairName } from 'src/domain/value-object/pairName';
 import { ParticipantIdType } from 'src/domain/entity/participant';
+import { isNone, none } from 'fp-ts/lib/Option';
 
 describe('team-repository.integration.test', () => {
   const teamRepository = new TeamRepository(prisma);
@@ -54,12 +55,13 @@ describe('team-repository.integration.test', () => {
     });
     test('[正常系]', async () => {
       const result = await teamRepository.findByParticipantId('007');
-      if (result == null) {
+      if (isNone(result)) {
         throw new Error();
       }
-      expect(result.id).toEqual('200');
-      expect(result.teamName.getValue()).toEqual('204');
-      expect(result.pairList.length).toBe(2);
+      const team = result.value;
+      expect(team.id).toEqual('200');
+      expect(team.teamName.getValue()).toEqual('204');
+      expect(team.pairList.length).toBe(2);
     });
   });
   describe('getSmallestTeamList', () => {
@@ -71,10 +73,11 @@ describe('team-repository.integration.test', () => {
     });
     test('[正常系]', async () => {
       const result = await teamRepository.getSmallestTeamList();
-      if (result == null) {
+      if (isNone(result)) {
         throw new Error();
       }
-      expect(result.length).toBe(3);
+      const team = result.value;
+      expect(team.length).toBe(3);
     });
   });
   describe('save', () => {
@@ -100,12 +103,13 @@ describe('team-repository.integration.test', () => {
       });
       await teamRepository.save(team);
       const result = await teamRepository.findByParticipantId('081');
-      if (result == null) {
+      if (isNone(result)) {
         throw new Error();
       }
-      expect(result.id).toEqual('300');
-      expect(result.teamName.getValue()).toEqual('303');
-      expect(result.pairList.length).toBe(2);
+      const teamResult = result.value;
+      expect(teamResult.id).toEqual('300');
+      expect(teamResult.teamName.getValue()).toEqual('303');
+      expect(teamResult.pairList.length).toBe(2);
     });
     test('[正常系] メンバー削除', async () => {
       const team = Team.create('400', {
@@ -123,15 +127,16 @@ describe('team-repository.integration.test', () => {
       });
       await teamRepository.save(team);
       const result = await teamRepository.findByParticipantId('011');
-      if (result == null) {
+      if (isNone(result)) {
         throw new Error();
       }
-      expect(result.id).toEqual('400');
-      expect(result.pairList.length).toBe(1);
-      expect(result.pairList[0].member.length).toBe(3);
+      const teamResult = result.value;
+      expect(teamResult.id).toEqual('400');
+      expect(teamResult.pairList.length).toBe(1);
+      expect(teamResult.pairList[0].member.length).toBe(3);
 
       const result2 = await teamRepository.findByParticipantId('012');
-      expect(result2).toBeNull();
+      expect(result2).toEqual(none);
     });
   });
 });

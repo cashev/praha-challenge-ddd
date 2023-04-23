@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { Option, none, some } from 'fp-ts/lib/Option';
 import { Pair } from 'src/domain/entity/pair';
 import { ParticipantIdType } from 'src/domain/entity/participant';
 import { Team } from 'src/domain/entity/team';
@@ -13,7 +14,7 @@ export class TeamRepository implements ITeamRepository {
     this.prismaClient = prismaClient;
   }
 
-  async findByParticipantId(participantId: string): Promise<Team | null> {
+  async findByParticipantId(participantId: string): Promise<Option<Team>> {
     const result = await this.prismaClient.team.findFirst({
       where: {
         participants: {
@@ -35,7 +36,7 @@ export class TeamRepository implements ITeamRepository {
       },
     });
     if (result == null) {
-      return null;
+      return none;
     }
     const pairList = result.pairs
       .map((tp) => tp.pair)
@@ -47,13 +48,14 @@ export class TeamRepository implements ITeamRepository {
           ),
         });
       });
-    return Team.create(result.id, {
+    const team = Team.create(result.id, {
       teamName: TeamName.create(result.name),
       pairList,
     });
+    return some(team);
   }
 
-  async getSmallestTeamList(): Promise<Team[] | null> {
+  async getSmallestTeamList(): Promise<Option<Team[]>> {
     // const results = await this.prismaClient.$queryRaw<[TeamPairDto]>`
     // select t.id "teamId", t.name "teamName", p.id "pairId", p.name "pairName", pp."participantId" "participantId"
     // from "Team" t
@@ -127,7 +129,7 @@ export class TeamRepository implements ITeamRepository {
           }),
       });
     });
-    return ret;
+    return some(ret);
   }
 
   async save(team: Team): Promise<void> {

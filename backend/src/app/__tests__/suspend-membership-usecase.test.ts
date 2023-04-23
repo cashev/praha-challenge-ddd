@@ -23,7 +23,7 @@ describe('do', () => {
       save: jest.fn(),
     };
   };
-  const createMockTeamRepo = (team: Team | null = null) => {
+  const createMockTeamRepo = (team: Option<Team> = none) => {
     return {
       findByParticipantId: jest.fn().mockResolvedValue(team),
       getSmallestTeamList: jest.fn(),
@@ -73,8 +73,10 @@ describe('do', () => {
       email: ParticipantEmail.create('adati568@dti.ad.jp'),
       status: Zaiseki,
     });
-    const mockParticipantRepo = createMockParticipantRepo(some(removeParticipant));
-    const mockTeamRepo = createMockTeamRepo(team);
+    const mockParticipantRepo = createMockParticipantRepo(
+      some(removeParticipant),
+    );
+    const mockTeamRepo = createMockTeamRepo(some(team));
 
     const usecase = new SuspendMembershipUsecase(
       mockParticipantRepo,
@@ -109,8 +111,10 @@ describe('do', () => {
       email: ParticipantEmail.create('adati568@dti.ad.jp'),
       status: Zaiseki,
     });
-    const mockParticipantRepo = createMockParticipantRepo(some(removeParticipant));
-    const mockTeamRepo = createMockTeamRepo(team);
+    const mockParticipantRepo = createMockParticipantRepo(
+      some(removeParticipant),
+    );
+    const mockTeamRepo = createMockTeamRepo(some(team));
 
     const usecase = new SuspendMembershipUsecase(
       mockParticipantRepo,
