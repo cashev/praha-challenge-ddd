@@ -10,5 +10,8 @@ export class TeamDto {
 }
 
 export interface ITeamQS {
+  /**
+   * 全てのTeamを取得します。
+   */
   getAll(): Promise<TeamDto[]>;
 }

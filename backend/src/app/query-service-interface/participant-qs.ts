@@ -18,6 +18,9 @@ export class ParticipantDto {
   }
 }
 
+/**
+ * 全ての参加者を取得します。
+ */
 export interface IParticipantQS {
   getAll(): Promise<ParticipantDto[]>;
 }
@@ -34,5 +37,10 @@ export class ParticipantNameDto {
 }
 
 export interface IParticipantNameQS {
+  /**
+   * 指定した参加者idの参加者名を取得します。
+   * 
+   * @param ids 参加者idのリスト
+   */
   getNames(ids: string[]): Promise<ParticipantNameDto[]>;
 }

@@ -10,5 +10,8 @@ export class PairDto {
 }
 
 export interface IPairQS {
+  /**
+   * 全てのペアを取得します。
+   */
   getAll(): Promise<PairDto[]>;
 }

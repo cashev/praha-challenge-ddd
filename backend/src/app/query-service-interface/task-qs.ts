@@ -12,6 +12,9 @@ export class TaskDto {
 }
 
 export interface ITaskQS {
+  /**
+   * 全ての課題を取得します。
+   */
   getAll(): Promise<TaskDto[]>;
 }
 
@@ -25,5 +28,8 @@ export class TaskIdDto {
 }
 
 export interface ITaskIdQS {
+  /**
+   * すべての課題idを取得します。
+   */
   getAll(): Promise<TaskIdDto[]>;
 }
