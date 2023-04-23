@@ -4,6 +4,7 @@ import { randomChoice } from 'src/util/random';
 import { ITeamRepository } from '../domain/repository-interface/team-repository';
 import { IParticipantRepository } from '../domain/repository-interface/participant-repository';
 import { Participant } from 'src/domain/entity/participant';
+import { isNone } from 'fp-ts/lib/Option';
 
 // 休会中, 退会済の参加者が復帰するユースケース
 export class RejoinTeamUseCase {
@@ -19,10 +20,11 @@ export class RejoinTeamUseCase {
   }
 
   async do(participantId: string) {
-    const participant = await this.participantRepo.find(participantId);
-    if (participant == null) {
+    const result = await this.participantRepo.find(participantId);
+    if (isNone(result)) {
       throw new Error();
     }
+    const participant = result.value;
     this.validate(participant);
 
     participant.status = Zaiseki;

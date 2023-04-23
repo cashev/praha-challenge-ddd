@@ -11,10 +11,11 @@ import {
 } from 'src/domain/value-object/participantStatus';
 import { TeamName } from 'src/domain/value-object/teamName';
 import { SuspendMembershipUsecase } from '../suspend-membership-usecase';
+import { Option, none, some } from 'fp-ts/lib/Option';
 
 describe('do', () => {
   const createMockParticipantRepo = (
-    participant: Participant | null = null,
+    participant: Option<Participant> = none,
   ) => {
     return {
       find: jest.fn().mockResolvedValue(participant),
@@ -72,7 +73,7 @@ describe('do', () => {
       email: ParticipantEmail.create('adati568@dti.ad.jp'),
       status: Zaiseki,
     });
-    const mockParticipantRepo = createMockParticipantRepo(removeParticipant);
+    const mockParticipantRepo = createMockParticipantRepo(some(removeParticipant));
     const mockTeamRepo = createMockTeamRepo(team);
 
     const usecase = new SuspendMembershipUsecase(
@@ -108,7 +109,7 @@ describe('do', () => {
       email: ParticipantEmail.create('adati568@dti.ad.jp'),
       status: Zaiseki,
     });
-    const mockParticipantRepo = createMockParticipantRepo(removeParticipant);
+    const mockParticipantRepo = createMockParticipantRepo(some(removeParticipant));
     const mockTeamRepo = createMockTeamRepo(team);
 
     const usecase = new SuspendMembershipUsecase(
@@ -142,7 +143,7 @@ describe('do', () => {
       email: ParticipantEmail.create('siraisi1920902@mail.goo.ne.jp'),
       status: Kyukai,
     });
-    const mockParticipantRepo = createMockParticipantRepo(participant);
+    const mockParticipantRepo = createMockParticipantRepo(some(participant));
     const mockTeamRepo = createMockTeamRepo();
 
     const usecase = new SuspendMembershipUsecase(
@@ -160,7 +161,7 @@ describe('do', () => {
       email: ParticipantEmail.create('hideoyamamura@freeml.co.jp'),
       status: Taikai,
     });
-    const mockParticipantRepo = createMockParticipantRepo(participant);
+    const mockParticipantRepo = createMockParticipantRepo(some(participant));
     const mockTeamRepo = createMockTeamRepo();
 
     const usecase = new SuspendMembershipUsecase(

@@ -8,6 +8,7 @@ import {
   createUserStatus,
   getValue,
 } from 'src/domain/value-object/participantStatus';
+import { isNone, isSome } from 'fp-ts/lib/Option';
 
 describe('participant-repository.integration.test', () => {
   const participantRepository = new ParticipantRepository(prisma);
@@ -58,12 +59,13 @@ describe('participant-repository.integration.test', () => {
     });
     test('', async () => {
       const result = await participantRepository.find('3');
-      if (result == null) {
+      if (isNone(result)) {
         throw new Error();
       }
-      expect(result.participantName.getValue()).toEqual(p3.name);
-      expect(result.email.getValue()).toEqual(p3.email);
-      expect(getValue(result.status)).toEqual(p3.status);
+      const p = result.value;
+      expect(p.participantName.getValue()).toEqual(p3.name);
+      expect(p.email.getValue()).toEqual(p3.email);
+      expect(getValue(p.status)).toEqual(p3.status);
     });
   });
 
@@ -83,11 +85,12 @@ describe('participant-repository.integration.test', () => {
       await participantRepository.save(participant);
 
       const result = await participantRepository.find(p2.id);
-      if (result != null) {
-        expect(result.participantName.getValue()).toEqual(p2.name);
-        expect(result.participantName.getValue()).toEqual(p2.name);
-        expect(result.email.getValue()).toEqual(p2.email);
-        expect(getValue(result.status)).toEqual(p2.status);
+      if (isSome(result)) {
+        const participant = result.value;
+        expect(participant.participantName.getValue()).toEqual(p2.name);
+        expect(participant.participantName.getValue()).toEqual(p2.name);
+        expect(participant.email.getValue()).toEqual(p2.email);
+        expect(getValue(participant.status)).toEqual(p2.status);
       } else {
         throw new Error();
       }
@@ -102,10 +105,11 @@ describe('participant-repository.integration.test', () => {
       await participantRepository.save(participant);
 
       const result = await participantRepository.find(p3.id);
-      if (result == null) {
+      if (isNone(result)) {
         throw new Error();
       }
-      expect(getValue(result.status)).toEqual(getValue(Taikai));
+      const p = result.value;
+      expect(getValue(p.status)).toEqual(getValue(Taikai));
     });
   });
 });

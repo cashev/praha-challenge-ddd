@@ -9,6 +9,7 @@ import {
 import { createRandomIdString } from 'src/util/random';
 import { IParticipantNameQS } from './query-service-interface/participant-qs';
 import { ParticipantName } from 'src/domain/value-object/participantName';
+import { isNone } from 'fp-ts/lib/Option';
 
 /**
  * チームから参加者を取り除くユースケースです。
@@ -45,10 +46,11 @@ export class RemoveMemberUsecase {
         '取り除く参加者のステータスを在籍中へ変更できません。休会中または退会済を指定してください。',
       );
     }
-    const participant = await this.participantRepo.find(participantId);
-    if (participant == null) {
+    const pResult = await this.participantRepo.find(participantId);
+    if (isNone(pResult)) {
       throw new Error('存在しない参加者です。');
     }
+    const participant = pResult.value;
     if (participant.status != Zaiseki) {
       throw new Error('在籍中ではない参加者です。');
     }

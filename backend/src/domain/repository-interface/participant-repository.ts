@@ -1,3 +1,4 @@
+import { Option } from 'fp-ts/lib/Option';
 import { Participant } from 'src/domain/entity/participant';
 
 export interface IParticipantRepository {
@@ -6,7 +7,7 @@ export interface IParticipantRepository {
    * 
    * @param id 参加者id
    */
-  find(id: string): Promise<Participant | null>;
+  find(id: string): Promise<Option<Participant>>;
   /**
    * 参加者を保存します。
    * 

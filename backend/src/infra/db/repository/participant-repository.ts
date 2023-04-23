@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { Option, none, some } from 'fp-ts/lib/Option';
 import { Participant } from 'src/domain/entity/participant';
 import { IParticipantRepository } from 'src/domain/repository-interface/participant-repository';
 import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
@@ -15,22 +16,21 @@ export class ParticipantRepository implements IParticipantRepository {
     this.prismaClient = prismaClient;
   }
 
-  async find(id: string): Promise<Participant | null> {
+  async find(id: string): Promise<Option<Participant>> {
     const result = await this.prismaClient.participant.findUnique({
       where: { id },
     });
     if (result == null) {
-      return null;
+      return none;
     }
-    return Participant.create(result.id.toString(), {
+    const participant = Participant.create(result.id.toString(), {
       participantName: ParticipantName.create(result.name),
       email: ParticipantEmail.create(result.email),
       status: createUserStatus(result.status),
     });
+    return some(participant);
   }
-  async getNextId(): Promise<number> {
-    throw new Error();
-  }
+
   async save(participant: Participant): Promise<void> {
     await this.prismaClient.participant.upsert({
       where: { id: participant.id },

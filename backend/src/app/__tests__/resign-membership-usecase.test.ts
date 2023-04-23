@@ -11,13 +11,14 @@ import {
 } from 'src/domain/value-object/participantStatus';
 import { TeamName } from 'src/domain/value-object/teamName';
 import { ResignMembershipUsecase } from '../resign-membership-usecase';
+import { some } from 'fp-ts/lib/Option';
 
 describe('do', () => {
   const createMockParticipantRepo = (
     participant: Participant | null = null,
   ) => {
     return {
-      find: jest.fn().mockResolvedValue(participant),
+      find: jest.fn().mockResolvedValue(some(participant)),
       getNextId: jest.fn(),
       save: jest.fn(),
     };

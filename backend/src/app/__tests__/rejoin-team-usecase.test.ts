@@ -12,9 +12,10 @@ import {
   Zaiseki,
 } from 'src/domain/value-object/participantStatus';
 import { RejoinTeamUseCase } from '../rejoin-team-usecase';
+import { Option, none, some } from 'fp-ts/lib/Option';
 
 describe('do', () => {
-  const createMockParticipantRepo = (participant: Participant | null) => {
+  const createMockParticipantRepo = (participant: Option<Participant>) => {
     return {
       find: jest.fn().mockResolvedValue(participant),
       save: jest.fn(),
@@ -60,7 +61,7 @@ describe('do', () => {
     });
     const newParticipant = createParticipant(Kyukai);
 
-    const mockParticipantRepo = createMockParticipantRepo(newParticipant);
+    const mockParticipantRepo = createMockParticipantRepo(some(newParticipant));
     const mockTeamRepo = createMockTeamRepo([team]);
     const participantcase = new RejoinTeamUseCase(
       mockParticipantRepo,
@@ -82,7 +83,7 @@ describe('do', () => {
     });
     const newParticipant = createParticipant(Taikai);
 
-    const mockParticipantRepo = createMockParticipantRepo(newParticipant);
+    const mockParticipantRepo = createMockParticipantRepo(some(newParticipant));
     const mockTeamRepo = createMockTeamRepo([team]);
     const participantcase = new RejoinTeamUseCase(
       mockParticipantRepo,
@@ -96,7 +97,7 @@ describe('do', () => {
   });
 
   test('[異常系] 存在しない参加者', async () => {
-    const mockParticipantRepo = createMockParticipantRepo(null);
+    const mockParticipantRepo = createMockParticipantRepo(none);
     const mockTeamRepo = createMockTeamRepo(null);
     const useCase = new RejoinTeamUseCase(mockParticipantRepo, mockTeamRepo);
 
@@ -105,7 +106,7 @@ describe('do', () => {
 
   test('[異常系] 在籍中の参加者', async () => {
     const participant = createParticipant(Zaiseki);
-    const mockParticipantRepo = createMockParticipantRepo(participant);
+    const mockParticipantRepo = createMockParticipantRepo(some(participant));
     const mockTeamRepo = createMockTeamRepo(null);
     const useCase = new RejoinTeamUseCase(mockParticipantRepo, mockTeamRepo);
 
