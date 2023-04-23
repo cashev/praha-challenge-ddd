@@ -72,13 +72,17 @@ export class TeamRepository implements ITeamRepository {
     //     group by tp3."teamId"
     //   )
     // )`;
+    // ↑みたいに1クエリで取得したかったけど、できなかったので断念
+    // チームごとの参加者数
     const countMember = await this.prismaClient.team_Participant.groupBy({
       by: ['teamId'],
       _count: {
         teamId: true,
       },
     });
+    // 最小人数
     const minSize = Math.min(...countMember.map((c) => c._count.teamId));
+    // 最小人数を持つチームid
     const teamIds = await this.prismaClient.team_Participant.groupBy({
       by: ['teamId'],
       having: {
