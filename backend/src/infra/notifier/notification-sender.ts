@@ -5,6 +5,9 @@ import * as nodemailer from 'nodemailer';
 export class NotificationSender implements INotificationSender {
   private smtp: nodemailer.Transporter;
 
+  private HOST_MAIL_ADDRESS = 'from@example.com';
+  private ADMIN_MAIL_ADDRESS = 'to@example.com';
+
   public constructor() {
     this.smtp = nodemailer.createTransport({
       host: 'localhost',
@@ -14,12 +17,11 @@ export class NotificationSender implements INotificationSender {
 
   async sendToAdmin(notification: Notification): Promise<void> {
     const message = {
-      from: 'from@example.com',
-      to: 'to@example.com',
+      from: this.HOST_MAIL_ADDRESS,
+      to: this.ADMIN_MAIL_ADDRESS,
       subject: notification.title,
       text: notification.content,
     };
-
     this.smtp.sendMail(message);
   }
 }
