@@ -10,15 +10,15 @@ import {
   Zaiseki,
 } from 'src/domain/value-object/participantStatus';
 import { TeamName } from 'src/domain/value-object/teamName';
-import { SuspendMembershipUsecase } from '../suspend-membership-usecase';
 import { Option, none, some } from 'fp-ts/lib/Option';
+import { RemoveMemberUsecase } from '../remove-member-usecase';
 
 describe('do', () => {
   const createMockParticipantRepo = (
-    participant: Option<Participant> = none,
+    participant: Participant | null = null,
   ) => {
     return {
-      find: jest.fn().mockResolvedValue(participant),
+      find: jest.fn().mockResolvedValue(some(participant)),
       getNextId: jest.fn(),
       save: jest.fn(),
     };
@@ -73,21 +73,19 @@ describe('do', () => {
       email: ParticipantEmail.create('adati568@dti.ad.jp'),
       status: Zaiseki,
     });
-    const mockParticipantRepo = createMockParticipantRepo(
-      some(removeParticipant),
-    );
+    const mockParticipantRepo = createMockParticipantRepo(removeParticipant);
     const mockTeamRepo = createMockTeamRepo(some(team));
 
-    const usecase = new SuspendMembershipUsecase(
+    const usecase = new RemoveMemberUsecase(
       mockParticipantRepo,
       mockTeamRepo,
       createMockNotificationSender(),
       createParticipantNameQS(),
     );
-    await usecase.do('21');
+    await usecase.do('21', Taikai);
 
     expect(team.isMember(removeParticipant)).toBeFalsy();
-    expect(removeParticipant.status).toEqual(Kyukai);
+    expect(removeParticipant.status).toEqual(Taikai);
   });
 
   test('[正常系] 2人のペアからメンバーを取り除く', async () => {
@@ -111,34 +109,32 @@ describe('do', () => {
       email: ParticipantEmail.create('adati568@dti.ad.jp'),
       status: Zaiseki,
     });
-    const mockParticipantRepo = createMockParticipantRepo(
-      some(removeParticipant),
-    );
+    const mockParticipantRepo = createMockParticipantRepo(removeParticipant);
     const mockTeamRepo = createMockTeamRepo(some(team));
 
-    const usecase = new SuspendMembershipUsecase(
+    const usecase = new RemoveMemberUsecase(
       mockParticipantRepo,
       mockTeamRepo,
       createMockNotificationSender(),
       createParticipantNameQS(),
     );
-    await usecase.do('21');
+    await usecase.do('21', Taikai);
 
     expect(team.isMember(removeParticipant)).toBeFalsy();
-    expect(removeParticipant.status).toEqual(Kyukai);
+    expect(removeParticipant.status).toEqual(Taikai);
   });
 
   test('[異常系] 存在しない参加者id', async () => {
     const mockParticipantRepo = createMockParticipantRepo();
     const mockTeamRepo = createMockTeamRepo();
 
-    const usecase = new SuspendMembershipUsecase(
+    const usecase = new RemoveMemberUsecase(
       mockParticipantRepo,
       mockTeamRepo,
       createMockNotificationSender(),
       createParticipantNameQS(),
     );
-    expect(() => usecase.do('31')).rejects.toThrow();
+    expect(() => usecase.do('31', Taikai)).rejects.toThrow();
   });
 
   test('[異常系] 休会中の参加者', async () => {
@@ -147,16 +143,16 @@ describe('do', () => {
       email: ParticipantEmail.create('siraisi1920902@mail.goo.ne.jp'),
       status: Kyukai,
     });
-    const mockParticipantRepo = createMockParticipantRepo(some(participant));
+    const mockParticipantRepo = createMockParticipantRepo(participant);
     const mockTeamRepo = createMockTeamRepo();
 
-    const usecase = new SuspendMembershipUsecase(
+    const usecase = new RemoveMemberUsecase(
       mockParticipantRepo,
       mockTeamRepo,
       createMockNotificationSender(),
       createParticipantNameQS(),
     );
-    expect(() => usecase.do('32')).rejects.toThrow();
+    expect(() => usecase.do('32', Kyukai)).rejects.toThrow();
   });
 
   test('[異常系] 退会済の参加者', async () => {
@@ -165,15 +161,15 @@ describe('do', () => {
       email: ParticipantEmail.create('hideoyamamura@freeml.co.jp'),
       status: Taikai,
     });
-    const mockParticipantRepo = createMockParticipantRepo(some(participant));
+    const mockParticipantRepo = createMockParticipantRepo(participant);
     const mockTeamRepo = createMockTeamRepo();
 
-    const usecase = new SuspendMembershipUsecase(
+    const usecase = new RemoveMemberUsecase(
       mockParticipantRepo,
       mockTeamRepo,
       createMockNotificationSender(),
       createParticipantNameQS(),
     );
-    expect(() => usecase.do('33')).rejects.toThrow();
+    expect(() => usecase.do('33', Taikai)).rejects.toThrow();
   });
 });
