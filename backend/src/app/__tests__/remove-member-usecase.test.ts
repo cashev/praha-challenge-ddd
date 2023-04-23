@@ -12,6 +12,7 @@ import {
 import { TeamName } from 'src/domain/value-object/teamName';
 import { Option, none, some } from 'fp-ts/lib/Option';
 import { RemoveMemberUsecase } from '../remove-member-usecase';
+import { MockTeamRepository } from './mock/team-repository';
 
 describe('do', () => {
   const createMockParticipantRepo = (
@@ -20,13 +21,6 @@ describe('do', () => {
     return {
       find: jest.fn().mockResolvedValue(some(participant)),
       getNextId: jest.fn(),
-      save: jest.fn(),
-    };
-  };
-  const createMockTeamRepo = (team: Option<Team> = none) => {
-    return {
-      findByParticipantId: jest.fn().mockResolvedValue(team),
-      getSmallestTeamList: jest.fn(),
       save: jest.fn(),
     };
   };
@@ -74,7 +68,7 @@ describe('do', () => {
       status: Zaiseki,
     });
     const mockParticipantRepo = createMockParticipantRepo(removeParticipant);
-    const mockTeamRepo = createMockTeamRepo(some(team));
+    const mockTeamRepo = new MockTeamRepository(some(team), none);
 
     const usecase = new RemoveMemberUsecase(
       mockParticipantRepo,
@@ -110,7 +104,7 @@ describe('do', () => {
       status: Zaiseki,
     });
     const mockParticipantRepo = createMockParticipantRepo(removeParticipant);
-    const mockTeamRepo = createMockTeamRepo(some(team));
+    const mockTeamRepo = new MockTeamRepository(some(team), none);
 
     const usecase = new RemoveMemberUsecase(
       mockParticipantRepo,
@@ -126,7 +120,7 @@ describe('do', () => {
 
   test('[異常系] 存在しない参加者id', async () => {
     const mockParticipantRepo = createMockParticipantRepo();
-    const mockTeamRepo = createMockTeamRepo();
+    const mockTeamRepo = new MockTeamRepository();
 
     const usecase = new RemoveMemberUsecase(
       mockParticipantRepo,
@@ -144,7 +138,7 @@ describe('do', () => {
       status: Kyukai,
     });
     const mockParticipantRepo = createMockParticipantRepo(participant);
-    const mockTeamRepo = createMockTeamRepo();
+    const mockTeamRepo = new MockTeamRepository();
 
     const usecase = new RemoveMemberUsecase(
       mockParticipantRepo,
@@ -162,7 +156,7 @@ describe('do', () => {
       status: Taikai,
     });
     const mockParticipantRepo = createMockParticipantRepo(participant);
-    const mockTeamRepo = createMockTeamRepo();
+    const mockTeamRepo = new MockTeamRepository();
 
     const usecase = new RemoveMemberUsecase(
       mockParticipantRepo,

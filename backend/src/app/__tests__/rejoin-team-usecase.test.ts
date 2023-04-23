@@ -13,18 +13,12 @@ import {
 } from 'src/domain/value-object/participantStatus';
 import { RejoinTeamUseCase } from '../rejoin-team-usecase';
 import { Option, none, some } from 'fp-ts/lib/Option';
+import { MockTeamRepository } from './mock/team-repository';
 
 describe('do', () => {
   const createMockParticipantRepo = (participant: Option<Participant>) => {
     return {
       find: jest.fn().mockResolvedValue(participant),
-      save: jest.fn(),
-    };
-  };
-  const createMockTeamRepo = (team: Option<Team[]> = none) => {
-    return {
-      findByParticipantId: jest.fn(),
-      getSmallestTeamList: jest.fn().mockResolvedValue(team),
       save: jest.fn(),
     };
   };
@@ -62,7 +56,7 @@ describe('do', () => {
     const newParticipant = createParticipant(Kyukai);
 
     const mockParticipantRepo = createMockParticipantRepo(some(newParticipant));
-    const mockTeamRepo = createMockTeamRepo(some([team]));
+    const mockTeamRepo = new MockTeamRepository(none, some([team]));
     const participantcase = new RejoinTeamUseCase(
       mockParticipantRepo,
       mockTeamRepo,
@@ -84,7 +78,7 @@ describe('do', () => {
     const newParticipant = createParticipant(Taikai);
 
     const mockParticipantRepo = createMockParticipantRepo(some(newParticipant));
-    const mockTeamRepo = createMockTeamRepo(some([team]));
+    const mockTeamRepo = new MockTeamRepository(none, some([team]));
     const participantcase = new RejoinTeamUseCase(
       mockParticipantRepo,
       mockTeamRepo,
@@ -98,7 +92,7 @@ describe('do', () => {
 
   test('[異常系] 存在しない参加者', async () => {
     const mockParticipantRepo = createMockParticipantRepo(none);
-    const mockTeamRepo = createMockTeamRepo();
+    const mockTeamRepo = new MockTeamRepository();
     const useCase = new RejoinTeamUseCase(mockParticipantRepo, mockTeamRepo);
 
     expect(useCase.do('1')).rejects.toThrow();
@@ -107,7 +101,7 @@ describe('do', () => {
   test('[異常系] 在籍中の参加者', async () => {
     const participant = createParticipant(Zaiseki);
     const mockParticipantRepo = createMockParticipantRepo(some(participant));
-    const mockTeamRepo = createMockTeamRepo();
+    const mockTeamRepo = new MockTeamRepository();
     const useCase = new RejoinTeamUseCase(mockParticipantRepo, mockTeamRepo);
 
     expect(useCase.do('1')).rejects.toThrow();
