@@ -3,6 +3,7 @@ import { Yet, Waiting, Done } from 'src/domain/value-object/taskStatusValue';
 import { UpdateTaskStatusUseCase } from '../update-taskStatus-usecase';
 import { ParticipantIdType } from 'src/domain/entity/participant';
 import { some } from 'fp-ts/lib/Option';
+import { MockTaskStatusRepository } from './mock/taskStatus-repository';
 
 describe('do', () => {
   test('[正常系] 未着手->レビュー待ち', async () => {
@@ -11,12 +12,7 @@ describe('do', () => {
       taskId: '1' as TaskIdType,
       status: Yet,
     });
-    const mockTaskStatusRepo = {
-      find: jest.fn().mockResolvedValue(some(taskStatus)),
-      getNextIdAndSetNext: jest.fn(),
-      save: jest.fn(),
-      saveAll: jest.fn(),
-    };
+    const mockTaskStatusRepo = new MockTaskStatusRepository(some(taskStatus));
 
     const usecase = new UpdateTaskStatusUseCase(mockTaskStatusRepo);
     await usecase.do('1', '1', 'レビュー待ち');
@@ -29,12 +25,7 @@ describe('do', () => {
       taskId: '1' as TaskIdType,
       status: Waiting,
     });
-    const mockTaskStatusRepo = {
-      find: jest.fn().mockResolvedValue(some(taskStatus)),
-      getNextIdAndSetNext: jest.fn(),
-      save: jest.fn(),
-      saveAll: jest.fn(),
-    };
+    const mockTaskStatusRepo = new MockTaskStatusRepository(some(taskStatus));
 
     const usecase = new UpdateTaskStatusUseCase(mockTaskStatusRepo);
     await usecase.do('1', '1', '完了');
@@ -47,12 +38,7 @@ describe('do', () => {
       taskId: '1' as TaskIdType,
       status: Yet,
     });
-    const mockTaskStatusRepo = {
-      find: jest.fn().mockResolvedValue(some(taskStatus)),
-      getNextIdAndSetNext: jest.fn(),
-      save: jest.fn(),
-      saveAll: jest.fn(),
-    };
+    const mockTaskStatusRepo = new MockTaskStatusRepository(some(taskStatus));
 
     const usecase = new UpdateTaskStatusUseCase(mockTaskStatusRepo);
     await usecase.do('1', '1', '完了');
@@ -65,12 +51,7 @@ describe('do', () => {
       taskId: '1' as TaskIdType,
       status: Done,
     });
-    const mockTaskStatusRepo = {
-      find: jest.fn().mockResolvedValue(some(taskStatus)),
-      getNextIdAndSetNext: jest.fn(),
-      save: jest.fn(),
-      saveAll: jest.fn(),
-    };
+    const mockTaskStatusRepo = new MockTaskStatusRepository(some(taskStatus));
 
     const usecase = new UpdateTaskStatusUseCase(mockTaskStatusRepo);
     await expect(usecase.do('1', '1', '未着手')).rejects.toThrow();
@@ -82,12 +63,7 @@ describe('do', () => {
       taskId: '1' as TaskIdType,
       status: Done,
     });
-    const mockTaskStatusRepo = {
-      find: jest.fn().mockResolvedValue(some(taskStatus)),
-      getNextIdAndSetNext: jest.fn(),
-      save: jest.fn(),
-      saveAll: jest.fn(),
-    };
+    const mockTaskStatusRepo = new MockTaskStatusRepository(some(taskStatus));
 
     const usecase = new UpdateTaskStatusUseCase(mockTaskStatusRepo);
     await expect(usecase.do('1', '1', 'レビュー待ち')).rejects.toThrow();
