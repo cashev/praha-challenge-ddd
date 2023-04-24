@@ -6,12 +6,16 @@ export class MockTaskStatusRepository implements ITaskStatusRepository {
   constructor(private findResult: Option<TaskStatus> = none) {}
 
   find(participantId: string, taskId: string): Promise<Option<TaskStatus>> {
+    participantId;
+    taskId;
     return Promise.resolve(this.findResult);
   }
   save(taskStatus: TaskStatus): Promise<void> {
+    taskStatus;
     return Promise.resolve();
   }
   saveAll(taskStatusList: TaskStatus[]): Promise<void> {
+    taskStatusList;
     return Promise.resolve();
   }
 }

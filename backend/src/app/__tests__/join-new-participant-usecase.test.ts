@@ -9,16 +9,9 @@ import { Yet } from 'src/domain/value-object/taskStatusValue';
 import { TaskIdDto } from '../query-service-interface/task-qs';
 import { none, some } from 'fp-ts/lib/Option';
 import { MockTeamRepository } from './mock/team-repository';
+import { MockParticipantRepository } from './mock/participant-repository';
 
 describe('do', () => {
-  const createMockParticipantRepo = (
-    participant: Participant | null = null,
-  ) => {
-    return {
-      find: jest.fn().mockResolvedValue(participant),
-      save: jest.fn(),
-    };
-  };
   const createMockTaskStatusRepo = (nextId: number, tsList: TaskStatus[]) => {
     return {
       find: jest.fn(),
@@ -67,7 +60,7 @@ describe('do', () => {
     const team = createTeam();
     const tsList: TaskStatus[] = [];
     const usecase = new JoinNewParticipantUsecase(
-      createMockParticipantRepo(null),
+      new MockParticipantRepository(),
       new MockTeamRepository(none, some([team])),
       createMockTaskStatusRepo(241, tsList),
       createMockTaskQS(),

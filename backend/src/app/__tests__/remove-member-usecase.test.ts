@@ -13,17 +13,9 @@ import { TeamName } from 'src/domain/value-object/teamName';
 import { Option, none, some } from 'fp-ts/lib/Option';
 import { RemoveMemberUsecase } from '../remove-member-usecase';
 import { MockTeamRepository } from './mock/team-repository';
+import { MockParticipantRepository } from './mock/participant-repository';
 
 describe('do', () => {
-  const createMockParticipantRepo = (
-    participant: Participant | null = null,
-  ) => {
-    return {
-      find: jest.fn().mockResolvedValue(some(participant)),
-      getNextId: jest.fn(),
-      save: jest.fn(),
-    };
-  };
   const createMockNotificationSender = () => {
     return {
       sendToAdmin: jest.fn(),
@@ -67,7 +59,9 @@ describe('do', () => {
       email: ParticipantEmail.create('adati568@dti.ad.jp'),
       status: Zaiseki,
     });
-    const mockParticipantRepo = createMockParticipantRepo(removeParticipant);
+    const mockParticipantRepo = new MockParticipantRepository(
+      some(removeParticipant),
+    );
     const mockTeamRepo = new MockTeamRepository(some(team), none);
 
     const usecase = new RemoveMemberUsecase(
@@ -103,7 +97,9 @@ describe('do', () => {
       email: ParticipantEmail.create('adati568@dti.ad.jp'),
       status: Zaiseki,
     });
-    const mockParticipantRepo = createMockParticipantRepo(removeParticipant);
+    const mockParticipantRepo = new MockParticipantRepository(
+      some(removeParticipant),
+    );
     const mockTeamRepo = new MockTeamRepository(some(team), none);
 
     const usecase = new RemoveMemberUsecase(
@@ -119,7 +115,7 @@ describe('do', () => {
   });
 
   test('[異常系] 存在しない参加者id', async () => {
-    const mockParticipantRepo = createMockParticipantRepo();
+    const mockParticipantRepo = new MockParticipantRepository();
     const mockTeamRepo = new MockTeamRepository();
 
     const usecase = new RemoveMemberUsecase(
@@ -137,7 +133,9 @@ describe('do', () => {
       email: ParticipantEmail.create('siraisi1920902@mail.goo.ne.jp'),
       status: Kyukai,
     });
-    const mockParticipantRepo = createMockParticipantRepo(participant);
+    const mockParticipantRepo = new MockParticipantRepository(
+      some(participant),
+    );
     const mockTeamRepo = new MockTeamRepository();
 
     const usecase = new RemoveMemberUsecase(
@@ -155,7 +153,9 @@ describe('do', () => {
       email: ParticipantEmail.create('hideoyamamura@freeml.co.jp'),
       status: Taikai,
     });
-    const mockParticipantRepo = createMockParticipantRepo(participant);
+    const mockParticipantRepo = new MockParticipantRepository(
+      some(participant),
+    );
     const mockTeamRepo = new MockTeamRepository();
 
     const usecase = new RemoveMemberUsecase(
