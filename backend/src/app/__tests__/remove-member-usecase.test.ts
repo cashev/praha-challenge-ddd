@@ -10,7 +10,7 @@ import {
   Zaiseki,
 } from 'src/domain/value-object/participantStatus';
 import { TeamName } from 'src/domain/value-object/teamName';
-import { Option, none, some } from 'fp-ts/lib/Option';
+import { none, some } from 'fp-ts/lib/Option';
 import { RemoveMemberUsecase } from '../remove-member-usecase';
 import { MockTeamRepository } from './mock/team-repository';
 import { MockParticipantRepository } from './mock/participant-repository';
@@ -72,7 +72,7 @@ describe('do', () => {
     );
     await usecase.do('21', Taikai);
 
-    expect(team.isMember(removeParticipant)).toBeFalsy();
+    expect(team.member.some((p) => p === removeParticipant.id)).toBeFalsy();
     expect(removeParticipant.status).toEqual(Taikai);
   });
 
@@ -110,7 +110,7 @@ describe('do', () => {
     );
     await usecase.do('21', Taikai);
 
-    expect(team.isMember(removeParticipant)).toBeFalsy();
+    expect(team.member.some((p) => p === removeParticipant.id)).toBeFalsy();
     expect(removeParticipant.status).toEqual(Taikai);
   });
 

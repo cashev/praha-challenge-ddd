@@ -9,20 +9,20 @@ import {
 } from 'src/domain/value-object/participantStatus';
 import { Pair } from '../pair';
 import { Team } from '../team';
-import { Participant } from '../participant';
+import { Participant, ParticipantIdType } from '../participant';
 
-const createMember = () => {
-  const u1 = Participant.create('1', {
+const createThreeMember = () => {
+  const u1 = Participant.create('11', {
     participantName: ParticipantName.create('本多 洵子'),
     email: ParticipantEmail.create('honda_junko@example.jp'),
     status: Zaiseki,
   });
-  const u2 = Participant.create('2', {
+  const u2 = Participant.create('12', {
     participantName: ParticipantName.create('堀川 訓'),
     email: ParticipantEmail.create('satosi1977@infoweb.ne.jp'),
     status: Zaiseki,
   });
-  const u3 = Participant.create('3', {
+  const u3 = Participant.create('13', {
     participantName: ParticipantName.create('吉川 永子'),
     email: ParticipantEmail.create('nagako.yosikawa@infoseek.jp'),
     status: Zaiseki,
@@ -30,13 +30,13 @@ const createMember = () => {
   return [u1, u2, u3];
 };
 
-const createMember2 = () => {
-  const u1 = Participant.create('1', {
+const createTwoMember = () => {
+  const u1 = Participant.create('21', {
     participantName: ParticipantName.create('長尾 由記彦'),
     email: ParticipantEmail.create('ykhk20210106@example.co.jp'),
     status: Zaiseki,
   });
-  const u2 = Participant.create('2', {
+  const u2 = Participant.create('22', {
     participantName: ParticipantName.create('佐野 晴仁'),
     email: ParticipantEmail.create('sano1988@sannet.ne.jp'),
     status: Zaiseki,
@@ -44,19 +44,23 @@ const createMember2 = () => {
   return [u1, u2];
 };
 
-const createPairList = (member: Participant[]) => {
+const createPairList = (member: ParticipantIdType[]) => {
   const pairName = PairName.create('a');
   return [
     Pair.create('1', {
       pairName,
-      member: member.map((p) => p.id),
+      member,
     }),
   ];
 };
 
+const convertToMember = (member: Participant[]) => {
+  return member.map((p) => p.id);
+};
+
 describe('create', () => {
   test('[正常系] チームの参加者が3人', () => {
-    const pairList = createPairList(createMember());
+    const pairList = createPairList(convertToMember(createThreeMember()));
     const teamName = TeamName.create('123');
 
     const team = Team.create('1', { teamName, pairList });
@@ -65,7 +69,9 @@ describe('create', () => {
   });
 
   test('[異常系] チームの参加者が2人', () => {
-    const pairList = createPairList(createMember().slice(0, 2));
+    const pairList = createPairList(
+      convertToMember(createThreeMember().slice(0, 2)),
+    );
     const teamName = TeamName.create('123');
 
     expect(() => Team.create('1', { teamName, pairList })).toThrow();
@@ -76,15 +82,15 @@ describe('addParticipant', () => {
   test('[正常系] 既存のペアに参加する', async () => {
     jest.spyOn(global.Math, 'random').mockReturnValue(0);
 
-    const member = createMember();
+    const member = createThreeMember();
     const pair1 = Pair.create('1', {
       pairName: PairName.create('a'),
-      member: member.slice(1).map((p) => p.id),
+      member: convertToMember(member.slice(1)),
     });
-    const member2 = createMember2();
+    const member2 = createTwoMember();
     const pair2 = Pair.create('2', {
       pairName: PairName.create('b'),
-      member: member2.map((p) => p.id),
+      member: convertToMember(member2),
     });
     const team = Team.create('1', {
       teamName: TeamName.create('123'),
@@ -95,88 +101,65 @@ describe('addParticipant', () => {
     team.addParticipant(newParticipant);
 
     expect(team.pairList[0].member).toEqual([
-      ...member.slice(1).map((p) => p.id),
+      ...convertToMember(member.slice(1)),
       newParticipant.id,
     ]);
   });
 
   test('[正常系] 既存のペアを分割して参加する', async () => {
     jest.spyOn(global.Math, 'random').mockReturnValue(0);
-    const member = createMember();
-    const pairList = createPairList(member);
+    const member = createThreeMember();
+    const pairList = createPairList(convertToMember(member));
     const team = Team.create('1', {
       teamName: TeamName.create('123'),
       pairList,
     });
-    const newParticipant = createMember2()[0];
+    const newParticipant = createTwoMember()[0];
 
     await team.addParticipant(newParticipant);
 
     expect(team.pairList.length).toBe(2);
     expect(team.pairList[0].member).toEqual([
-      ...member.slice(1).map((p) => p.id),
+      ...convertToMember(member.slice(1)),
     ]);
     expect(team.pairList[1].member).toEqual([member[0].id, newParticipant.id]);
   });
 
   test('[異常系] 休会中の参加者', async () => {
-    const member = createMember();
+    const member = convertToMember(createThreeMember());
     const pairList = createPairList(member);
     const team = Team.create('1', {
       teamName: TeamName.create('123'),
       pairList,
     });
-    const newParticipant = createMember2()[0];
+    const newParticipant = createTwoMember()[0];
     newParticipant.status = Kyukai;
 
     expect(team.addParticipant(newParticipant)).rejects.toThrow();
   });
 
   test('[異常系] 退会済の参加者', async () => {
-    const member = createMember();
+    const member = convertToMember(createThreeMember());
     const pairList = createPairList(member);
     const team = Team.create('1', {
       teamName: TeamName.create('123'),
       pairList,
     });
-    const newParticipant = createMember2()[0];
+    const newParticipant = createTwoMember()[0];
     newParticipant.status = Taikai;
 
     expect(team.addParticipant(newParticipant)).rejects.toThrow();
   });
 });
 
-describe('isMember', () => {
-  test('[正常系] 引数の参加者がチームの一員である場合、True', () => {
-    const member = createMember();
-    const pairList = createPairList(member);
-    const team = Team.create('1', { teamName: TeamName.create('1'), pairList });
-
-    const u1 = member[0];
-    expect(team.isMember(u1)).toBeTruthy();
-  });
-
-  test('[正常系] 引数の参加者がチームの一員でない場合、False', () => {
-    const pairList = createPairList(createMember());
-    const team = Team.create('1', { teamName: TeamName.create('1'), pairList });
-
-    const u4 = Participant.create('4', {
-      participantName: ParticipantName.create('藤村 和好'),
-      email: ParticipantEmail.create('kazuyosihuzimura@combzmail.jp'),
-      status: Zaiseki,
-    });
-    expect(team.isMember(u4)).toBeFalsy();
-  });
-});
-
 describe('canRemoveParticipant', () => {
   test('[正常系] 参加者が4人であれば、true', () => {
-    const member1 = createMember().slice(1);
+    const member1 = createThreeMember().slice(1);
     const pair1 = Pair.create('1', {
       pairName: PairName.create('a'),
       member: member1.map((p) => p.id),
     });
-    const member2 = createMember().slice(1);
+    const member2 = createThreeMember().slice(1);
     const pair2 = Pair.create('2', {
       pairName: PairName.create('b'),
       member: member2.map((p) => p.id),
@@ -190,7 +173,7 @@ describe('canRemoveParticipant', () => {
   });
 
   test('[正常系] 参加者が3人であれば、false', () => {
-    const member1 = createMember();
+    const member1 = createThreeMember();
     const pair1 = Pair.create('1', {
       pairName: PairName.create('a'),
       member: member1.map((p) => p.id),
@@ -201,5 +184,85 @@ describe('canRemoveParticipant', () => {
     });
 
     expect(team.canRemoveParticipant()).toBeFalsy();
+  });
+});
+
+describe('removeParticipant', () => {
+  test('[正常系] 3人のペアから取り除く', () => {
+    jest.spyOn(global.Math, 'random').mockReturnValue(0);
+
+    const threeMember = createThreeMember();
+    const pair1 = Pair.create('1', {
+      pairName: PairName.create('a'),
+      member: convertToMember(threeMember),
+    });
+    const twoMember = createTwoMember();
+    const pair2 = Pair.create('2', {
+      pairName: PairName.create('b'),
+      member: convertToMember(twoMember),
+    });
+    const team = Team.create('1', {
+      teamName: TeamName.create('123'),
+      pairList: [pair1, pair2],
+    });
+    const removeParticipant = threeMember[0];
+
+    team.removeParticipant(removeParticipant);
+
+    expect(team.member.length).toBe(4);
+    expect(team.member.some((p) => p == removeParticipant.id)).toBeFalsy();
+    expect(team.pairList.length).toBe(2);
+  });
+
+  test('[正常系] 2人のペアから取り除き、残ったメンバーを3人ペアへ合流させる', () => {
+    jest.spyOn(global.Math, 'random').mockReturnValue(0);
+
+    const threeMember = createThreeMember();
+    const pair1 = Pair.create('1', {
+      pairName: PairName.create('a'),
+      member: convertToMember(threeMember),
+    });
+    const twoMember = createTwoMember();
+    const pair2 = Pair.create('2', {
+      pairName: PairName.create('b'),
+      member: convertToMember(twoMember),
+    });
+    const team = Team.create('1', {
+      teamName: TeamName.create('123'),
+      pairList: [pair1, pair2],
+    });
+    const removeParticipant = twoMember[0];
+
+    team.removeParticipant(removeParticipant);
+
+    expect(team.member.length).toBe(4);
+    expect(team.member.some((p) => p == removeParticipant.id)).toBeFalsy();
+    expect(team.pairList.length).toBe(2);
+  });
+
+  test('[正常系] 2人のペアから取り除き、残ったメンバーを2人ペアへ合流させる', () => {
+    jest.spyOn(global.Math, 'random').mockReturnValue(0);
+
+    const twoMember1 = createThreeMember().slice(1);
+    const pair1 = Pair.create('1', {
+      pairName: PairName.create('a'),
+      member: convertToMember(twoMember1),
+    });
+    const twoMember2 = createTwoMember();
+    const pair2 = Pair.create('2', {
+      pairName: PairName.create('b'),
+      member: convertToMember(twoMember2),
+    });
+    const team = Team.create('1', {
+      teamName: TeamName.create('123'),
+      pairList: [pair1, pair2],
+    });
+    const removeParticipant = twoMember1[0];
+
+    team.removeParticipant(removeParticipant);
+
+    expect(team.member.length).toBe(3);
+    expect(team.member.some((p) => p == removeParticipant.id)).toBeFalsy();
+    expect(team.pairList.length).toBe(1);
   });
 });

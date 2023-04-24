@@ -37,10 +37,6 @@ export class Team extends Entity<TeamIdType, TeamProps> {
     return this.props.pairList.flatMap((pair) => pair.member);
   }
 
-  isMember(participant: Participant): boolean {
-    return this.member.some((id) => id === participant.id);
-  }
-
   /**
    * チームに参加者を追加します。
    * 3人のペアのみの場合、ペアを分割します。
@@ -86,7 +82,7 @@ export class Team extends Entity<TeamIdType, TeamProps> {
    * @returns true...成功, false...失敗
    */
   removeParticipant(participant: Participant) {
-    if (!this.isMember(participant)) {
+    if (this.member.some((p) => p == participant.id) == false) {
       throw new Error('メンバーではありません');
     }
     // 参加者が所属していたペアを取得

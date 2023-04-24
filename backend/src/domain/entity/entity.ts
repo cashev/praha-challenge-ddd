@@ -17,15 +17,12 @@ export abstract class Entity<T extends Brand<any, any>, U> {
     if (object == null || object == undefined) {
       return false;
     }
-
     if (this === object) {
       return true;
     }
-
     if (!isEntity(object)) {
       return false;
     }
-
     return this._id === object._id;
   }
 }

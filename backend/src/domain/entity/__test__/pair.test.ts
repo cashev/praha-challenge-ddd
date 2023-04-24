@@ -81,7 +81,7 @@ describe('addMember', () => {
   test('[異常系] 既にペアの一員の参加者は追加できない', () => {
     const member = createMember().slice(0, 2);
     const pairName = PairName.create('o');
-    const pair = Pair.create('15', { pairName, member });
+    const pair = Pair.create('13', { pairName, member });
     const newMember = member[0];
 
     expect(() => pair.addMember(newMember)).toThrow();

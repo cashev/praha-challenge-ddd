@@ -1,5 +1,5 @@
 import { Pair } from 'src/domain/entity/pair';
-import { Participant, ParticipantIdType } from 'src/domain/entity/participant';
+import { ParticipantIdType } from 'src/domain/entity/participant';
 import { Team } from 'src/domain/entity/team';
 import { PairName } from 'src/domain/value-object/pairName';
 import { TeamName } from 'src/domain/value-object/teamName';

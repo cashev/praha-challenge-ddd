@@ -12,7 +12,7 @@ import {
   Zaiseki,
 } from 'src/domain/value-object/participantStatus';
 import { RejoinTeamUseCase } from '../rejoin-team-usecase';
-import { Option, none, some } from 'fp-ts/lib/Option';
+import { none, some } from 'fp-ts/lib/Option';
 import { MockTeamRepository } from './mock/team-repository';
 import { MockParticipantRepository } from './mock/participant-repository';
 
