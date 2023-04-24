@@ -11,6 +11,7 @@ import { ITaskIdQS } from './query-service-interface/task-qs';
 import { TaskStatusService } from 'src/domain/service/taskStatus-service';
 import { createRandomIdString } from 'src/util/random';
 import { isNone } from 'fp-ts/lib/Option';
+import { TaskIdType } from 'src/domain/entity/taskStatus';
 
 /**
  * 参加者を新規追加するユースケース
@@ -60,9 +61,10 @@ export class JoinNewParticipantUsecase {
     team.addParticipant(newParticipant);
     this.teamRepo.save(team);
     // 各課題について未着手の進捗ステータスを作成する
-    const tsService = new TaskStatusService(this.qs);
-    const taskStatusList = await tsService.createTaskStatusForNewParticipant(
+    const tsService = new TaskStatusService();
+    const taskStatusList = tsService.createTaskStatusForNewParticipant(
       newParticipant.id,
+      (await this.qs.getAll()).map(dto => dto.id as TaskIdType),
     );
     this.taskStatusRepo.saveAll(taskStatusList);
   }

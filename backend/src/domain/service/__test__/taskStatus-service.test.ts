@@ -2,6 +2,7 @@ import { ParticipantIdType } from 'src/domain/entity/participant';
 import { TaskStatusService } from '../taskStatus-service';
 import { Yet } from 'src/domain/value-object/taskStatusValue';
 import { TaskIdDto } from 'src/app/query-service-interface/task-qs';
+import { TaskIdType } from 'src/domain/entity/taskStatus';
 
 describe('createAllTaskStatusForNewParticipant', () => {
   const createMockQS = (dtos: TaskIdDto[]) => {
@@ -11,13 +12,14 @@ describe('createAllTaskStatusForNewParticipant', () => {
   };
 
   test('[正常系]', async () => {
-    const dtos = [];
+    const taskIds = [];
     for (let i = 1; i <= 80; i++) {
-      dtos.push(new TaskIdDto({ id: i.toString() }));
+      taskIds.push(i.toString() as TaskIdType);
     }
-    const service = new TaskStatusService(createMockQS(dtos));
+    const service = new TaskStatusService();
     const result = await service.createTaskStatusForNewParticipant(
       '4' as ParticipantIdType,
+      taskIds,
     );
     expect(result.length).toBe(80);
     expect(result.every((ts) => ts.status === Yet)).toBeTruthy();
