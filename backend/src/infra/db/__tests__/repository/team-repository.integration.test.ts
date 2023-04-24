@@ -63,6 +63,11 @@ describe('team-repository.integration.test', () => {
       expect(team.teamName.getValue()).toEqual('204');
       expect(team.pairList.length).toBe(2);
     });
+
+    test('[異常系]', async () => {
+      const result = await teamRepository.findByParticipantId('999');
+      expect(isNone(result)).toBeTruthy();
+    });
   });
   describe('getSmallestTeamList', () => {
     beforeAll(async () => {
@@ -76,8 +81,9 @@ describe('team-repository.integration.test', () => {
       if (isNone(result)) {
         throw new Error();
       }
-      const team = result.value;
-      expect(team.length).toBe(3);
+      const teams = result.value;
+      expect(teams.length).toBe(3);
+      expect(teams.every(t => t.member.length === 3)).toBeTruthy();
     });
   });
   describe('save', () => {
