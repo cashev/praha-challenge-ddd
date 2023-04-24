@@ -64,7 +64,7 @@ export class JoinNewParticipantUsecase {
     const tsService = new TaskStatusService();
     const taskStatusList = tsService.createTaskStatusForNewParticipant(
       newParticipant.id,
-      (await this.qs.getAll()).map(dto => dto.id as TaskIdType),
+      (await this.qs.getAll()).map((dto) => dto.id as TaskIdType),
     );
     this.taskStatusRepo.saveAll(taskStatusList);
   }

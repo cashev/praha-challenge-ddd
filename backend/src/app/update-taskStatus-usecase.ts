@@ -2,6 +2,9 @@ import { createTaskStatusValue } from 'src/domain/value-object/taskStatusValue';
 import { ITaskStatusRepository } from '../domain/repository-interface/taskStatus-repository';
 import { isNone } from 'fp-ts/lib/Option';
 
+/**
+ * 課題進捗ステータスを更新するユースケースです。
+ */
 export class UpdateTaskStatusUseCase {
   readonly taskStatusRepo: ITaskStatusRepository;
 
@@ -9,6 +12,13 @@ export class UpdateTaskStatusUseCase {
     this.taskStatusRepo = taskStatusRepo;
   }
 
+  /**
+   * 指定した参加者の課題進捗ステータスを更新します。
+   *
+   * @param participantId 参加者id
+   * @param taskId 課題id
+   * @param status 課題進捗ステータス
+   */
   async do(participantId: string, taskId: string, status: string) {
     const newStatus = createTaskStatusValue(status);
     const tsResult = await this.taskStatusRepo.find(participantId, taskId);

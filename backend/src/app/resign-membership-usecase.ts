@@ -5,8 +5,9 @@ import { Taikai } from 'src/domain/value-object/participantStatus';
 import { RemoveMemberUsecase } from './remove-member-usecase';
 import { IParticipantNameQS } from './query-service-interface/participant-qs';
 
-// TOOD 休会中, 退会済を一つにまとめる
-// 参加者が退会するユースケース
+/**
+ * 参加者の在籍ステータスを退会済にするユースケース
+ */
 export class ResignMembershipUsecase {
   private readonly participantRepo: IParticipantRepository;
   private readonly teamRepo: ITeamRepository;
@@ -25,6 +26,13 @@ export class ResignMembershipUsecase {
     this.participantNameQS = participantNameQS;
   }
 
+  /**
+   * 指定された参加者をチームから取り除き、在籍ステータスを退会済へ更新します。
+   * 参加者が抜けてペアが1人になる場合、チーム内でペアを再編成します。
+   * チームメンバーが最低人数を下回る場合、管理者へ通知します。
+   *
+   * @param participantId 参加者id
+   */
   async do(participantId: string) {
     const usecase = new RemoveMemberUsecase(
       this.participantRepo,

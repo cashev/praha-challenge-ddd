@@ -6,7 +6,7 @@ import { createRandomIdString } from 'src/util/random';
 export class TaskStatusService {
   /**
    * 対象の参加者に対して課題進捗ステータスを作成します。
-   * 
+   *
    * @param participantId 参加者id
    * @param taskIds 課題idのリスト
    * @returns 課題進捗ステータスのリスト
