@@ -4,7 +4,7 @@ import { ParticipantIdType } from 'src/domain/entity/participant';
 import { TaskIdType, TaskStatus } from 'src/domain/entity/taskStatus';
 import { ITaskStatusRepository } from 'src/domain/repository-interface/taskStatus-repository';
 import {
-  convertToString,
+  getTaskStatusValue,
   createTaskStatusValue,
 } from 'src/domain/value-object/taskStatusValue';
 
@@ -45,7 +45,7 @@ export class TaskStatusRepository implements ITaskStatusRepository {
         },
       },
       data: {
-        status: convertToString(taskStatus.status),
+        status: getTaskStatusValue(taskStatus.status),
       },
     });
   }
@@ -57,7 +57,7 @@ export class TaskStatusRepository implements ITaskStatusRepository {
           id: ts.id,
           participantId: ts.participantId,
           taskId: ts.taskId,
-          status: convertToString(ts.status),
+          status: getTaskStatusValue(ts.status),
         };
       }),
     });

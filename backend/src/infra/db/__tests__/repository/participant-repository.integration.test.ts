@@ -6,7 +6,7 @@ import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
 import {
   Taikai,
   createUserStatus,
-  getValue,
+  getParticipantStatusValue,
 } from 'src/domain/value-object/participantStatus';
 import { isNone, isSome } from 'fp-ts/lib/Option';
 
@@ -65,7 +65,7 @@ describe('participant-repository.integration.test', () => {
       const p = result.value;
       expect(p.participantName.getValue()).toEqual(p3.name);
       expect(p.email.getValue()).toEqual(p3.email);
-      expect(getValue(p.status)).toEqual(p3.status);
+      expect(getParticipantStatusValue(p.status)).toEqual(p3.status);
     });
   });
 
@@ -90,7 +90,9 @@ describe('participant-repository.integration.test', () => {
         expect(participant.participantName.getValue()).toEqual(p2.name);
         expect(participant.participantName.getValue()).toEqual(p2.name);
         expect(participant.email.getValue()).toEqual(p2.email);
-        expect(getValue(participant.status)).toEqual(p2.status);
+        expect(getParticipantStatusValue(participant.status)).toEqual(
+          p2.status,
+        );
       } else {
         throw new Error();
       }
@@ -109,7 +111,9 @@ describe('participant-repository.integration.test', () => {
         throw new Error();
       }
       const p = result.value;
-      expect(getValue(p.status)).toEqual(getValue(Taikai));
+      expect(getParticipantStatusValue(p.status)).toEqual(
+        getParticipantStatusValue(Taikai),
+      );
     });
   });
 });

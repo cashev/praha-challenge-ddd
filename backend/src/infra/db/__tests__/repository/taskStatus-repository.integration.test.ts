@@ -10,7 +10,7 @@ import { ParticipantIdType } from 'src/domain/entity/participant';
 import {
   Done,
   Yet,
-  convertToString,
+  getTaskStatusValue,
 } from 'src/domain/value-object/taskStatusValue';
 import { isNone } from 'fp-ts/lib/Option';
 
@@ -124,7 +124,7 @@ describe('taskStatus-repository.integration.test', () => {
       });
       expect(results.length).toBe(4);
       expect(
-        results.every((r) => r.status === convertToString(Yet)),
+        results.every((r) => r.status === getTaskStatusValue(Yet)),
       ).toBeTruthy();
     });
   });

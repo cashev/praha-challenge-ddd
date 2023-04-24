@@ -23,7 +23,7 @@ export function createTaskStatusValue(status: string): TaskStatusValue {
   );
 }
 
-export const convertToString = (taskStatus: TaskStatusValue) => {
+export const getTaskStatusValue = (taskStatus: TaskStatusValue) => {
   switch (taskStatus) {
     case Yet:
       return TaskStatusValues.Yet;

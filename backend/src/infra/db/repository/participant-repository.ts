@@ -6,7 +6,7 @@ import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
 import { ParticipantName } from 'src/domain/value-object/participantName';
 import {
   createUserStatus,
-  getValue,
+  getParticipantStatusValue,
 } from 'src/domain/value-object/participantStatus';
 
 export class ParticipantRepository implements IParticipantRepository {
@@ -37,13 +37,13 @@ export class ParticipantRepository implements IParticipantRepository {
       update: {
         name: participant.participantName.getValue(),
         email: participant.email.getValue(),
-        status: getValue(participant.status),
+        status: getParticipantStatusValue(participant.status),
       },
       create: {
         id: participant.id,
         name: participant.participantName.getValue(),
         email: participant.email.getValue(),
-        status: getValue(participant.status),
+        status: getParticipantStatusValue(participant.status),
       },
     });
   }

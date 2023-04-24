@@ -9,7 +9,7 @@ export const Kyukai = Symbol(ParticipantStatusValues.Kyukai);
 export const Taikai = Symbol(ParticipantStatusValues.Taikai);
 export type ParticipantStatus = typeof Zaiseki | typeof Kyukai | typeof Taikai;
 
-export function getValue(status: ParticipantStatus): string {
+export function getParticipantStatusValue(status: ParticipantStatus): string {
   switch (status) {
     case Zaiseki:
       return ParticipantStatusValues.Zaiseki;
