@@ -5,12 +5,6 @@ import { TaskIdDto } from 'src/app/query-service-interface/task-qs';
 import { TaskIdType } from 'src/domain/entity/taskStatus';
 
 describe('createAllTaskStatusForNewParticipant', () => {
-  const createMockQS = (dtos: TaskIdDto[]) => {
-    return {
-      getAll: jest.fn().mockResolvedValue(dtos),
-    };
-  };
-
   test('[正常系]', async () => {
     const taskIds = [];
     for (let i = 1; i <= 80; i++) {
