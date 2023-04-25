@@ -9,7 +9,7 @@ import { isNone } from 'fp-ts/lib/Option';
 /**
  * 休会中, 退会済の参加者が再度参加するユースケース
  */
-export class RejoinTeamUseCase {
+export class RejoinParticipantUseCase {
   private readonly participantRepo: IParticipantRepository;
   private readonly teamRepo: ITeamRepository;
 

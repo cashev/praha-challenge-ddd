@@ -83,7 +83,7 @@ describe('team-repository.integration.test', () => {
       }
       const teams = result.value;
       expect(teams.length).toBe(3);
-      expect(teams.every(t => t.member.length === 3)).toBeTruthy();
+      expect(teams.every((t) => t.member.length === 3)).toBeTruthy();
     });
   });
   describe('save', () => {

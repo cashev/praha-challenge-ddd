@@ -15,7 +15,7 @@ import {
   Zaiseki,
   createUserStatus,
 } from 'src/domain/value-object/participantStatus';
-import { RejoinTeamUseCase } from 'src/app/rejoin-team-usecase';
+import { RejoinParticipantUseCase } from 'src/app/rejoin-participant-usecase';
 import { SuspendMembershipUsecase } from 'src/app/suspend-membership-usecase';
 import { ResignMembershipUsecase } from 'src/app/resign-membership-usecase';
 import {
@@ -79,9 +79,10 @@ export class ParticipantController {
     const { participantId, status } = patchParticipantRequest;
     switch (createUserStatus(status)) {
       case Zaiseki:
-        await new RejoinTeamUseCase(participantRepository, teamRepository).do(
-          participantId,
-        );
+        await new RejoinParticipantUseCase(
+          participantRepository,
+          teamRepository,
+        ).do(participantId);
         break;
       case Kyukai:
         await new SuspendMembershipUsecase(

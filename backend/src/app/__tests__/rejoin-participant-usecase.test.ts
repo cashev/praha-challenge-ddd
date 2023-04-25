@@ -11,7 +11,7 @@ import {
   ParticipantStatus,
   Zaiseki,
 } from 'src/domain/value-object/participantStatus';
-import { RejoinTeamUseCase } from '../rejoin-team-usecase';
+import { RejoinParticipantUseCase } from '../rejoin-participant-usecase';
 import { none, some } from 'fp-ts/lib/Option';
 import { MockTeamRepository } from './mock/team-repository';
 import { MockParticipantRepository } from './mock/participant-repository';
@@ -54,7 +54,7 @@ describe('do', () => {
       some(newParticipant),
     );
     const mockTeamRepo = new MockTeamRepository(none, some([team]));
-    const participantcase = new RejoinTeamUseCase(
+    const participantcase = new RejoinParticipantUseCase(
       mockParticipantRepo,
       mockTeamRepo,
     );
@@ -78,7 +78,7 @@ describe('do', () => {
       some(newParticipant),
     );
     const mockTeamRepo = new MockTeamRepository(none, some([team]));
-    const participantcase = new RejoinTeamUseCase(
+    const participantcase = new RejoinParticipantUseCase(
       mockParticipantRepo,
       mockTeamRepo,
     );
@@ -92,7 +92,10 @@ describe('do', () => {
   test('[異常系] 存在しない参加者', async () => {
     const mockParticipantRepo = new MockParticipantRepository();
     const mockTeamRepo = new MockTeamRepository();
-    const useCase = new RejoinTeamUseCase(mockParticipantRepo, mockTeamRepo);
+    const useCase = new RejoinParticipantUseCase(
+      mockParticipantRepo,
+      mockTeamRepo,
+    );
 
     expect(useCase.do('1')).rejects.toThrow();
   });
@@ -103,7 +106,10 @@ describe('do', () => {
       some(participant),
     );
     const mockTeamRepo = new MockTeamRepository();
-    const useCase = new RejoinTeamUseCase(mockParticipantRepo, mockTeamRepo);
+    const useCase = new RejoinParticipantUseCase(
+      mockParticipantRepo,
+      mockTeamRepo,
+    );
 
     expect(useCase.do('1')).rejects.toThrow();
   });

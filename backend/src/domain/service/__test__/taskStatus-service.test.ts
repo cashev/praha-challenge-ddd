@@ -1,7 +1,6 @@
 import { ParticipantIdType } from 'src/domain/entity/participant';
 import { TaskStatusService } from '../taskStatus-service';
 import { Yet } from 'src/domain/value-object/taskStatusValue';
-import { TaskIdDto } from 'src/app/query-service-interface/task-qs';
 import { TaskIdType } from 'src/domain/entity/taskStatus';
 
 describe('createAllTaskStatusForNewParticipant', () => {
