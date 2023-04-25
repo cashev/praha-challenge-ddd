@@ -1,3 +1,5 @@
+import { Either, left, right } from 'fp-ts/lib/Either';
+
 export const TaskStatusValues = {
   Yet: '未着手',
   Waiting: 'レビュー待ち',
@@ -19,19 +21,23 @@ export type TaskStatusValue = typeof Yet | typeof Waiting | typeof Done;
  * @param status 課題進捗ステータスの文字列
  * @returns 課題進捗ステータスの型
  */
-export function createTaskStatusValue(status: string): TaskStatusValue {
+export const createTaskStatusValue = (
+  status: string,
+): Either<Error, TaskStatusValue> => {
   switch (status) {
     case TaskStatusValues.Yet:
-      return Yet;
+      return right(Yet);
     case TaskStatusValues.Waiting:
-      return Waiting;
+      return right(Waiting);
     case TaskStatusValues.Done:
-      return Done;
+      return right(Done);
   }
-  throw Error(
-    '不正な値です。未着手, レビュー待ち, 完了を指定してください。: ' + status,
+  return left(
+    new Error(
+      '不正な値です。未着手, レビュー待ち, 完了を指定してください。: ' + status,
+    ),
   );
-}
+};
 
 /**
  * 課題進捗ステータスの型から文字列へ変換します。

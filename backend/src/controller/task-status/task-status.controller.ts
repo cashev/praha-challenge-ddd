@@ -2,7 +2,13 @@ import { PrismaClient } from '@prisma/client';
 import { GetByTaskStatusResponse } from './response/task-status-response';
 import { ParticipantByTaskStatusQS } from 'src/infra/db/query-service/participant-by-taskStatus-qs';
 import { GetByTaskStatusUsecase } from 'src/app/get-by-taskStatus-usecase';
-import { Body, Controller, Patch, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import {
   PatchTaskStatusRequest,
@@ -10,6 +16,7 @@ import {
 } from './request/task-status-request';
 import { TaskStatusRepository } from 'src/infra/db/repository/taskStatus-repository';
 import { UpdateTaskStatusUseCase } from 'src/app/update-taskStatus-usecase';
+import { isSome } from 'fp-ts/lib/Option';
 
 @Controller({
   path: '/taskStatus',
@@ -40,6 +47,9 @@ export class TaskStatusController {
     const taskStatusRepository = new TaskStatusRepository(prisma);
     const usecase = new UpdateTaskStatusUseCase(taskStatusRepository);
     const { participantId, taskId, status } = patchTaskStatusRequest;
-    await usecase.do(participantId, taskId, status);
+    const result = await usecase.do(participantId, taskId, status);
+    if (isSome(result)) {
+      throw new BadRequestException(result.value.message);
+    }
   }
 }

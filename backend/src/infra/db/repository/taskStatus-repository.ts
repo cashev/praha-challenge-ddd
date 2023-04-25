@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { isLeft } from 'fp-ts/lib/Either';
 import { Option, none, some } from 'fp-ts/lib/Option';
 import { ParticipantIdType } from 'src/domain/entity/participant';
 import { TaskIdType, TaskStatus } from 'src/domain/entity/taskStatus';
@@ -28,10 +29,14 @@ export class TaskStatusRepository implements ITaskStatusRepository {
     if (result == null) {
       return none;
     }
+    const statusEither = createTaskStatusValue(result.status);
+    if (isLeft(statusEither)) {
+      return none;
+    }
     const taskStatus = TaskStatus.create(result.id, {
       participantId: result.participantId as ParticipantIdType,
       taskId: result.taskId as TaskIdType,
-      status: createTaskStatusValue(result.status),
+      status: statusEither.right,
     });
     return some(taskStatus);
   }

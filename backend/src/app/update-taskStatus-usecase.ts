@@ -1,6 +1,7 @@
 import { createTaskStatusValue } from 'src/domain/value-object/taskStatusValue';
 import { ITaskStatusRepository } from '../domain/repository-interface/taskStatus-repository';
-import { isNone } from 'fp-ts/lib/Option';
+import { Option, isNone, none, some } from 'fp-ts/lib/Option';
+import { isLeft } from 'fp-ts/lib/Either';
 
 /**
  * 課題進捗ステータスを更新するユースケースです。
@@ -19,14 +20,34 @@ export class UpdateTaskStatusUseCase {
    * @param taskId 課題id
    * @param status 課題進捗ステータス
    */
-  async do(participantId: string, taskId: string, status: string) {
-    const newStatus = createTaskStatusValue(status);
+  async do(
+    participantId: string,
+    taskId: string,
+    status: string,
+  ): Promise<Option<Error>> {
+    const statusEither = createTaskStatusValue(status);
+    if (isLeft(statusEither)) {
+      return some(statusEither.left);
+    }
+    const newStatus = statusEither.right;
     const tsResult = await this.taskStatusRepo.find(participantId, taskId);
     if (isNone(tsResult)) {
-      throw new Error();
+      return some(
+        new Error(
+          '課題進捗ステータスが見つかりません。参加者id: ' +
+            participantId +
+            ', 課題id: ' +
+            taskId,
+        ),
+      );
     }
     const taskStatus = tsResult.value;
-    taskStatus.status = newStatus;
+    try {
+      taskStatus.status = newStatus;
+    } catch (e) {
+      return some(e);
+    }
     await this.taskStatusRepo.save(taskStatus);
+    return none;
   }
 }

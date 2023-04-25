@@ -2,7 +2,7 @@ import { TaskIdType, TaskStatus } from 'src/domain/entity/taskStatus';
 import { Yet, Waiting, Done } from 'src/domain/value-object/taskStatusValue';
 import { UpdateTaskStatusUseCase } from '../update-taskStatus-usecase';
 import { ParticipantIdType } from 'src/domain/entity/participant';
-import { some } from 'fp-ts/lib/Option';
+import { isSome, some } from 'fp-ts/lib/Option';
 import { MockTaskStatusRepository } from './mock/taskStatus-repository';
 
 describe('do', () => {
@@ -54,7 +54,8 @@ describe('do', () => {
     const mockTaskStatusRepo = new MockTaskStatusRepository(some(taskStatus));
 
     const usecase = new UpdateTaskStatusUseCase(mockTaskStatusRepo);
-    await expect(usecase.do('1', '1', '未着手')).rejects.toThrow();
+    const result = await usecase.do('1', '1', '未着手');
+    expect(isSome(result)).toBeTruthy();
   });
 
   test('[異常系] 完了->レビュー待ち', async () => {
@@ -66,6 +67,7 @@ describe('do', () => {
     const mockTaskStatusRepo = new MockTaskStatusRepository(some(taskStatus));
 
     const usecase = new UpdateTaskStatusUseCase(mockTaskStatusRepo);
-    await expect(usecase.do('1', '1', 'レビュー待ち')).rejects.toThrow();
+    const result = await usecase.do('1', '1', 'レビュー待ち');
+    expect(isSome(result)).toBeTruthy();
   });
 });
