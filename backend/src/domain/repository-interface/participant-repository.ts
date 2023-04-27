@@ -9,6 +9,12 @@ export interface IParticipantRepository {
    */
   find(id: string): Promise<Option<Participant>>;
   /**
+   * メールアドレスから参加者を取得します。
+   *
+   * @param email メールアドレス
+   */
+  findByEmail(email: string): Promise<Option<Participant>>;
+  /**
    * 参加者を保存します。
    *
    * @param participant 参加者

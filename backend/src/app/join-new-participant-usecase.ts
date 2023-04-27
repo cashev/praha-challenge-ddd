@@ -10,7 +10,7 @@ import { randomChoice } from 'src/util/random';
 import { ITaskIdQS } from './query-service-interface/task-qs';
 import { TaskStatusService } from 'src/domain/service/taskStatus-service';
 import { createRandomIdString } from 'src/util/random';
-import { isNone } from 'fp-ts/lib/Option';
+import { Option, isNone, isSome, none, some } from 'fp-ts/lib/Option';
 import { TaskIdType } from 'src/domain/entity/taskStatus';
 
 /**
@@ -40,7 +40,11 @@ export class JoinNewParticipantUsecase {
    * @param name 参加者の名前
    * @param email 参加者のメールアドレス
    */
-  async do(name: string, email: string) {
+  async do(name: string, email: string): Promise<Option<Error>> {
+    if (isSome(await this.participantRepo.findByEmail(email))) {
+      // メールアドレス重複チェック
+      return some(new Error('メールアドレスが重複しています。'));
+    }
     // 参加者を新規参加
     const newParticipant = Participant.create(createRandomIdString(), {
       participantName: ParticipantName.create(name),
@@ -59,13 +63,14 @@ export class JoinNewParticipantUsecase {
     }
     const team = randomChoice<Team>(teams);
     team.addParticipant(newParticipant);
-    this.teamRepo.save(team);
+    await this.teamRepo.save(team);
     // 各課題について未着手の進捗ステータスを作成する
     const tsService = new TaskStatusService();
     const taskStatusList = tsService.createTaskStatusForNewParticipant(
       newParticipant.id,
       (await this.qs.getAll()).map((dto) => dto.id as TaskIdType),
     );
-    this.taskStatusRepo.saveAll(taskStatusList);
+    await this.taskStatusRepo.saveAll(taskStatusList);
+    return none;
   }
 }

@@ -1,5 +1,5 @@
 import { Pair } from 'src/domain/entity/pair';
-import { ParticipantIdType } from 'src/domain/entity/participant';
+import { Participant, ParticipantIdType } from 'src/domain/entity/participant';
 import { Team } from 'src/domain/entity/team';
 import { PairName } from 'src/domain/value-object/pairName';
 import { TeamName } from 'src/domain/value-object/teamName';
@@ -7,9 +7,12 @@ import { JoinNewParticipantUsecase } from '../join-new-participant-usecase';
 import { TaskStatus } from 'src/domain/entity/taskStatus';
 import { Yet } from 'src/domain/value-object/taskStatusValue';
 import { TaskIdDto } from '../query-service-interface/task-qs';
-import { none, some } from 'fp-ts/lib/Option';
+import { isSome, none, some } from 'fp-ts/lib/Option';
 import { MockTeamRepository } from './mock/team-repository';
 import { MockParticipantRepository } from './mock/participant-repository';
+import { ParticipantName } from 'src/domain/value-object/participantName';
+import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
+import { Zaiseki } from 'src/domain/value-object/participantStatus';
 
 describe('do', () => {
   const createMockTaskStatusRepo = (nextId: number, tsList: TaskStatus[]) => {
@@ -74,6 +77,20 @@ describe('do', () => {
   });
 
   test('[異常系] メールアドレスが重複した参加者を追加する', async () => {
-    // TODO
+    const duplicateParticipant = Participant.create('31', {
+      participantName: ParticipantName.create('中島 裕実'),
+      email: ParticipantEmail.create('nakasima-hiromi@dion.ne.jp'),
+      status: Zaiseki,
+    });
+    const team = createTeam();
+    const tsList: TaskStatus[] = [];
+    const usecase = new JoinNewParticipantUsecase(
+      new MockParticipantRepository(some(duplicateParticipant)),
+      new MockTeamRepository(none, some([team])),
+      createMockTaskStatusRepo(241, tsList),
+      createMockTaskQS(),
+    );
+    const result = await usecase.do('中島 裕実', 'nakasima-hiromi@dion.ne.jp');
+    expect(isSome(result)).toBeTruthy();
   });
 });

@@ -31,6 +31,21 @@ export class ParticipantRepository implements IParticipantRepository {
     return some(participant);
   }
 
+  async findByEmail(email: string): Promise<Option<Participant>> {
+    const result = await this.prismaClient.participant.findUnique({
+      where: { email },
+    });
+    if (result == null) {
+      return none;
+    }
+    const participant = Participant.create(result.id.toString(), {
+      participantName: ParticipantName.create(result.name),
+      email: ParticipantEmail.create(result.email),
+      status: createUserStatus(result.status),
+    });
+    return some(participant);
+  }
+
   async save(participant: Participant): Promise<void> {
     await this.prismaClient.participant.upsert({
       where: { id: participant.id },

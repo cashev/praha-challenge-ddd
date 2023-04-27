@@ -9,6 +9,10 @@ export class MockParticipantRepository implements IParticipantRepository {
     id;
     return Promise.resolve(this.findResult);
   }
+  findByEmail(email: string): Promise<Option<Participant>> {
+    email;
+    return Promise.resolve(this.findResult);
+  }
   save(participant: Participant): Promise<void> {
     participant;
     return Promise.resolve();
