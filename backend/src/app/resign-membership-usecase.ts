@@ -4,6 +4,7 @@ import { INotificationSender } from 'src/domain/notifier-interface/notification-
 import { Taikai } from 'src/domain/value-object/participantStatus';
 import { RemoveMemberUsecase } from './remove-member-usecase';
 import { IParticipantNameQS } from './query-service-interface/participant-qs';
+import { Option } from 'fp-ts/lib/Option';
 
 /**
  * 参加者の在籍ステータスを退会済にするユースケース
@@ -33,13 +34,13 @@ export class ResignMembershipUsecase {
    *
    * @param participantId 参加者id
    */
-  async do(participantId: string) {
+  async do(participantId: string): Promise<Option<Error>> {
     const usecase = new RemoveMemberUsecase(
       this.participantRepo,
       this.teamRepo,
       this.notificationSender,
       this.participantNameQS,
     );
-    await usecase.do(participantId, Taikai);
+    return await usecase.do(participantId, Taikai);
   }
 }

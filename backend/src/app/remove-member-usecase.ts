@@ -9,7 +9,9 @@ import {
 import { createRandomIdString } from 'src/util/random';
 import { IParticipantNameQS } from './query-service-interface/participant-qs';
 import { ParticipantName } from 'src/domain/value-object/participantName';
-import { isNone } from 'fp-ts/lib/Option';
+import { Option, isNone, none, some } from 'fp-ts/lib/Option';
+import { Team } from 'src/domain/entity/team';
+import { Participant } from 'src/domain/entity/participant';
 
 /**
  * チームから参加者を取り除くユースケースです。
@@ -40,19 +42,24 @@ export class RemoveMemberUsecase {
    * @param participantId 取り除く参加者id
    * @param newStatus 在籍ステータス
    */
-  async do(participantId: string, newStatus: ParticipantStatus) {
+  async do(
+    participantId: string,
+    newStatus: ParticipantStatus,
+  ): Promise<Option<Error>> {
     if (newStatus == Zaiseki) {
-      throw new Error(
-        '取り除く参加者のステータスを在籍中へ変更できません。休会中または退会済を指定してください。',
+      return some(
+        new Error(
+          '取り除く参加者のステータスを在籍中へ変更できません。休会中または退会済を指定してください。',
+        ),
       );
     }
     const pResult = await this.participantRepo.find(participantId);
     if (isNone(pResult)) {
-      throw new Error('存在しない参加者です。');
+      return some(new Error('存在しない参加者です。'));
     }
     const participant = pResult.value;
     if (participant.status != Zaiseki) {
-      throw new Error('在籍中ではない参加者です。');
+      return some(new Error('在籍中ではない参加者です。'));
     }
 
     const tResult = await this.teamRepo.findByParticipantId(participantId);
@@ -62,25 +69,41 @@ export class RemoveMemberUsecase {
     const team = tResult.value;
     if (team.canRemoveParticipant() == false) {
       // チームの人数が規定の人数を下回る場合、管理者に通知する
-      const participantNames = await this.participantNameQS.getNames([
-        ...team.member,
-      ]);
-      const notification = Notification.create(createRandomIdString(), {
-        targetParticipantName: participant.participantName,
-        newStatus,
-        teamName: team.teamName,
-        teamMemberNames: participantNames.map((dto) =>
-          ParticipantName.create(dto.name),
-        ),
-      });
-      await this.notificationSender.sendToAdmin(notification);
-      throw new Error('');
+      await this.notifyToAdmin(participant, newStatus, team);
+      return some(new Error(''));
     }
-
     participant.status = newStatus;
     team.removeParticipant(participant);
 
     await this.teamRepo.save(team);
     await this.participantRepo.save(participant);
+    return none;
+  }
+
+  /**
+   * 管理者に通知します。
+   *
+   * @param participant 参加者
+   * @param newStatus 新規ステータス
+   * @param team チーム
+   */
+  private async notifyToAdmin(
+    participant: Participant,
+    newStatus: ParticipantStatus,
+    team: Team,
+  ) {
+    // チームの参加者名
+    const participantNames = await this.participantNameQS.getNames([
+      ...team.member,
+    ]);
+    const notification = Notification.create(createRandomIdString(), {
+      targetParticipantName: participant.participantName,
+      newStatus,
+      teamName: team.teamName,
+      teamMemberNames: participantNames.map((dto) =>
+        ParticipantName.create(dto.name),
+      ),
+    });
+    await this.notificationSender.sendToAdmin(notification);
   }
 }

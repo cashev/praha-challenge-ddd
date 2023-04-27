@@ -12,7 +12,7 @@ import {
   Zaiseki,
 } from 'src/domain/value-object/participantStatus';
 import { RejoinParticipantUseCase } from '../rejoin-participant-usecase';
-import { none, some } from 'fp-ts/lib/Option';
+import { isSome, none, some } from 'fp-ts/lib/Option';
 import { MockTeamRepository } from './mock/team-repository';
 import { MockParticipantRepository } from './mock/participant-repository';
 
@@ -97,7 +97,8 @@ describe('do', () => {
       mockTeamRepo,
     );
 
-    expect(useCase.do('1')).rejects.toThrow();
+    const result = await useCase.do('1');
+    expect(isSome(result)).toBeTruthy();
   });
 
   test('[異常系] 在籍中の参加者', async () => {
@@ -111,6 +112,7 @@ describe('do', () => {
       mockTeamRepo,
     );
 
-    expect(useCase.do('1')).rejects.toThrow();
+    const result = await useCase.do('1');
+    expect(isSome(result)).toBeTruthy();
   });
 });

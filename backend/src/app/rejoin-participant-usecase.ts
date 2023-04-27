@@ -3,8 +3,7 @@ import { Zaiseki } from 'src/domain/value-object/participantStatus';
 import { randomChoice } from 'src/util/random';
 import { ITeamRepository } from '../domain/repository-interface/team-repository';
 import { IParticipantRepository } from '../domain/repository-interface/participant-repository';
-import { Participant } from 'src/domain/entity/participant';
-import { isNone } from 'fp-ts/lib/Option';
+import { Option, isNone, none, some } from 'fp-ts/lib/Option';
 
 /**
  * 休会中, 退会済の参加者が再度参加するユースケース
@@ -26,13 +25,15 @@ export class RejoinParticipantUseCase {
    *
    * @param participantId 参加者id
    */
-  async do(participantId: string) {
+  async do(participantId: string): Promise<Option<Error>> {
     const result = await this.participantRepo.find(participantId);
     if (isNone(result)) {
-      throw new Error('存在しない参加者です。');
+      return some(new Error('存在しない参加者です。'));
     }
     const participant = result.value;
-    this.validate(participant);
+    if (participant.status === Zaiseki) {
+      return some(new Error('在籍中の参加者です。'));
+    }
 
     participant.status = Zaiseki;
     const tResult = await this.teamRepo.getSmallestTeamList();
@@ -44,11 +45,6 @@ export class RejoinParticipantUseCase {
 
     this.teamRepo.save(team);
     this.participantRepo.save(participant);
-  }
-
-  private validate(participant: Participant) {
-    if (participant.status === Zaiseki) {
-      throw new Error('在籍中の参加者です。');
-    }
+    return none;
   }
 }

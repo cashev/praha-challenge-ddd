@@ -10,7 +10,7 @@ import {
   Zaiseki,
 } from 'src/domain/value-object/participantStatus';
 import { TeamName } from 'src/domain/value-object/teamName';
-import { none, some } from 'fp-ts/lib/Option';
+import { isSome, none, some } from 'fp-ts/lib/Option';
 import { RemoveMemberUsecase } from '../remove-member-usecase';
 import { MockTeamRepository } from './mock/team-repository';
 import { MockParticipantRepository } from './mock/participant-repository';
@@ -23,7 +23,7 @@ describe('do', () => {
   };
   const createParticipantNameQS = () => {
     return {
-      getNames: jest.fn(),
+      getNames: jest.fn().mockResolvedValue(['参加者A', '参加者B', '参加者C']),
     };
   };
   const createTwoMember = () => {
@@ -124,7 +124,8 @@ describe('do', () => {
       createMockNotificationSender(),
       createParticipantNameQS(),
     );
-    expect(() => usecase.do('31', Taikai)).rejects.toThrow();
+    const result = await usecase.do('31', Taikai);
+    expect(isSome(result)).toBeTruthy();
   });
 
   test('[異常系] 休会中の参加者', async () => {
@@ -144,7 +145,8 @@ describe('do', () => {
       createMockNotificationSender(),
       createParticipantNameQS(),
     );
-    expect(() => usecase.do('32', Kyukai)).rejects.toThrow();
+    const result = await usecase.do('32', Kyukai);
+    expect(isSome(result)).toBeTruthy();
   });
 
   test('[異常系] 退会済の参加者', async () => {
@@ -164,6 +166,37 @@ describe('do', () => {
       createMockNotificationSender(),
       createParticipantNameQS(),
     );
-    expect(() => usecase.do('33', Taikai)).rejects.toThrow();
+    const result = await usecase.do('33', Taikai);
+    expect(isSome(result)).toBeTruthy();
+  });
+
+  test('[異常系] 管理者に通知する', async () => {
+    const participant = Participant.create('34', {
+      participantName: ParticipantName.create('高井 勝夫'),
+      email: ParticipantEmail.create('oasam626@hotmail.co.jp'),
+      status: Zaiseki,
+    });
+    const threeMember = createThreeMember();
+    const threePair = Pair.create('2', {
+      pairName: PairName.create('b'),
+      member: threeMember,
+    });
+    const team = Team.create('1', {
+      teamName: TeamName.create('1'),
+      pairList: [threePair],
+    });
+    const mockParticipantRepo = new MockParticipantRepository(
+      some(participant),
+    );
+    const mockTeamRepo = new MockTeamRepository(some(team));
+
+    const usecase = new RemoveMemberUsecase(
+      mockParticipantRepo,
+      mockTeamRepo,
+      createMockNotificationSender(),
+      createParticipantNameQS(),
+    );
+    const result = await usecase.do('34', Taikai);
+    expect(isSome(result)).toBeTruthy();
   });
 });

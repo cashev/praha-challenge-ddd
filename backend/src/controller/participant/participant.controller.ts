@@ -33,7 +33,7 @@ import { TaskIdQS } from 'src/infra/db/query-service/task-qs';
 import { TaskStatusRepository } from 'src/infra/db/repository/taskStatus-repository';
 import { JoinNewParticipantUsecase } from 'src/app/join-new-participant-usecase';
 import { NotificationSender } from 'src/infra/notifier/notification-sender';
-import { isSome } from 'fp-ts/lib/Option';
+import { Option, isSome } from 'fp-ts/lib/Option';
 
 @Controller({
   path: '/participant',
@@ -88,15 +88,16 @@ export class ParticipantController {
     const participantNameQS = new ParticipantNameQS(prisma);
 
     const { participantId, status } = patchParticipantRequest;
+    let result: Option<Error>;
     switch (createUserStatus(status)) {
       case Zaiseki:
-        await new RejoinParticipantUseCase(
+        result = await new RejoinParticipantUseCase(
           participantRepository,
           teamRepository,
         ).do(participantId);
         break;
       case Kyukai:
-        await new SuspendMembershipUsecase(
+        result = await new SuspendMembershipUsecase(
           participantRepository,
           teamRepository,
           notificationSender,
@@ -104,13 +105,16 @@ export class ParticipantController {
         ).do(participantId);
         break;
       case Taikai:
-        await new ResignMembershipUsecase(
+        result = await new ResignMembershipUsecase(
           participantRepository,
           teamRepository,
           notificationSender,
           participantNameQS,
         ).do(participantId);
         break;
+    }
+    if (isSome(result)) {
+      throw new BadRequestException(result.value.message);
     }
   }
 }
