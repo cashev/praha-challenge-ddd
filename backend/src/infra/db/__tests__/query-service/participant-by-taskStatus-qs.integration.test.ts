@@ -1,8 +1,8 @@
 import { prisma } from 'src/testUtil/prisma';
-import { ParticipantByTaskStatusQS } from '../../query-service/participant-by-taskStatus-qs';
+import { TaskStatusQS } from '../../query-service/task-status-qs';
 
 describe('participant-by-taskStatus-qs.integration.test', () => {
-  const qs = new ParticipantByTaskStatusQS(prisma);
+  const qs = new TaskStatusQS(prisma);
   beforeAll(async () => {
     await prisma.taskStatus.deleteMany({});
     await prisma.participant.deleteMany({});

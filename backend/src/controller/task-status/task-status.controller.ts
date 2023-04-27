@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { GetByTaskStatusResponse } from './response/task-status-response';
-import { ParticipantByTaskStatusQS } from 'src/infra/db/query-service/participant-by-taskStatus-qs';
+import { TaskStatusQS } from 'src/infra/db/query-service/task-status-qs';
 import { GetByTaskStatusUsecase } from 'src/app/get-by-taskStatus-usecase';
 import {
   BadRequestException,
@@ -29,7 +29,7 @@ export class TaskStatusController {
     postTaskStatusRequest: PostTaskStatusRequest,
   ): Promise<GetByTaskStatusResponse> {
     const prisma = new PrismaClient();
-    const qs = new ParticipantByTaskStatusQS(prisma);
+    const qs = new TaskStatusQS(prisma);
     const usecase = new GetByTaskStatusUsecase(qs);
     const { taskIds, status, page } = postTaskStatusRequest;
     const result = await usecase.do(taskIds, status, page);

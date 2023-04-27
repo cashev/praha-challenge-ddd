@@ -1,8 +1,8 @@
 import { PrismaClient } from '@prisma/client';
-import { IParticipantByTaskStatusQS } from 'src/app/query-service-interface/participant-by-taskStatus-qs';
+import { ITaskStatusQS } from 'src/app/query-service-interface/task-status-qs';
 import { ParticipantDto } from 'src/app/query-service-interface/participant-qs';
 
-export class ParticipantByTaskStatusQS implements IParticipantByTaskStatusQS {
+export class TaskStatusQS implements ITaskStatusQS {
   private prismaClient: PrismaClient;
 
   constructor(prismaClient: PrismaClient) {

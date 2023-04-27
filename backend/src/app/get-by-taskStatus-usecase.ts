@@ -1,4 +1,4 @@
-import { IParticipantByTaskStatusQS } from './query-service-interface/participant-by-taskStatus-qs';
+import { ITaskStatusQS } from './query-service-interface/task-status-qs';
 
 /**
  * 1ページに表示する参加者の人数
@@ -9,8 +9,8 @@ const PARTICIPANT_TAKE_PER_PAGE = 10;
  * 特定の課題(複数指定可能)について特定の進捗ステータスとなっている参加者をページングして取得するユースケース
  */
 export class GetByTaskStatusUsecase {
-  private qs: IParticipantByTaskStatusQS;
-  constructor(qs: IParticipantByTaskStatusQS) {
+  private qs: ITaskStatusQS;
+  constructor(qs: ITaskStatusQS) {
     this.qs = qs;
   }
 

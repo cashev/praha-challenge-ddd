@@ -1,5 +1,5 @@
 import { GetByTaskStatusUsecase } from '../get-by-taskStatus-usecase';
-import { IParticipantByTaskStatusQS } from '../query-service-interface/participant-by-taskStatus-qs';
+import { ITaskStatusQS } from '../query-service-interface/task-status-qs';
 import { ParticipantDto } from '../query-service-interface/participant-qs';
 
 describe('do', () => {
@@ -77,7 +77,7 @@ describe('do', () => {
   });
   const plist = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12];
 
-  const mockQS = new (class implements IParticipantByTaskStatusQS {
+  const mockQS = new (class implements ITaskStatusQS {
     getWithPagination(
       taskIds: string[],
       status: string,
