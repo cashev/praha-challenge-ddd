@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { PrismaClient } from '@prisma/client';
 import { GetAllParticipantUseCase } from 'src/app/get-all-participant-usecase';
@@ -26,6 +33,7 @@ import { TaskIdQS } from 'src/infra/db/query-service/task-qs';
 import { TaskStatusRepository } from 'src/infra/db/repository/taskStatus-repository';
 import { JoinNewParticipantUsecase } from 'src/app/join-new-participant-usecase';
 import { NotificationSender } from 'src/infra/notifier/notification-sender';
+import { isSome } from 'fp-ts/lib/Option';
 
 @Controller({
   path: '/participant',
@@ -61,7 +69,10 @@ export class ParticipantController {
       taskIdQS,
     );
     const { name, email } = postParticipantRequest;
-    await usecase.do(name, email);
+    const result = await usecase.do(name, email);
+    if (isSome(result)) {
+      throw new BadRequestException(result.value.message);
+    }
   }
 
   @Patch()
