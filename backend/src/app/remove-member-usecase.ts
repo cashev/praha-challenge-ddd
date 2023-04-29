@@ -2,21 +2,23 @@ import { Notification } from 'src/domain/entity/notification';
 import { INotificationSender } from 'src/domain/notifier-interface/notification-sender';
 import { IParticipantRepository } from 'src/domain/repository-interface/participant-repository';
 import { ITeamRepository } from 'src/domain/repository-interface/team-repository';
-import {
-  ParticipantStatus,
-  Zaiseki,
-} from 'src/domain/value-object/participantStatus';
+import { Zaiseki } from 'src/domain/value-object/participantStatus';
 import { createRandomIdString } from 'src/util/random';
 import { IParticipantNameQS } from './query-service-interface/participant-qs';
 import { ParticipantName } from 'src/domain/value-object/participantName';
-import { Option, isNone, none, some } from 'fp-ts/lib/Option';
+import { isNone } from 'fp-ts/lib/Option';
 import { Team } from 'src/domain/entity/team';
 import { Participant } from 'src/domain/entity/participant';
+import { Either, isLeft, left, right } from 'fp-ts/lib/Either';
+
+export interface IRemoveMemberUsecase {
+  do(participantId: string): Promise<Either<Error, Participant>>;
+}
 
 /**
  * チームから参加者を取り除くユースケースです。
  */
-export class RemoveMemberUsecase {
+export class RemoveMemberUsecase implements IRemoveMemberUsecase {
   private readonly participantRepo: IParticipantRepository;
   private readonly teamRepo: ITeamRepository;
   private readonly notificationSender: INotificationSender;
@@ -35,70 +37,86 @@ export class RemoveMemberUsecase {
   }
 
   /**
-   * 指定された参加者をチームから取り除き、指定された在籍ステースタへ更新します。
+   * 指定した参加者をチーム, ペアから取り除きます。
    * 参加者が抜けてペアが1人になる場合、チーム内でペアを再編成します。
    * チームメンバーが最低人数を下回る場合、管理者へ通知します。
    *
-   * @param participantId 取り除く参加者id
-   * @param newStatus 在籍ステータス
+   * @param participantId 参加者id
+   * @returns left...エラー, right...取り除いた参加者
    */
-  async do(
-    participantId: string,
-    newStatus: ParticipantStatus,
-  ): Promise<Option<Error>> {
-    if (newStatus == Zaiseki) {
-      return some(
-        new Error(
-          '取り除く参加者のステータスを在籍中へ変更できません。休会中または退会済を指定してください。',
-        ),
-      );
+  async do(participantId: string): Promise<Either<Error, Participant>> {
+    // 参加者を取得
+    const findResult = await this.findMember(participantId);
+    if (isLeft(findResult)) {
+      return findResult;
     }
-    const pResult = await this.participantRepo.find(participantId);
-    if (isNone(pResult)) {
-      return some(new Error('存在しない参加者です。'));
-    }
-    const participant = pResult.value;
-    if (participant.status != Zaiseki) {
-      return some(new Error('在籍中ではない参加者です。'));
-    }
+    const participant = findResult.right;
 
-    const tResult = await this.teamRepo.findByParticipantId(participantId);
-    if (isNone(tResult)) {
-      throw new Error();
-    }
-    const team = tResult.value;
+    const team = await this.findTeam(participant);
+    // チーム, ペアから取り除く
     if (team.canRemoveParticipant() == false) {
       // チームの人数が規定の人数を下回る場合、管理者に通知する
-      await this.notifyToAdmin(participant, newStatus, team);
-      return some(new Error(''));
+      await this.notifyToAdmin(participant, team);
+      return left(new Error(''));
     }
-    participant.status = newStatus;
     team.removeParticipant(participant);
 
     await this.teamRepo.save(team);
-    await this.participantRepo.save(participant);
-    return none;
+    return right(participant);
+  }
+
+  private async findMember(
+    participantId: string,
+  ): Promise<Either<Error, Participant>> {
+    const pResult = await this.participantRepo.find(participantId);
+    if (isNone(pResult)) {
+      return left(new Error('存在しない参加者です。'));
+    }
+    const participant = pResult.value;
+    if (participant.status != Zaiseki) {
+      return left(new Error('在籍中ではない参加者です。'));
+    }
+    return right(participant);
+  }
+
+  /**
+   * 参加者が所属しているチームを取得します。
+   *
+   * @param participant 参加者
+   * @returns チーム
+   */
+  private async findTeam(participant: Participant): Promise<Team> {
+    const tResult = await this.teamRepo.findByParticipantId(participant.id);
+    if (isNone(tResult)) {
+      // 在籍中の参加者はどこかのチーム,ペアに所属しているはずのため、ここで見つからない場合はデータ不整合
+      await this.notifyInconsistent(participant);
+      throw new Error('データ不整合');
+    }
+    return tResult.value;
+  }
+
+  /**
+   * データ不整合を管理者に通知します。
+   *
+   * @param participant 参加者
+   */
+  private async notifyInconsistent(participant: Participant) {
+    participant;
   }
 
   /**
    * 管理者に通知します。
    *
    * @param participant 参加者
-   * @param newStatus 新規ステータス
    * @param team チーム
    */
-  private async notifyToAdmin(
-    participant: Participant,
-    newStatus: ParticipantStatus,
-    team: Team,
-  ) {
+  private async notifyToAdmin(participant: Participant, team: Team) {
     // チームの参加者名
     const participantNames = await this.participantNameQS.getNames([
       ...team.member,
     ]);
     const notification = Notification.create(createRandomIdString(), {
       targetParticipantName: participant.participantName,
-      newStatus,
       teamName: team.teamName,
       teamMemberNames: participantNames.map((dto) =>
         ParticipantName.create(dto.name),

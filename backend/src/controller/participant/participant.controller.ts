@@ -34,6 +34,7 @@ import { TaskStatusRepository } from 'src/infra/db/repository/taskStatus-reposit
 import { JoinNewParticipantUsecase } from 'src/app/join-new-participant-usecase';
 import { NotificationSender } from 'src/infra/notifier/notification-sender';
 import { Option, isSome } from 'fp-ts/lib/Option';
+import { RemoveMemberUsecase } from 'src/app/remove-member-usecase';
 
 @Controller({
   path: '/participant',
@@ -86,6 +87,12 @@ export class ParticipantController {
     const teamRepository = new TeamRepository(prisma);
     const notificationSender = new NotificationSender();
     const participantNameQS = new ParticipantNameQS(prisma);
+    const removeMemberUsecase = new RemoveMemberUsecase(
+      participantRepository,
+      teamRepository,
+      notificationSender,
+      participantNameQS,
+    );
 
     const { participantId, status } = patchParticipantRequest;
     let result: Option<Error>;
@@ -99,17 +106,13 @@ export class ParticipantController {
       case Kyukai:
         result = await new SuspendMembershipUsecase(
           participantRepository,
-          teamRepository,
-          notificationSender,
-          participantNameQS,
+          removeMemberUsecase,
         ).do(participantId);
         break;
       case Taikai:
         result = await new ResignMembershipUsecase(
           participantRepository,
-          teamRepository,
-          notificationSender,
-          participantNameQS,
+          removeMemberUsecase,
         ).do(participantId);
         break;
     }

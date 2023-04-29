@@ -1,8 +1,4 @@
 import { ParticipantName } from '../value-object/participantName';
-import {
-  ParticipantStatus,
-  getParticipantStatusValue,
-} from '../value-object/participantStatus';
 import { TeamName } from '../value-object/teamName';
 import { Brand } from '../value-object/valueObject';
 import { Entity } from './entity';
@@ -11,7 +7,6 @@ type NotificationIdType = Brand<string, 'NotificationId'>;
 
 interface NotificationProps {
   targetParticipantName: ParticipantName;
-  newStatus: ParticipantStatus;
   teamName: TeamName;
   teamMemberNames: ParticipantName[];
 }
@@ -29,9 +24,7 @@ export class Notification extends Entity<
   }
 
   get content(): string {
-    const content = `チームの人数が3人を下回ることになるため、参加者のステータスを${getParticipantStatusValue(
-      this.props.newStatus,
-    )}へ変更することができません。
+    const content = `チームの人数が3人を下回ることになるため、以下参加者をチームから取り除くことができません。
     対象者: ${this.props.targetParticipantName.getValue()}
     チーム名: ${this.props.teamName.getValue()}
     チーム参加者名:

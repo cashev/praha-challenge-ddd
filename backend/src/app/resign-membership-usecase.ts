@@ -1,30 +1,22 @@
 import { IParticipantRepository } from 'src/domain/repository-interface/participant-repository';
-import { ITeamRepository } from 'src/domain/repository-interface/team-repository';
-import { INotificationSender } from 'src/domain/notifier-interface/notification-sender';
 import { Taikai } from 'src/domain/value-object/participantStatus';
-import { RemoveMemberUsecase } from './remove-member-usecase';
-import { IParticipantNameQS } from './query-service-interface/participant-qs';
-import { Option } from 'fp-ts/lib/Option';
+import { Option, none, some } from 'fp-ts/lib/Option';
+import { isLeft } from 'fp-ts/lib/Either';
+import { IRemoveMemberUsecase } from './remove-member-usecase';
 
 /**
  * 参加者の在籍ステータスを退会済にするユースケース
  */
 export class ResignMembershipUsecase {
   private readonly participantRepo: IParticipantRepository;
-  private readonly teamRepo: ITeamRepository;
-  private readonly notificationSender: INotificationSender;
-  private readonly participantNameQS: IParticipantNameQS;
+  private readonly removeMemberUsecase: IRemoveMemberUsecase;
 
   constructor(
     participantRepo: IParticipantRepository,
-    teamRepo: ITeamRepository,
-    notificationSender: INotificationSender,
-    participantNameQS: IParticipantNameQS,
+    removeMemberUsecase: IRemoveMemberUsecase,
   ) {
     this.participantRepo = participantRepo;
-    this.teamRepo = teamRepo;
-    this.notificationSender = notificationSender;
-    this.participantNameQS = participantNameQS;
+    this.removeMemberUsecase = removeMemberUsecase;
   }
 
   /**
@@ -35,12 +27,13 @@ export class ResignMembershipUsecase {
    * @param participantId 参加者id
    */
   async do(participantId: string): Promise<Option<Error>> {
-    const usecase = new RemoveMemberUsecase(
-      this.participantRepo,
-      this.teamRepo,
-      this.notificationSender,
-      this.participantNameQS,
-    );
-    return await usecase.do(participantId, Taikai);
+    const removeResult = await this.removeMemberUsecase.do(participantId);
+    if (isLeft(removeResult)) {
+      return some(removeResult.left);
+    }
+    const participant = removeResult.right;
+    participant.status = Taikai;
+    this.participantRepo.save(participant);
+    return none;
   }
 }

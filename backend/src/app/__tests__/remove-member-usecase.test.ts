@@ -10,10 +10,11 @@ import {
   Zaiseki,
 } from 'src/domain/value-object/participantStatus';
 import { TeamName } from 'src/domain/value-object/teamName';
-import { isSome, none, some } from 'fp-ts/lib/Option';
+import { none, some } from 'fp-ts/lib/Option';
 import { RemoveMemberUsecase } from '../remove-member-usecase';
 import { MockTeamRepository } from './mock/team-repository';
 import { MockParticipantRepository } from './mock/participant-repository';
+import { isLeft } from 'fp-ts/lib/Either';
 
 describe('do', () => {
   const createMockNotificationSender = () => {
@@ -70,10 +71,9 @@ describe('do', () => {
       createMockNotificationSender(),
       createParticipantNameQS(),
     );
-    await usecase.do('21', Taikai);
+    await usecase.do('21');
 
     expect(team.member.some((p) => p === removeParticipant.id)).toBeFalsy();
-    expect(removeParticipant.status).toEqual(Taikai);
   });
 
   test('[正常系] 2人のペアからメンバーを取り除く', async () => {
@@ -108,10 +108,9 @@ describe('do', () => {
       createMockNotificationSender(),
       createParticipantNameQS(),
     );
-    await usecase.do('21', Taikai);
+    await usecase.do('21');
 
     expect(team.member.some((p) => p === removeParticipant.id)).toBeFalsy();
-    expect(removeParticipant.status).toEqual(Taikai);
   });
 
   test('[異常系] 存在しない参加者id', async () => {
@@ -124,8 +123,8 @@ describe('do', () => {
       createMockNotificationSender(),
       createParticipantNameQS(),
     );
-    const result = await usecase.do('31', Taikai);
-    expect(isSome(result)).toBeTruthy();
+    const result = await usecase.do('31');
+    expect(isLeft(result)).toBeTruthy();
   });
 
   test('[異常系] 休会中の参加者', async () => {
@@ -145,8 +144,8 @@ describe('do', () => {
       createMockNotificationSender(),
       createParticipantNameQS(),
     );
-    const result = await usecase.do('32', Kyukai);
-    expect(isSome(result)).toBeTruthy();
+    const result = await usecase.do('32');
+    expect(isLeft(result)).toBeTruthy();
   });
 
   test('[異常系] 退会済の参加者', async () => {
@@ -166,8 +165,8 @@ describe('do', () => {
       createMockNotificationSender(),
       createParticipantNameQS(),
     );
-    const result = await usecase.do('33', Taikai);
-    expect(isSome(result)).toBeTruthy();
+    const result = await usecase.do('33');
+    expect(isLeft(result)).toBeTruthy();
   });
 
   test('[異常系] 管理者に通知する', async () => {
@@ -196,7 +195,7 @@ describe('do', () => {
       createMockNotificationSender(),
       createParticipantNameQS(),
     );
-    const result = await usecase.do('34', Taikai);
-    expect(isSome(result)).toBeTruthy();
+    const result = await usecase.do('34');
+    expect(isLeft(result)).toBeTruthy();
   });
 });
