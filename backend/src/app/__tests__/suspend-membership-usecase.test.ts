@@ -5,15 +5,9 @@ import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
 import { Kyukai, Zaiseki } from 'src/domain/value-object/participantStatus';
 import { isNone, some } from 'fp-ts/lib/Option';
 import { SuspendMembershipUsecase } from '../suspend-membership-usecase';
-import { right } from 'fp-ts/lib/Either';
+import { MockRemoveMemberUsecase } from './mock/remove-member-usecase';
 
 describe('do', () => {
-  const createRemoveMemberUsecase = (participant: Participant) => {
-    return {
-      do: jest.fn().mockResolvedValue(right(participant)),
-    };
-  };
-
   test('[正常系]', async () => {
     const participant = Participant.create('a', {
       participantName: ParticipantName.create('谷 信弥'),
@@ -22,7 +16,7 @@ describe('do', () => {
     });
     const usecase = new SuspendMembershipUsecase(
       new MockParticipantRepository(some(participant)),
-      createRemoveMemberUsecase(participant),
+      new MockRemoveMemberUsecase(participant),
     );
     const result = await usecase.do('');
     expect(isNone(result)).toBeTruthy();
