@@ -12,6 +12,14 @@ import { Participant } from 'src/domain/entity/participant';
 import { Either, isLeft, left, right } from 'fp-ts/lib/Either';
 
 export interface IRemoveMemberUsecase {
+    /**
+   * 指定した参加者をチーム, ペアから取り除きます。
+   * 参加者が抜けてペアが1人になる場合、チーム内でペアを再編成します。
+   * チームメンバーが最低人数を下回る場合、管理者へ通知します。
+   *
+   * @param participantId 参加者id
+   * @returns left...エラー, right...取り除いた参加者
+   */
   do(participantId: string): Promise<Either<Error, Participant>>;
 }
 
@@ -36,14 +44,6 @@ export class RemoveMemberUsecase implements IRemoveMemberUsecase {
     this.participantNameQS = participantNameQS;
   }
 
-  /**
-   * 指定した参加者をチーム, ペアから取り除きます。
-   * 参加者が抜けてペアが1人になる場合、チーム内でペアを再編成します。
-   * チームメンバーが最低人数を下回る場合、管理者へ通知します。
-   *
-   * @param participantId 参加者id
-   * @returns left...エラー, right...取り除いた参加者
-   */
   async do(participantId: string): Promise<Either<Error, Participant>> {
     // 参加者を取得
     const findResult = await this.findMember(participantId);
