@@ -12,7 +12,7 @@ import { Participant } from 'src/domain/entity/participant';
 import { Either, isLeft, left, right } from 'fp-ts/lib/Either';
 
 export interface IRemoveMemberUsecase {
-    /**
+  /**
    * 指定した参加者をチーム, ペアから取り除きます。
    * 参加者が抜けてペアが1人になる場合、チーム内でペアを再編成します。
    * チームメンバーが最低人数を下回る場合、管理者へ通知します。

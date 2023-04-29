@@ -1,4 +1,4 @@
-import { Participant } from 'src/domain/entity/participant';
+import { Participant, ParticipantIdType } from 'src/domain/entity/participant';
 import { Team } from 'src/domain/entity/team';
 import { IParticipantRepository } from 'src/domain/repository-interface/participant-repository';
 import { ITaskStatusRepository } from 'src/domain/repository-interface/taskStatus-repository';
@@ -11,7 +11,7 @@ import { ITaskIdQS } from './query-service-interface/task-qs';
 import { TaskStatusService } from 'src/domain/service/taskStatus-service';
 import { createRandomIdString } from 'src/util/random';
 import { Option, isNone, isSome, none, some } from 'fp-ts/lib/Option';
-import { TaskIdType } from 'src/domain/entity/taskStatus';
+import { TaskIdType, TaskStatus } from 'src/domain/entity/taskStatus';
 
 /**
  * 参加者を新規追加するユースケース
@@ -53,6 +53,16 @@ export class JoinNewParticipantUsecase {
     });
     await this.participantRepo.save(newParticipant);
     // 新規参加者をチームに追加する
+    const team = await this.findTeam();
+    team.addParticipant(newParticipant);
+    await this.teamRepo.save(team);
+    // 各課題について未着手の進捗ステータスを作成する
+    const taskStatusList = await this.createTaskStatusList(newParticipant.id);
+    await this.taskStatusRepo.saveAll(taskStatusList);
+    return none;
+  }
+
+  private async findTeam(): Promise<Team> {
     const tResult = await this.teamRepo.getSmallestTeamList();
     if (isNone(tResult)) {
       throw new Error('チームが見つかりませんでした。');
@@ -61,16 +71,17 @@ export class JoinNewParticipantUsecase {
     if (teams.length == 0) {
       throw new Error('チームが見つかりませんでした。');
     }
-    const team = randomChoice<Team>(teams);
-    team.addParticipant(newParticipant);
-    await this.teamRepo.save(team);
-    // 各課題について未着手の進捗ステータスを作成する
+    return randomChoice<Team>(teams);
+  }
+
+  private async createTaskStatusList(
+    participantId: ParticipantIdType,
+  ): Promise<TaskStatus[]> {
     const tsService = new TaskStatusService();
     const taskStatusList = tsService.createTaskStatusForNewParticipant(
-      newParticipant.id,
+      participantId,
       (await this.qs.getAll()).map((dto) => dto.id as TaskIdType),
     );
-    await this.taskStatusRepo.saveAll(taskStatusList);
-    return none;
+    return taskStatusList;
   }
 }
