@@ -35,14 +35,14 @@ describe('do', () => {
   };
   const createPair = () => {
     const pair = Pair.create('1', {
-      pairName: PairName.create('a'),
+      name: PairName.create('a'),
       member: createThreeMember(),
     });
     return [pair];
   };
   const createTeam = () => {
     const team = Team.create('1', {
-      teamName: TeamName.create('123'),
+      name: TeamName.create('123'),
       pairList: createPair(),
     });
     return team;
@@ -68,7 +68,7 @@ describe('do', () => {
 
   test('[異常系] メールアドレスが重複した参加者を追加する', async () => {
     const duplicateParticipant = Participant.create('31', {
-      participantName: ParticipantName.create('中島 裕実'),
+      name: ParticipantName.create('中島 裕実'),
       email: ParticipantEmail.create('nakasima-hiromi@dion.ne.jp'),
       status: Zaiseki,
     });

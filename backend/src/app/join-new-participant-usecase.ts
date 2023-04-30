@@ -47,7 +47,7 @@ export class JoinNewParticipantUsecase {
     }
     // 参加者を新規参加
     const newParticipant = Participant.create(createRandomIdString(), {
-      participantName: ParticipantName.create(name),
+      name: ParticipantName.create(name),
       email: ParticipantEmail.create(email),
       status: Zaiseki,
     });

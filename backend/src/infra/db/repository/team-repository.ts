@@ -42,14 +42,14 @@ export class TeamRepository implements ITeamRepository {
       .map((tp) => tp.pair)
       .map((p) => {
         return Pair.create(p.id, {
-          pairName: PairName.create(p.name),
+          name: PairName.create(p.name),
           member: p.participants.map(
             (p2) => p2.participantId as ParticipantIdType,
           ),
         });
       });
     const team = Team.create(result.id, {
-      teamName: TeamName.create(result.name),
+      name: TeamName.create(result.name),
       pairList,
     });
     return some(team);
@@ -116,12 +116,12 @@ export class TeamRepository implements ITeamRepository {
     });
     const ret = teams.map((team) => {
       return Team.create(team.id, {
-        teamName: TeamName.create(team.name),
+        name: TeamName.create(team.name),
         pairList: team.pairs
           .map((tp) => tp.pair)
           .map((pair) => {
             return Pair.create(pair.id, {
-              pairName: PairName.create(pair.name),
+              name: PairName.create(pair.name),
               member: pair.participants.map(
                 (pp) => pp.participantId as ParticipantIdType,
               ),

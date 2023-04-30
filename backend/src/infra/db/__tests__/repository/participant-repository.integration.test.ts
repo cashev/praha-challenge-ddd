@@ -80,7 +80,7 @@ describe('participant-repository.integration.test', () => {
 
     test('[正常系] insert', async () => {
       const participant = Participant.create(p901.id.toString(), {
-        participantName: ParticipantName.create(p901.name),
+        name: ParticipantName.create(p901.name),
         email: ParticipantEmail.create(p901.email),
         status: createUserStatus(p901.status),
       });
@@ -102,7 +102,7 @@ describe('participant-repository.integration.test', () => {
     test('[正常系] update', async () => {
       const p5 = data[4];
       const participant = Participant.create(p5.id.toString(), {
-        participantName: ParticipantName.create(p5.name),
+        name: ParticipantName.create(p5.name),
         email: ParticipantEmail.create(p5.email),
         status: createUserStatus(p5.status),
       });

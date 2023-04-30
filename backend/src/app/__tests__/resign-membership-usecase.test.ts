@@ -11,7 +11,7 @@ import { left, right } from 'fp-ts/lib/Either';
 describe('do', () => {
   test('[正常系]', async () => {
     const participant = Participant.create('a', {
-      participantName: ParticipantName.create('大内 唯'),
+      name: ParticipantName.create('大内 唯'),
       email: ParticipantEmail.create('yui-oouti@example.net'),
       status: Zaiseki,
     });

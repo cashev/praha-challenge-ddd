@@ -7,7 +7,7 @@ import { Entity } from './entity';
 export type ParticipantIdType = Brand<string, 'ParticipantId'>;
 
 interface ParticipantProps {
-  participantName: ParticipantName;
+  name: ParticipantName;
   email: ParticipantEmail;
   status: ParticipantStatus;
 }
@@ -18,11 +18,11 @@ export class Participant extends Entity<ParticipantIdType, ParticipantProps> {
   }
 
   get participantName(): ParticipantName {
-    return this.props.participantName;
+    return this.props.name;
   }
 
   set participantName(participantName: ParticipantName) {
-    this.props.participantName = participantName;
+    this.props.name = participantName;
   }
 
   get email(): ParticipantEmail {

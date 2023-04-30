@@ -95,14 +95,14 @@ describe('team-repository.integration.test', () => {
     });
     test('[正常系] メンバー追加', async () => {
       const team = Team.create('300', {
-        teamName: TeamName.create('303'),
+        name: TeamName.create('303'),
         pairList: [
           Pair.create('301', {
-            pairName: PairName.create('a'),
+            name: PairName.create('a'),
             member: ['008' as ParticipantIdType, '010' as ParticipantIdType],
           }),
           Pair.create('302', {
-            pairName: PairName.create('b'),
+            name: PairName.create('b'),
             member: ['009' as ParticipantIdType, '081' as ParticipantIdType],
           }),
         ],
@@ -119,10 +119,10 @@ describe('team-repository.integration.test', () => {
     });
     test('[正常系] メンバー削除', async () => {
       const team = Team.create('400', {
-        teamName: TeamName.create('404'),
+        name: TeamName.create('404'),
         pairList: [
           Pair.create('402', {
-            pairName: PairName.create('b'),
+            name: PairName.create('b'),
             member: [
               '011' as ParticipantIdType,
               '013' as ParticipantIdType,

@@ -10,7 +10,7 @@ import { createRandomIdString, randomChoice } from 'src/util/random';
 type TeamIdType = Brand<string, 'TeamId'>;
 
 interface TeamProps {
-  teamName: TeamName;
+  name: TeamName;
   pairList: Pair[];
 }
 
@@ -22,11 +22,11 @@ export class Team extends Entity<TeamIdType, TeamProps> {
   }
 
   get teamName(): TeamName {
-    return this.props.teamName;
+    return this.props.name;
   }
 
   set teamName(teamName: TeamName) {
-    this.props.teamName = teamName;
+    this.props.name = teamName;
   }
 
   get pairList(): readonly Pair[] {
@@ -55,7 +55,7 @@ export class Team extends Entity<TeamIdType, TeamProps> {
       pair.removeMember(anotherMember);
       // 新しいペアを作成する
       const newPair = Pair.create(createRandomIdString(), {
-        pairName: this.getUnusedPairName(),
+        name: this.getUnusedPairName(),
         member: [anotherMember, participant.id],
       });
       this.addPair(newPair);
@@ -107,7 +107,7 @@ export class Team extends Entity<TeamIdType, TeamProps> {
         ]);
         anotherPair.removeMember(existingUser);
         const newPair = Pair.create(createRandomIdString(), {
-          pairName: this.getUnusedPairName(),
+          name: this.getUnusedPairName(),
           member: [existingUser, anotherParticipant],
         });
         this.addPair(newPair);

@@ -24,7 +24,7 @@ export class ParticipantRepository implements IParticipantRepository {
       return none;
     }
     const participant = Participant.create(result.id.toString(), {
-      participantName: ParticipantName.create(result.name),
+      name: ParticipantName.create(result.name),
       email: ParticipantEmail.create(result.email),
       status: createUserStatus(result.status),
     });
@@ -39,7 +39,7 @@ export class ParticipantRepository implements IParticipantRepository {
       return none;
     }
     const participant = Participant.create(result.id.toString(), {
-      participantName: ParticipantName.create(result.name),
+      name: ParticipantName.create(result.name),
       email: ParticipantEmail.create(result.email),
       status: createUserStatus(result.status),
     });

@@ -6,7 +6,7 @@ import { ParticipantIdType } from './participant';
 type PairIdType = Brand<string, 'PairId'>;
 
 interface PairProps {
-  pairName: PairName;
+  name: PairName;
   member: ParticipantIdType[];
 }
 
@@ -19,7 +19,7 @@ export class Pair extends Entity<PairIdType, PairProps> {
   }
 
   get pairName(): PairName {
-    return this.props.pairName;
+    return this.props.name;
   }
 
   get member(): readonly ParticipantIdType[] {

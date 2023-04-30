@@ -39,20 +39,20 @@ describe('do', () => {
     const twoMember = createTwoMember();
     const threeMember = createThreeMember();
     const twoPair = Pair.create('1', {
-      pairName: PairName.create('a'),
+      name: PairName.create('a'),
       member: twoMember,
     });
     const threePair = Pair.create('2', {
-      pairName: PairName.create('b'),
+      name: PairName.create('b'),
       member: threeMember,
     });
     const team = Team.create('1', {
-      teamName: TeamName.create('1'),
+      name: TeamName.create('1'),
       pairList: [twoPair, threePair],
     });
 
     const removeParticipant = Participant.create('21', {
-      participantName: ParticipantName.create('足立 里香'),
+      name: ParticipantName.create('足立 里香'),
       email: ParticipantEmail.create('adati568@dti.ad.jp'),
       status: Zaiseki,
     });
@@ -76,20 +76,20 @@ describe('do', () => {
     const twoMember1 = createTwoMember();
     const twoMember2 = createThreeMember().slice(0, 2);
     const twoPair = Pair.create('1', {
-      pairName: PairName.create('a'),
+      name: PairName.create('a'),
       member: twoMember1,
     });
     const threePair = Pair.create('2', {
-      pairName: PairName.create('b'),
+      name: PairName.create('b'),
       member: twoMember2,
     });
     const team = Team.create('1', {
-      teamName: TeamName.create('1'),
+      name: TeamName.create('1'),
       pairList: [twoPair, threePair],
     });
 
     const removeParticipant = Participant.create('21', {
-      participantName: ParticipantName.create('足立 里香'),
+      name: ParticipantName.create('足立 里香'),
       email: ParticipantEmail.create('adati568@dti.ad.jp'),
       status: Zaiseki,
     });
@@ -125,7 +125,7 @@ describe('do', () => {
 
   test('[異常系] 休会中の参加者', async () => {
     const participant = Participant.create('32', {
-      participantName: ParticipantName.create('白石 道和'),
+      name: ParticipantName.create('白石 道和'),
       email: ParticipantEmail.create('siraisi1920902@mail.goo.ne.jp'),
       status: Kyukai,
     });
@@ -146,7 +146,7 @@ describe('do', () => {
 
   test('[異常系] 退会済の参加者', async () => {
     const participant = Participant.create('33', {
-      participantName: ParticipantName.create('山村 偉生'),
+      name: ParticipantName.create('山村 偉生'),
       email: ParticipantEmail.create('hideoyamamura@freeml.co.jp'),
       status: Taikai,
     });
@@ -167,17 +167,17 @@ describe('do', () => {
 
   test('[異常系] 参加者が取り除けないことを管理者に通知する', async () => {
     const participant = Participant.create('34', {
-      participantName: ParticipantName.create('高井 勝夫'),
+      name: ParticipantName.create('高井 勝夫'),
       email: ParticipantEmail.create('oasam626@hotmail.co.jp'),
       status: Zaiseki,
     });
     const threeMember = createThreeMember();
     const threePair = Pair.create('2', {
-      pairName: PairName.create('b'),
+      name: PairName.create('b'),
       member: threeMember,
     });
     const team = Team.create('1', {
-      teamName: TeamName.create('1'),
+      name: TeamName.create('1'),
       pairList: [threePair],
     });
     const mockParticipantRepo = new MockParticipantRepository(
@@ -198,7 +198,7 @@ describe('do', () => {
 
   test('[異常系] データ不整合を管理者に通知する', async () => {
     const participant = Participant.create('35', {
-      participantName: ParticipantName.create('田上 澄'),
+      name: ParticipantName.create('田上 澄'),
       email: ParticipantEmail.create('tagami1000011@plala.or.jp'),
       status: Zaiseki,
     });

@@ -13,17 +13,17 @@ import { Participant, ParticipantIdType } from '../participant';
 
 const createThreeMember = () => {
   const u1 = Participant.create('11', {
-    participantName: ParticipantName.create('本多 洵子'),
+    name: ParticipantName.create('本多 洵子'),
     email: ParticipantEmail.create('honda_junko@example.jp'),
     status: Zaiseki,
   });
   const u2 = Participant.create('12', {
-    participantName: ParticipantName.create('堀川 訓'),
+    name: ParticipantName.create('堀川 訓'),
     email: ParticipantEmail.create('satosi1977@infoweb.ne.jp'),
     status: Zaiseki,
   });
   const u3 = Participant.create('13', {
-    participantName: ParticipantName.create('吉川 永子'),
+    name: ParticipantName.create('吉川 永子'),
     email: ParticipantEmail.create('nagako.yosikawa@infoseek.jp'),
     status: Zaiseki,
   });
@@ -32,12 +32,12 @@ const createThreeMember = () => {
 
 const createTwoMember = () => {
   const u1 = Participant.create('21', {
-    participantName: ParticipantName.create('長尾 由記彦'),
+    name: ParticipantName.create('長尾 由記彦'),
     email: ParticipantEmail.create('ykhk20210106@example.co.jp'),
     status: Zaiseki,
   });
   const u2 = Participant.create('22', {
-    participantName: ParticipantName.create('佐野 晴仁'),
+    name: ParticipantName.create('佐野 晴仁'),
     email: ParticipantEmail.create('sano1988@sannet.ne.jp'),
     status: Zaiseki,
   });
@@ -48,7 +48,7 @@ const createPairList = (member: ParticipantIdType[]) => {
   const pairName = PairName.create('a');
   return [
     Pair.create('1', {
-      pairName,
+      name: pairName,
       member,
     }),
   ];
@@ -63,7 +63,7 @@ describe('create', () => {
     const pairList = createPairList(convertToMember(createThreeMember()));
     const teamName = TeamName.create('123');
 
-    const team = Team.create('1', { teamName, pairList });
+    const team = Team.create('1', { name: teamName, pairList });
     expect(team.teamName).toEqual(teamName);
     expect(team.pairList).toEqual(pairList);
   });
@@ -74,7 +74,7 @@ describe('create', () => {
     );
     const teamName = TeamName.create('123');
 
-    expect(() => Team.create('1', { teamName, pairList })).toThrow();
+    expect(() => Team.create('1', { name: teamName, pairList })).toThrow();
   });
 });
 
@@ -84,16 +84,16 @@ describe('addParticipant', () => {
 
     const member = createThreeMember();
     const pair1 = Pair.create('1', {
-      pairName: PairName.create('a'),
+      name: PairName.create('a'),
       member: convertToMember(member.slice(1)),
     });
     const member2 = createTwoMember();
     const pair2 = Pair.create('2', {
-      pairName: PairName.create('b'),
+      name: PairName.create('b'),
       member: convertToMember(member2),
     });
     const team = Team.create('1', {
-      teamName: TeamName.create('123'),
+      name: TeamName.create('123'),
       pairList: [pair1, pair2],
     });
     const newParticipant = member[0];
@@ -111,7 +111,7 @@ describe('addParticipant', () => {
     const member = createThreeMember();
     const pairList = createPairList(convertToMember(member));
     const team = Team.create('1', {
-      teamName: TeamName.create('123'),
+      name: TeamName.create('123'),
       pairList,
     });
     const newParticipant = createTwoMember()[0];
@@ -129,7 +129,7 @@ describe('addParticipant', () => {
     const member = convertToMember(createThreeMember());
     const pairList = createPairList(member);
     const team = Team.create('1', {
-      teamName: TeamName.create('123'),
+      name: TeamName.create('123'),
       pairList,
     });
     const newParticipant = createTwoMember()[0];
@@ -142,7 +142,7 @@ describe('addParticipant', () => {
     const member = convertToMember(createThreeMember());
     const pairList = createPairList(member);
     const team = Team.create('1', {
-      teamName: TeamName.create('123'),
+      name: TeamName.create('123'),
       pairList,
     });
     const newParticipant = createTwoMember()[0];
@@ -156,16 +156,16 @@ describe('canRemoveParticipant', () => {
   test('[正常系] 参加者が4人であれば、true', () => {
     const member1 = createThreeMember().slice(1);
     const pair1 = Pair.create('1', {
-      pairName: PairName.create('a'),
+      name: PairName.create('a'),
       member: member1.map((p) => p.id),
     });
     const member2 = createThreeMember().slice(1);
     const pair2 = Pair.create('2', {
-      pairName: PairName.create('b'),
+      name: PairName.create('b'),
       member: member2.map((p) => p.id),
     });
     const team = Team.create('1', {
-      teamName: TeamName.create('1'),
+      name: TeamName.create('1'),
       pairList: [pair1, pair2],
     });
 
@@ -175,11 +175,11 @@ describe('canRemoveParticipant', () => {
   test('[正常系] 参加者が3人であれば、false', () => {
     const member1 = createThreeMember();
     const pair1 = Pair.create('1', {
-      pairName: PairName.create('a'),
+      name: PairName.create('a'),
       member: member1.map((p) => p.id),
     });
     const team = Team.create('1', {
-      teamName: TeamName.create('1'),
+      name: TeamName.create('1'),
       pairList: [pair1],
     });
 
@@ -193,16 +193,16 @@ describe('removeParticipant', () => {
 
     const threeMember = createThreeMember();
     const pair1 = Pair.create('1', {
-      pairName: PairName.create('a'),
+      name: PairName.create('a'),
       member: convertToMember(threeMember),
     });
     const twoMember = createTwoMember();
     const pair2 = Pair.create('2', {
-      pairName: PairName.create('b'),
+      name: PairName.create('b'),
       member: convertToMember(twoMember),
     });
     const team = Team.create('1', {
-      teamName: TeamName.create('123'),
+      name: TeamName.create('123'),
       pairList: [pair1, pair2],
     });
     const removeParticipant = threeMember[0];
@@ -219,16 +219,16 @@ describe('removeParticipant', () => {
 
     const threeMember = createThreeMember();
     const pair1 = Pair.create('1', {
-      pairName: PairName.create('a'),
+      name: PairName.create('a'),
       member: convertToMember(threeMember),
     });
     const twoMember = createTwoMember();
     const pair2 = Pair.create('2', {
-      pairName: PairName.create('b'),
+      name: PairName.create('b'),
       member: convertToMember(twoMember),
     });
     const team = Team.create('1', {
-      teamName: TeamName.create('123'),
+      name: TeamName.create('123'),
       pairList: [pair1, pair2],
     });
     const removeParticipant = twoMember[0];
@@ -245,16 +245,16 @@ describe('removeParticipant', () => {
 
     const twoMember1 = createThreeMember().slice(1);
     const pair1 = Pair.create('1', {
-      pairName: PairName.create('a'),
+      name: PairName.create('a'),
       member: convertToMember(twoMember1),
     });
     const twoMember2 = createTwoMember();
     const pair2 = Pair.create('2', {
-      pairName: PairName.create('b'),
+      name: PairName.create('b'),
       member: convertToMember(twoMember2),
     });
     const team = Team.create('1', {
-      teamName: TeamName.create('123'),
+      name: TeamName.create('123'),
       pairList: [pair1, pair2],
     });
     const removeParticipant = twoMember1[0];

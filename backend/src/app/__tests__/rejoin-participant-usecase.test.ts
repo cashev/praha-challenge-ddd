@@ -19,7 +19,7 @@ import { MockParticipantRepository } from './mock/participant-repository';
 describe('do', () => {
   const createParticipant = (status: ParticipantStatus) => {
     return Participant.create('1', {
-      participantName: ParticipantName.create('川島 佐十郎'),
+      name: ParticipantName.create('川島 佐十郎'),
       email: ParticipantEmail.create('sjurp8200331@combzmail.jp'),
       status,
     });
@@ -39,13 +39,13 @@ describe('do', () => {
 
   test('[正常系] 既存のペアに参加する', async () => {
     const member = createMember().slice(0, 2);
-    const pair1 = Pair.create('1', { pairName: PairName.create('a'), member });
+    const pair1 = Pair.create('1', { name: PairName.create('a'), member });
     const pair2 = Pair.create('2', {
-      pairName: PairName.create('b'),
+      name: PairName.create('b'),
       member: createMember2(),
     });
     const team = Team.create('1', {
-      teamName: TeamName.create('1'),
+      name: TeamName.create('1'),
       pairList: [pair1, pair2],
     });
     const newParticipant = createParticipant(Kyukai);
@@ -67,9 +67,9 @@ describe('do', () => {
     jest.spyOn(global.Math, 'random').mockReturnValue(0);
 
     const member = createMember();
-    const pair1 = Pair.create('1', { pairName: PairName.create('a'), member });
+    const pair1 = Pair.create('1', { name: PairName.create('a'), member });
     const team = Team.create('1', {
-      teamName: TeamName.create('1'),
+      name: TeamName.create('1'),
       pairList: [pair1],
     });
     const newParticipant = createParticipant(Taikai);
