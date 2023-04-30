@@ -4,7 +4,6 @@ import { Team } from 'src/domain/entity/team';
 import { PairName } from 'src/domain/value-object/pairName';
 import { TeamName } from 'src/domain/value-object/teamName';
 import { JoinNewParticipantUsecase } from '../join-new-participant-usecase';
-import { TaskStatus } from 'src/domain/entity/taskStatus';
 import { Yet } from 'src/domain/value-object/taskStatusValue';
 import { TaskIdDto } from '../query-service-interface/task-qs';
 import { isSome, none, some } from 'fp-ts/lib/Option';
@@ -13,19 +12,9 @@ import { MockParticipantRepository } from './mock/participant-repository';
 import { ParticipantName } from 'src/domain/value-object/participantName';
 import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
 import { Zaiseki } from 'src/domain/value-object/participantStatus';
+import { MockTaskStatusRepository } from './mock/taskStatus-repository';
 
 describe('do', () => {
-  const createMockTaskStatusRepo = (nextId: number, tsList: TaskStatus[]) => {
-    return {
-      find: jest.fn(),
-      getNextIdAndSetNext: jest.fn().mockResolvedValue(nextId),
-      save: jest.fn(),
-      saveAll: (taskStatusList: TaskStatus[]) => {
-        taskStatusList.map((ts) => tsList.push(ts));
-        return Promise.resolve();
-      },
-    };
-  };
   const createMockTaskQS = () => {
     const ret = [];
     for (let i = 1; i <= 80; i++) {
@@ -61,17 +50,18 @@ describe('do', () => {
 
   test('[正常系] 新規参加者を追加する', async () => {
     const team = createTeam();
-    const tsList: TaskStatus[] = [];
+    const mockTSRepository = new MockTaskStatusRepository();
     const usecase = new JoinNewParticipantUsecase(
       new MockParticipantRepository(),
       new MockTeamRepository(none, some([team])),
-      createMockTaskStatusRepo(241, tsList),
+      mockTSRepository,
       createMockTaskQS(),
     );
     await usecase.do('三谷 照也', 'ayuret1975@gmo-media.jp');
 
     expect(team.pairList.length).toBe(2);
     expect(team.member.length).toBe(4);
+    const tsList = mockTSRepository.getAll();
     expect(tsList.length).toBe(80);
     expect(tsList.every((ts) => ts.status === Yet)).toBeTruthy();
   });
@@ -83,11 +73,10 @@ describe('do', () => {
       status: Zaiseki,
     });
     const team = createTeam();
-    const tsList: TaskStatus[] = [];
     const usecase = new JoinNewParticipantUsecase(
       new MockParticipantRepository(some(duplicateParticipant)),
       new MockTeamRepository(none, some([team])),
-      createMockTaskStatusRepo(241, tsList),
+      new MockTaskStatusRepository(),
       createMockTaskQS(),
     );
     const result = await usecase.do('中島 裕実', 'nakasima-hiromi@dion.ne.jp');
