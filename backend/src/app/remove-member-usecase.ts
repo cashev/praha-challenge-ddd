@@ -1,15 +1,15 @@
-import { Notification } from 'src/domain/entity/notification';
-import { INotificationSender } from 'src/domain/notifier-interface/notification-sender';
+import { INotificationSender } from 'src/domain/notification-interface/notification-sender';
 import { IParticipantRepository } from 'src/domain/repository-interface/participant-repository';
 import { ITeamRepository } from 'src/domain/repository-interface/team-repository';
 import { Zaiseki } from 'src/domain/value-object/participantStatus';
-import { createRandomIdString } from 'src/util/random';
 import { IParticipantNameQS } from './query-service-interface/participant-qs';
 import { ParticipantName } from 'src/domain/value-object/participantName';
 import { isNone } from 'fp-ts/lib/Option';
 import { Team } from 'src/domain/entity/team';
 import { Participant } from 'src/domain/entity/participant';
 import { Either, isLeft, left, right } from 'fp-ts/lib/Either';
+import { MemberLimitNotification } from 'src/domain/entity/member-limit-notification';
+import { InconsistentNotification } from 'src/domain/entity/inconsistent-notification';
 
 export interface IRemoveMemberUsecase {
   /**
@@ -101,11 +101,14 @@ export class RemoveMemberUsecase implements IRemoveMemberUsecase {
    * @param participant 参加者
    */
   private async notifyInconsistent(participant: Participant) {
-    participant;
+    const notification = InconsistentNotification.create({
+      participantName: participant.participantName,
+    });
+    await this.notificationSender.sendToAdmin(notification);
   }
 
   /**
-   * 管理者に通知します。
+   * 参加者が取り除けないことを管理者に通知します。
    *
    * @param participant 参加者
    * @param team チーム
@@ -115,7 +118,7 @@ export class RemoveMemberUsecase implements IRemoveMemberUsecase {
     const participantNames = await this.participantNameQS.getNames([
       ...team.member,
     ]);
-    const notification = Notification.create(createRandomIdString(), {
+    const notification = MemberLimitNotification.create({
       targetParticipantName: participant.participantName,
       teamName: team.teamName,
       teamMemberNames: participantNames.map((dto) =>

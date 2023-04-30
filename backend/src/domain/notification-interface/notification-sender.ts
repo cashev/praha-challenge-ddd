@@ -1,4 +1,4 @@
-import { Notification } from '../entity/notification';
+import { INotification } from './notification';
 
 export interface INotificationSender {
   /**
@@ -6,5 +6,5 @@ export interface INotificationSender {
    *
    * @param notification 通知内容
    */
-  sendToAdmin(notification: Notification): Promise<void>;
+  sendToAdmin(notification: INotification): Promise<void>;
 }

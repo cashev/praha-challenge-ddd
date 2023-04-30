@@ -1,6 +1,6 @@
-import { Notification } from 'src/domain/entity/notification';
-import { INotificationSender } from 'src/domain/notifier-interface/notification-sender';
+import { INotificationSender } from 'src/domain/notification-interface/notification-sender';
 import * as nodemailer from 'nodemailer';
+import { INotification } from 'src/domain/notification-interface/notification';
 
 export class NotificationSender implements INotificationSender {
   private smtp: nodemailer.Transporter;
@@ -15,12 +15,12 @@ export class NotificationSender implements INotificationSender {
     });
   }
 
-  async sendToAdmin(notification: Notification): Promise<void> {
+  async sendToAdmin(notification: INotification): Promise<void> {
     const message = {
       from: this.HOST_MAIL_ADDRESS,
       to: this.ADMIN_MAIL_ADDRESS,
-      subject: notification.title,
-      text: notification.content,
+      subject: notification.getTitle(),
+      text: notification.getContent(),
     };
     this.smtp.sendMail(message);
   }

@@ -15,13 +15,9 @@ import { RemoveMemberUsecase } from '../remove-member-usecase';
 import { MockTeamRepository } from './mock/team-repository';
 import { MockParticipantRepository } from './mock/participant-repository';
 import { isLeft } from 'fp-ts/lib/Either';
+import { MockNotificationSender } from './mock/notification-sender';
 
 describe('do', () => {
-  const createMockNotificationSender = () => {
-    return {
-      sendToAdmin: jest.fn(),
-    };
-  };
   const createParticipantNameQS = () => {
     return {
       getNames: jest.fn().mockResolvedValue(['参加者A', '参加者B', '参加者C']),
@@ -68,7 +64,7 @@ describe('do', () => {
     const usecase = new RemoveMemberUsecase(
       mockParticipantRepo,
       mockTeamRepo,
-      createMockNotificationSender(),
+      new MockNotificationSender(),
       createParticipantNameQS(),
     );
     await usecase.do('21');
@@ -105,7 +101,7 @@ describe('do', () => {
     const usecase = new RemoveMemberUsecase(
       mockParticipantRepo,
       mockTeamRepo,
-      createMockNotificationSender(),
+      new MockNotificationSender(),
       createParticipantNameQS(),
     );
     await usecase.do('21');
@@ -120,7 +116,7 @@ describe('do', () => {
     const usecase = new RemoveMemberUsecase(
       mockParticipantRepo,
       mockTeamRepo,
-      createMockNotificationSender(),
+      new MockNotificationSender(),
       createParticipantNameQS(),
     );
     const result = await usecase.do('31');
@@ -141,7 +137,7 @@ describe('do', () => {
     const usecase = new RemoveMemberUsecase(
       mockParticipantRepo,
       mockTeamRepo,
-      createMockNotificationSender(),
+      new MockNotificationSender(),
       createParticipantNameQS(),
     );
     const result = await usecase.do('32');
@@ -162,14 +158,14 @@ describe('do', () => {
     const usecase = new RemoveMemberUsecase(
       mockParticipantRepo,
       mockTeamRepo,
-      createMockNotificationSender(),
+      new MockNotificationSender(),
       createParticipantNameQS(),
     );
     const result = await usecase.do('33');
     expect(isLeft(result)).toBeTruthy();
   });
 
-  test('[異常系] 管理者に通知する', async () => {
+  test('[異常系] 参加者が取り除けないことを管理者に通知する', async () => {
     const participant = Participant.create('34', {
       participantName: ParticipantName.create('高井 勝夫'),
       email: ParticipantEmail.create('oasam626@hotmail.co.jp'),
@@ -188,14 +184,36 @@ describe('do', () => {
       some(participant),
     );
     const mockTeamRepo = new MockTeamRepository(some(team));
-
+    const mockSender = new MockNotificationSender();
     const usecase = new RemoveMemberUsecase(
       mockParticipantRepo,
       mockTeamRepo,
-      createMockNotificationSender(),
+      mockSender,
       createParticipantNameQS(),
     );
     const result = await usecase.do('34');
     expect(isLeft(result)).toBeTruthy();
+    expect(mockSender.getAll().length).toBe(1);
+  });
+
+  test('[異常系] データ不整合を管理者に通知する', async () => {
+    const participant = Participant.create('35', {
+      participantName: ParticipantName.create('田上 澄'),
+      email: ParticipantEmail.create('tagami1000011@plala.or.jp'),
+      status: Zaiseki,
+    });
+    const mockParticipantRepo = new MockParticipantRepository(
+      some(participant),
+    );
+    const mockTeamRepo = new MockTeamRepository();
+    const mockSender = new MockNotificationSender();
+    const usecase = new RemoveMemberUsecase(
+      mockParticipantRepo,
+      mockTeamRepo,
+      mockSender,
+      createParticipantNameQS(),
+    );
+    await expect(() => usecase.do('34')).rejects.toThrow();
+    expect(mockSender.getAll().length).toBe(1);
   });
 });
