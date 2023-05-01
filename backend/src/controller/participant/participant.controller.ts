@@ -35,6 +35,7 @@ import { JoinNewParticipantUsecase } from 'src/app/join-new-participant-usecase'
 import { NotificationSender } from 'src/infra/notifier/notification-sender';
 import { Option, isSome } from 'fp-ts/lib/Option';
 import { RemoveMemberUsecase } from 'src/app/remove-member-usecase';
+import { isLeft } from 'fp-ts/lib/Either';
 
 @Controller({
   path: '/participant',
@@ -96,7 +97,12 @@ export class ParticipantController {
 
     const { participantId, status } = patchParticipantRequest;
     let result: Option<Error>;
-    switch (createUserStatus(status)) {
+    const statusResult = createUserStatus(status);
+    if (isLeft(statusResult)) {
+      throw new BadRequestException(statusResult.left);
+    }
+    const participantStatus = statusResult.right;
+    switch (participantStatus) {
       case Zaiseki:
         result = await new RejoinParticipantUseCase(
           participantRepository,

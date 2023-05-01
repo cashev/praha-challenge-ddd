@@ -10,6 +10,7 @@ import {
 } from 'src/domain/value-object/participantStatus';
 import { isNone, isSome } from 'fp-ts/lib/Option';
 import { createTestParticipants } from 'src/testUtil/test-data';
+import { isLeft } from 'fp-ts/lib/Either';
 
 describe('participant-repository.integration.test', () => {
   const participantRepository = new ParticipantRepository(prisma);
@@ -79,10 +80,15 @@ describe('participant-repository.integration.test', () => {
     };
 
     test('[正常系] insert', async () => {
+      const statusResult = createUserStatus(p901.status);
+      if (isLeft(statusResult)) {
+        throw new Error();
+      }
+      const status = statusResult.right;
       const participant = Participant.create(p901.id.toString(), {
         name: ParticipantName.create(p901.name),
         email: ParticipantEmail.create(p901.email),
-        status: createUserStatus(p901.status),
+        status,
       });
       await participantRepository.save(participant);
 
@@ -101,10 +107,15 @@ describe('participant-repository.integration.test', () => {
     });
     test('[正常系] update', async () => {
       const p5 = data[4];
+      const statusResult = createUserStatus(p5.status);
+      if (isLeft(statusResult)) {
+        throw new Error();
+      }
+      const status = statusResult.right;
       const participant = Participant.create(p5.id.toString(), {
         name: ParticipantName.create(p5.name),
         email: ParticipantEmail.create(p5.email),
-        status: createUserStatus(p5.status),
+        status,
       });
       participant.status = Taikai;
       await participantRepository.save(participant);

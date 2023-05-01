@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { isLeft } from 'fp-ts/lib/Either';
 import { Option, none, some } from 'fp-ts/lib/Option';
 import { Participant } from 'src/domain/entity/participant';
 import { IParticipantRepository } from 'src/domain/repository-interface/participant-repository';
@@ -23,10 +24,15 @@ export class ParticipantRepository implements IParticipantRepository {
     if (result == null) {
       return none;
     }
+    const statusResult = createUserStatus(result.status);
+    if (isLeft(statusResult)) {
+      throw new Error();
+    }
+    const status = statusResult.right;
     const participant = Participant.create(result.id.toString(), {
       name: ParticipantName.create(result.name),
       email: ParticipantEmail.create(result.email),
-      status: createUserStatus(result.status),
+      status,
     });
     return some(participant);
   }
@@ -38,10 +44,15 @@ export class ParticipantRepository implements IParticipantRepository {
     if (result == null) {
       return none;
     }
+    const statusResult = createUserStatus(result.status);
+    if (isLeft(statusResult)) {
+      throw new Error();
+    }
+    const status = statusResult.right;
     const participant = Participant.create(result.id.toString(), {
       name: ParticipantName.create(result.name),
       email: ParticipantEmail.create(result.email),
-      status: createUserStatus(result.status),
+      status,
     });
     return some(participant);
   }

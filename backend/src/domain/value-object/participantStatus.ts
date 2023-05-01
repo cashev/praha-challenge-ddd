@@ -1,3 +1,5 @@
+import { Either, left, right } from 'fp-ts/lib/Either';
+
 const ParticipantStatusValues = {
   Zaiseki: '在籍中',
   Kyukai: '休会中',
@@ -19,17 +21,21 @@ export type ParticipantStatus = typeof Zaiseki | typeof Kyukai | typeof Taikai;
  * @param status 参加者在籍ステータスの文字列
  * @returns 参加者在籍ステータスの型
  */
-export function createUserStatus(status: string): ParticipantStatus {
+export function createUserStatus(
+  status: string,
+): Either<Error, ParticipantStatus> {
   switch (status) {
     case ParticipantStatusValues.Zaiseki:
-      return Zaiseki;
+      return right(Zaiseki);
     case ParticipantStatusValues.Kyukai:
-      return Kyukai;
+      return right(Kyukai);
     case ParticipantStatusValues.Taikai:
-      return Taikai;
+      return right(Taikai);
   }
-  throw Error(
-    '不正な値です。在籍中, 休会中, 退会済を指定してください。: ' + status,
+  return left(
+    new Error(
+      '不正な値です。在籍中, 休会中, 退会済を指定してください。: ' + status,
+    ),
   );
 }
 
