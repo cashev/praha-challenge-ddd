@@ -70,6 +70,10 @@ Onion Architectureに基づいて設計しています。
 
     全ての課題を取得します。
 
+  - GET `/taskStatus`
+
+    全ての課題の進捗ステータスを取得します。
+
   - PATCH `/taskStatus`
 
     課題の進捗ステータスを更新します。
