@@ -57,7 +57,9 @@ export class RemoveMemberUsecase implements IRemoveMemberUsecase {
     if (team.canRemoveParticipant() == false) {
       // チームの人数が規定の人数を下回る場合、管理者に通知する
       await this.notifyToAdmin(participant, team);
-      return left(new Error(''));
+      return left(
+        new Error('チームの人数が規定数を下回るため参加者を取り除けません。'),
+      );
     }
     team.removeParticipant(participant);
 
@@ -90,7 +92,10 @@ export class RemoveMemberUsecase implements IRemoveMemberUsecase {
     if (isNone(tResult)) {
       // 在籍中の参加者はどこかのチーム,ペアに所属しているはずのため、ここで見つからない場合はデータ不整合
       await this.notifyInconsistent(participant);
-      throw new Error('データ不整合');
+      throw new Error(
+        '[データ不整合] チームに所属していない在籍中の参加者がいます。:' +
+          participant.participantName.getValue(),
+      );
     }
     return tResult.value;
   }
