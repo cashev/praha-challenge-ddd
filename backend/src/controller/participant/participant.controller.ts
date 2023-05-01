@@ -99,7 +99,7 @@ export class ParticipantController {
     let result: Option<Error>;
     const statusResult = createUserStatus(status);
     if (isLeft(statusResult)) {
-      throw new BadRequestException(statusResult.left);
+      throw new BadRequestException(statusResult.left.message);
     }
     const participantStatus = statusResult.right;
     switch (participantStatus) {
