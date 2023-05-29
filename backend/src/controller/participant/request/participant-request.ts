@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsIn, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNotEmpty } from 'class-validator';
 
-export class PostParticipantRequest {
+export class CreateParticipantRequest {
   @ApiProperty()
   @IsNotEmpty()
   readonly name: string;
@@ -12,13 +12,20 @@ export class PostParticipantRequest {
   readonly email: string;
 }
 
-export class PatchParticipantRequest {
+export class RejoinParticipantRequest {
   @ApiProperty()
   @IsNotEmpty()
   readonly participantId: string;
+}
 
+export class SuspendParticipantRequest {
   @ApiProperty()
   @IsNotEmpty()
-  @IsIn(['在籍中', 'レビュー待ち', '完了'])
-  readonly status: string;
+  readonly participantId: string;
+}
+
+export class ResignParticipantRequest {
+  @ApiProperty()
+  @IsNotEmpty()
+  readonly participantId: string;
 }

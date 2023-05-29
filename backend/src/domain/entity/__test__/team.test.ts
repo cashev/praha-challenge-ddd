@@ -1,268 +1,442 @@
-import { PairName } from 'src/domain/value-object/pairName';
-import { TeamName } from 'src/domain/value-object/teamName';
-import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
-import { ParticipantName } from 'src/domain/value-object/participantName';
-import {
-  Kyukai,
-  Taikai,
-  Zaiseki,
-} from 'src/domain/value-object/participantStatus';
-import { Pair } from '../pair';
 import { Team } from '../team';
-import { Participant, ParticipantIdType } from '../participant';
+import { ParticipantIdType } from '../participant';
+import { isNone, isSome } from 'fp-ts/lib/Option';
 
-const createThreeMember = () => {
-  const u1 = Participant.create('11', {
-    name: ParticipantName.create('本多 洵子'),
-    email: ParticipantEmail.create('honda_junko@example.jp'),
-    status: Zaiseki,
-  });
-  const u2 = Participant.create('12', {
-    name: ParticipantName.create('堀川 訓'),
-    email: ParticipantEmail.create('satosi1977@infoweb.ne.jp'),
-    status: Zaiseki,
-  });
-  const u3 = Participant.create('13', {
-    name: ParticipantName.create('吉川 永子'),
-    email: ParticipantEmail.create('nagako.yosikawa@infoseek.jp'),
-    status: Zaiseki,
-  });
-  return [u1, u2, u3];
+const createThreeZaisekiMember = () => {
+  const ps11 = {
+    participantId: '11',
+    status: '在籍中',
+  };
+  const ps12 = {
+    participantId: '12',
+    status: '在籍中',
+  };
+  const ps13 = {
+    participantId: '13',
+    status: '在籍中',
+  };
+  const ps14 = {
+    participantId: '14',
+    status: '休会中',
+  };
+  return [ps11, ps12, ps13, ps14];
 };
 
-const createTwoMember = () => {
-  const u1 = Participant.create('21', {
-    name: ParticipantName.create('長尾 由記彦'),
-    email: ParticipantEmail.create('ykhk20210106@example.co.jp'),
-    status: Zaiseki,
-  });
-  const u2 = Participant.create('22', {
-    name: ParticipantName.create('佐野 晴仁'),
-    email: ParticipantEmail.create('sano1988@sannet.ne.jp'),
-    status: Zaiseki,
-  });
-  return [u1, u2];
+const createTwoZaisekiMember01 = () => {
+  const ps21 = {
+    participantId: '21',
+    status: '在籍中',
+  };
+  const ps22 = {
+    participantId: '22',
+    status: '在籍中',
+  };
+  const ps23 = {
+    participantId: '23',
+    status: '休会中',
+  };
+  return [ps21, ps22, ps23];
 };
 
-const createPairList = (member: ParticipantIdType[]) => {
-  const pairName = PairName.create('a');
-  return [
-    Pair.create('1', {
-      name: pairName,
-      member,
-    }),
-  ];
-};
-
-const convertToMember = (member: Participant[]) => {
-  return member.map((p) => p.id);
+const createTwoZaisekiMember02 = () => {
+  const ps21 = {
+    participantId: '31',
+    status: '在籍中',
+  };
+  const ps22 = {
+    participantId: '32',
+    status: '在籍中',
+  };
+  const ps23 = {
+    participantId: '33',
+    status: '休会中',
+  };
+  return [ps21, ps22, ps23];
 };
 
 describe('create', () => {
   test('[正常系] チームの参加者が3人', () => {
-    const pairList = createPairList(convertToMember(createThreeMember()));
-    const teamName = TeamName.create('123');
+    const teamName = '123';
+    const pairId = '1';
+    const pairName = 'a';
+    const member = [...createThreeZaisekiMember()];
+    const team = Team.create('1', teamName, [{ pairId, pairName, member }]);
 
-    const team = Team.create('1', { name: teamName, pairList });
-    expect(team.teamName).toEqual(teamName);
-    expect(team.pairList).toEqual(pairList);
+    expect(team.name.getValue()).toEqual(teamName);
+    expect(team.getAllMember().length).toEqual(4);
+    expect(team.getZaisekiMember().length).toEqual(3);
+    expect(team.getPairs().length).toEqual(1);
+    const pair = team.getPairs()[0];
+    expect(pair.id).toEqual(pairId);
+    expect(pair.name.getValue()).toEqual(pairName);
+    expect(pair.getAllMember().length).toEqual(4);
+    expect(pair.getZaisekiMember().length).toEqual(3);
+    expect(
+      pair.getAllMember().map((ps) => {
+        return { participantId: ps.participantId, status: ps.getStatusValue() };
+      }),
+    ).toEqual(member);
+    expect(
+      pair.getAllMember().map((ps) => {
+        return { participantId: ps.participantId, status: ps.getStatusValue() };
+      }),
+    ).toEqual([
+      { participantId: '11', status: '在籍中' },
+      { participantId: '12', status: '在籍中' },
+      { participantId: '13', status: '在籍中' },
+      { participantId: '14', status: '休会中' },
+    ]);
   });
 
   test('[異常系] チームの参加者が2人', () => {
-    const pairList = createPairList(
-      convertToMember(createThreeMember().slice(0, 2)),
-    );
-    const teamName = TeamName.create('123');
+    const teamName = '123';
+    const pairId = '1';
+    const pairName = 'a';
+    const member = [...createTwoZaisekiMember01()];
 
-    expect(() => Team.create('1', { name: teamName, pairList })).toThrow();
+    expect(() =>
+      Team.create('1', teamName, [{ pairId, pairName, member }]),
+    ).toThrow();
   });
 });
 
-describe('addParticipant', () => {
-  test('[正常系] 既存のペアに参加する', async () => {
+describe('joinParticipant', () => {
+  test('[正常系] 新規参加者を追加する', () => {
     jest.spyOn(global.Math, 'random').mockReturnValue(0);
+    const team = Team.create('1', '123', [
+      { pairId: '1', pairName: 'a', member: [...createThreeZaisekiMember()] },
+      { pairId: '2', pairName: 'b', member: [...createTwoZaisekiMember02()] },
+    ]);
 
-    const member = createThreeMember();
-    const pair1 = Pair.create('1', {
-      name: PairName.create('a'),
-      member: convertToMember(member.slice(1)),
-    });
-    const member2 = createTwoMember();
-    const pair2 = Pair.create('2', {
-      name: PairName.create('b'),
-      member: convertToMember(member2),
-    });
-    const team = Team.create('1', {
-      name: TeamName.create('123'),
-      pairList: [pair1, pair2],
-    });
-    const newParticipant = member[0];
+    const pid = '91' as ParticipantIdType;
+    const joinResult = team.joinParticipant(pid);
 
-    team.addParticipant(newParticipant);
-
-    expect(team.pairList[0].member).toEqual([
-      ...convertToMember(member.slice(1)),
-      newParticipant.id,
+    expect(isNone(joinResult)).toBeTruthy();
+    expect(team.getAllMember().length).toEqual(8);
+    expect(team.getZaisekiMember().length).toEqual(6);
+    expect(team.getPairs().length).toEqual(2);
+    const pair1 = team.getPairs()[0];
+    expect(
+      pair1.getAllMember().map((ps) => {
+        return { participantId: ps.participantId, status: ps.getStatusValue() };
+      }),
+    ).toEqual([
+      { participantId: '11', status: '在籍中' },
+      { participantId: '12', status: '在籍中' },
+      { participantId: '13', status: '在籍中' },
+      { participantId: '14', status: '休会中' },
+    ]);
+    const pair2 = team.getPairs()[1];
+    expect(
+      pair2.getAllMember().map((ps) => {
+        return { participantId: ps.participantId, status: ps.getStatusValue() };
+      }),
+    ).toEqual([
+      { participantId: '31', status: '在籍中' },
+      { participantId: '32', status: '在籍中' },
+      { participantId: '33', status: '休会中' },
+      { participantId: '91', status: '在籍中' },
     ]);
   });
 
-  test('[正常系] 既存のペアを分割して参加する', async () => {
+  test('[正常系] 休会中の参加者を在籍中にする', () => {
     jest.spyOn(global.Math, 'random').mockReturnValue(0);
-    const member = createThreeMember();
-    const pairList = createPairList(convertToMember(member));
-    const team = Team.create('1', {
-      name: TeamName.create('123'),
-      pairList,
-    });
-    const newParticipant = createTwoMember()[0];
-
-    await team.addParticipant(newParticipant);
-
-    expect(team.pairList.length).toBe(2);
-    expect(team.pairList[0].member).toEqual([
-      ...convertToMember(member.slice(1)),
+    const team = Team.create('1', '123', [
+      { pairId: '1', pairName: 'a', member: [...createTwoZaisekiMember01()] },
+      { pairId: '2', pairName: 'b', member: [...createTwoZaisekiMember02()] },
     ]);
-    expect(team.pairList[1].member).toEqual([member[0].id, newParticipant.id]);
+
+    const pid = '33' as ParticipantIdType;
+    const joinResult = team.joinParticipant(pid);
+
+    expect(isNone(joinResult)).toBeTruthy();
+    expect(team.getAllMember().length).toEqual(6);
+    expect(team.getZaisekiMember().length).toEqual(5);
+    expect(team.getPairs().length).toEqual(2);
+    const pair1 = team.getPairs()[0];
+    expect(
+      pair1.getAllMember().map((ps) => {
+        return { participantId: ps.participantId, status: ps.getStatusValue() };
+      }),
+    ).toEqual([
+      { participantId: '21', status: '在籍中' },
+      { participantId: '22', status: '在籍中' },
+      { participantId: '23', status: '休会中' },
+      { participantId: '33', status: '在籍中' },
+    ]);
+    const pair2 = team.getPairs()[1];
+    expect(
+      pair2.getAllMember().map((ps) => {
+        return { participantId: ps.participantId, status: ps.getStatusValue() };
+      }),
+    ).toEqual([
+      { participantId: '31', status: '在籍中' },
+      { participantId: '32', status: '在籍中' },
+    ]);
   });
 
-  test('[異常系] 休会中の参加者', async () => {
-    const member = convertToMember(createThreeMember());
-    const pairList = createPairList(member);
-    const team = Team.create('1', {
-      name: TeamName.create('123'),
-      pairList,
-    });
-    const newParticipant = createTwoMember()[0];
-    newParticipant.status = Kyukai;
+  test('[正常系] 既存のペアを分割して新規参加者を追加する', async () => {
+    jest.spyOn(global.Math, 'random').mockReturnValue(0);
+    const member = [...createThreeZaisekiMember()];
+    const team = Team.create('1', '123', [
+      { pairId: '1', pairName: 'a', member },
+    ]);
 
-    expect(team.addParticipant(newParticipant)).rejects.toThrow();
+    const pid = '91' as ParticipantIdType;
+    const joinResult = team.joinParticipant(pid);
+
+    expect(isNone(joinResult)).toBeTruthy();
+    expect(team.getAllMember().length).toEqual(5);
+    expect(team.getZaisekiMember().length).toEqual(4);
+    expect(team.getPairs().length).toEqual(2);
+    const pair1 = team.getPairs()[0];
+    expect(
+      pair1.getAllMember().map((ps) => {
+        return { participantId: ps.participantId, status: ps.getStatusValue() };
+      }),
+    ).toEqual([
+      { participantId: '12', status: '在籍中' },
+      { participantId: '13', status: '在籍中' },
+      { participantId: '14', status: '休会中' },
+    ]);
+    const pair2 = team.getPairs()[1];
+    expect(
+      pair2.getAllMember().map((ps) => {
+        return { participantId: ps.participantId, status: ps.getStatusValue() };
+      }),
+    ).toEqual([
+      { participantId: '11', status: '在籍中' },
+      { participantId: '91', status: '在籍中' },
+    ]);
   });
 
-  test('[異常系] 退会済の参加者', async () => {
-    const member = convertToMember(createThreeMember());
-    const pairList = createPairList(member);
-    const team = Team.create('1', {
-      name: TeamName.create('123'),
-      pairList,
-    });
-    const newParticipant = createTwoMember()[0];
-    newParticipant.status = Taikai;
-
-    expect(team.addParticipant(newParticipant)).rejects.toThrow();
+  test('[異常系] 在籍中の参加者を追加する', () => {
+    const team = Team.create('1', '123', [
+      { pairId: '1', pairName: 'a', member: [...createThreeZaisekiMember()] },
+    ]);
+    const joinResult = team.joinParticipant('11' as ParticipantIdType);
+    expect(isSome(joinResult)).toBeTruthy();
   });
 });
 
 describe('canRemoveParticipant', () => {
   test('[正常系] 参加者が4人であれば、true', () => {
-    const member1 = createThreeMember().slice(1);
-    const pair1 = Pair.create('1', {
-      name: PairName.create('a'),
-      member: member1.map((p) => p.id),
-    });
-    const member2 = createThreeMember().slice(1);
-    const pair2 = Pair.create('2', {
-      name: PairName.create('b'),
-      member: member2.map((p) => p.id),
-    });
-    const team = Team.create('1', {
-      name: TeamName.create('1'),
-      pairList: [pair1, pair2],
-    });
+    const team = Team.create('1', '123', [
+      { pairId: '1', pairName: 'a', member: [...createTwoZaisekiMember01()] },
+      { pairId: '2', pairName: 'b', member: [...createTwoZaisekiMember02()] },
+    ]);
 
     expect(team.canRemoveParticipant()).toBeTruthy();
   });
 
   test('[正常系] 参加者が3人であれば、false', () => {
-    const member1 = createThreeMember();
-    const pair1 = Pair.create('1', {
-      name: PairName.create('a'),
-      member: member1.map((p) => p.id),
-    });
-    const team = Team.create('1', {
-      name: TeamName.create('1'),
-      pairList: [pair1],
-    });
+    const team = Team.create('1', '123', [
+      { pairId: '1', pairName: 'a', member: [...createThreeZaisekiMember()] },
+    ]);
 
     expect(team.canRemoveParticipant()).toBeFalsy();
   });
 });
 
+describe('suspendParticipant', () => {
+  test('[正常系] 3人ペアの参加者が休会する', () => {
+    const team = Team.create('1', '123', [
+      { pairId: '1', pairName: 'a', member: [...createThreeZaisekiMember()] },
+      { pairId: '2', pairName: 'b', member: [...createTwoZaisekiMember02()] },
+    ]);
+
+    const pid = '12' as ParticipantIdType;
+    const suspendResult = team.suspendParticipant(pid);
+
+    expect(isNone(suspendResult)).toBeTruthy();
+    expect(team.getAllMember().length).toEqual(7);
+    expect(team.getZaisekiMember().length).toEqual(4);
+    expect(team.getPairs().length).toEqual(2);
+    const pair1 = team.getPairs()[0];
+    expect(
+      pair1.getAllMember().map((ps) => {
+        return { participantId: ps.participantId, status: ps.getStatusValue() };
+      }),
+    ).toEqual([
+      { participantId: '11', status: '在籍中' },
+      { participantId: '12', status: '休会中' },
+      { participantId: '13', status: '在籍中' },
+      { participantId: '14', status: '休会中' },
+    ]);
+    const pair2 = team.getPairs()[1];
+    expect(
+      pair2.getAllMember().map((ps) => {
+        return { participantId: ps.participantId, status: ps.getStatusValue() };
+      }),
+    ).toEqual([
+      { participantId: '31', status: '在籍中' },
+      { participantId: '32', status: '在籍中' },
+      { participantId: '33', status: '休会中' },
+    ]);
+  });
+
+  test('[正常系] 2人ペアの参加者が休会し、残った参加者は2人ペアに合流する', () => {
+    const team = Team.create('1', '123', [
+      { pairId: '1', pairName: 'a', member: [...createTwoZaisekiMember01()] },
+      { pairId: '2', pairName: 'b', member: [...createTwoZaisekiMember02()] },
+    ]);
+
+    const pid = '22' as ParticipantIdType;
+    const suspendResult = team.suspendParticipant(pid);
+
+    expect(isNone(suspendResult)).toBeTruthy();
+    expect(team.getAllMember().length).toEqual(6);
+    expect(team.getZaisekiMember().length).toEqual(3);
+    expect(team.getPairs().length).toEqual(1);
+    const pair = team.getPairs()[0];
+    expect(
+      pair.getAllMember().map((ps) => {
+        return { participantId: ps.participantId, status: ps.getStatusValue() };
+      }),
+    ).toEqual([
+      { participantId: '21', status: '在籍中' },
+      { participantId: '22', status: '休会中' },
+      { participantId: '23', status: '休会中' },
+      { participantId: '31', status: '在籍中' },
+      { participantId: '32', status: '在籍中' },
+      { participantId: '33', status: '休会中' },
+    ]);
+  });
+
+  test('[正常系] 2人ペアの参加者が休会し、残った参加者は3人ペアに合流する', () => {
+    jest.spyOn(global.Math, 'random').mockReturnValue(0);
+    const team = Team.create('1', '123', [
+      { pairId: '1', pairName: 'a', member: [...createThreeZaisekiMember()] },
+      { pairId: '2', pairName: 'b', member: [...createTwoZaisekiMember02()] },
+    ]);
+
+    const pid = '32' as ParticipantIdType;
+    const suspendResult = team.suspendParticipant(pid);
+
+    expect(isNone(suspendResult)).toBeTruthy();
+    expect(team.getAllMember().length).toEqual(7);
+    expect(team.getZaisekiMember().length).toEqual(4);
+    expect(team.getPairs().length).toEqual(2);
+    const pair1 = team.getPairs()[0];
+    expect(
+      pair1.getAllMember().map((ps) => {
+        return { participantId: ps.participantId, status: ps.getStatusValue() };
+      }),
+    ).toEqual([
+      { participantId: '12', status: '在籍中' },
+      { participantId: '13', status: '在籍中' },
+      { participantId: '14', status: '休会中' },
+    ]);
+    const pair2 = team.getPairs()[1];
+    expect(
+      pair2.getAllMember().map((ps) => {
+        return { participantId: ps.participantId, status: ps.getStatusValue() };
+      }),
+    ).toEqual([
+      { participantId: '11', status: '在籍中' },
+      { participantId: '31', status: '在籍中' },
+      { participantId: '32', status: '休会中' },
+      { participantId: '33', status: '休会中' },
+    ]);
+  });
+});
+
 describe('removeParticipant', () => {
-  test('[正常系] 3人のペアから取り除く', () => {
-    jest.spyOn(global.Math, 'random').mockReturnValue(0);
+  test('[正常系] 3人ペアの参加者が退会する', () => {
+    const team = Team.create('1', '123', [
+      { pairId: '1', pairName: 'a', member: [...createThreeZaisekiMember()] },
+      { pairId: '2', pairName: 'b', member: [...createTwoZaisekiMember02()] },
+    ]);
+    const pid = '12' as ParticipantIdType;
 
-    const threeMember = createThreeMember();
-    const pair1 = Pair.create('1', {
-      name: PairName.create('a'),
-      member: convertToMember(threeMember),
-    });
-    const twoMember = createTwoMember();
-    const pair2 = Pair.create('2', {
-      name: PairName.create('b'),
-      member: convertToMember(twoMember),
-    });
-    const team = Team.create('1', {
-      name: TeamName.create('123'),
-      pairList: [pair1, pair2],
-    });
-    const removeParticipant = threeMember[0];
+    const removeResult = team.removeParticipant(pid);
 
-    team.removeParticipant(removeParticipant);
-
-    expect(team.member.length).toBe(4);
-    expect(team.member.some((p) => p == removeParticipant.id)).toBeFalsy();
-    expect(team.pairList.length).toBe(2);
+    expect(isNone(removeResult)).toBeTruthy();
+    expect(team.getAllMember().length).toEqual(6);
+    expect(team.getZaisekiMember().length).toEqual(4);
+    expect(team.getPairs().length).toEqual(2);
+    const pair1 = team.getPairs()[0];
+    expect(
+      pair1.getAllMember().map((ps) => {
+        return { participantId: ps.participantId, status: ps.getStatusValue() };
+      }),
+    ).toEqual([
+      { participantId: '11', status: '在籍中' },
+      { participantId: '13', status: '在籍中' },
+      { participantId: '14', status: '休会中' },
+    ]);
+    const pair2 = team.getPairs()[1];
+    expect(
+      pair2.getAllMember().map((ps) => {
+        return { participantId: ps.participantId, status: ps.getStatusValue() };
+      }),
+    ).toEqual([
+      { participantId: '31', status: '在籍中' },
+      { participantId: '32', status: '在籍中' },
+      { participantId: '33', status: '休会中' },
+    ]);
   });
 
-  test('[正常系] 2人のペアから取り除き、残ったメンバーを3人ペアへ合流させる', () => {
-    jest.spyOn(global.Math, 'random').mockReturnValue(0);
+  test('[正常系] 2人ペアの参加者が退会し、残った参加者は2人ペアに合流する', () => {
+    const team = Team.create('1', '123', [
+      { pairId: '1', pairName: 'a', member: [...createTwoZaisekiMember01()] },
+      { pairId: '2', pairName: 'b', member: [...createTwoZaisekiMember02()] },
+    ]);
+    const pid = '22' as ParticipantIdType;
 
-    const threeMember = createThreeMember();
-    const pair1 = Pair.create('1', {
-      name: PairName.create('a'),
-      member: convertToMember(threeMember),
-    });
-    const twoMember = createTwoMember();
-    const pair2 = Pair.create('2', {
-      name: PairName.create('b'),
-      member: convertToMember(twoMember),
-    });
-    const team = Team.create('1', {
-      name: TeamName.create('123'),
-      pairList: [pair1, pair2],
-    });
-    const removeParticipant = twoMember[0];
+    const removeResult = team.removeParticipant(pid);
 
-    team.removeParticipant(removeParticipant);
-
-    expect(team.member.length).toBe(4);
-    expect(team.member.some((p) => p == removeParticipant.id)).toBeFalsy();
-    expect(team.pairList.length).toBe(2);
+    expect(isNone(removeResult)).toBeTruthy();
+    expect(team.getAllMember().length).toEqual(5);
+    expect(team.getZaisekiMember().length).toEqual(3);
+    expect(team.getPairs().length).toEqual(1);
+    const pair = team.getPairs()[0];
+    expect(
+      pair.getAllMember().map((ps) => {
+        return { participantId: ps.participantId, status: ps.getStatusValue() };
+      }),
+    ).toEqual([
+      { participantId: '21', status: '在籍中' },
+      { participantId: '23', status: '休会中' },
+      { participantId: '31', status: '在籍中' },
+      { participantId: '32', status: '在籍中' },
+      { participantId: '33', status: '休会中' },
+    ]);
   });
 
-  test('[正常系] 2人のペアから取り除き、残ったメンバーを2人ペアへ合流させる', () => {
+  test('[正常系] 2人ペアの参加者が退会し、残った参加者は3人ペアに合流する', () => {
     jest.spyOn(global.Math, 'random').mockReturnValue(0);
+    const team = Team.create('1', '123', [
+      { pairId: '1', pairName: 'a', member: [...createThreeZaisekiMember()] },
+      { pairId: '2', pairName: 'b', member: [...createTwoZaisekiMember02()] },
+    ]);
+    const pid = '32' as ParticipantIdType;
 
-    const twoMember1 = createThreeMember().slice(1);
-    const pair1 = Pair.create('1', {
-      name: PairName.create('a'),
-      member: convertToMember(twoMember1),
-    });
-    const twoMember2 = createTwoMember();
-    const pair2 = Pair.create('2', {
-      name: PairName.create('b'),
-      member: convertToMember(twoMember2),
-    });
-    const team = Team.create('1', {
-      name: TeamName.create('123'),
-      pairList: [pair1, pair2],
-    });
-    const removeParticipant = twoMember1[0];
+    const removeResult = team.removeParticipant(pid);
 
-    team.removeParticipant(removeParticipant);
-
-    expect(team.member.length).toBe(3);
-    expect(team.member.some((p) => p == removeParticipant.id)).toBeFalsy();
-    expect(team.pairList.length).toBe(1);
+    expect(isNone(removeResult)).toBeTruthy();
+    expect(team.getAllMember().length).toEqual(6);
+    expect(team.getZaisekiMember().length).toEqual(4);
+    expect(team.getPairs().length).toEqual(2);
+    const pair1 = team.getPairs()[0];
+    expect(
+      pair1.getAllMember().map((ps) => {
+        return { participantId: ps.participantId, status: ps.getStatusValue() };
+      }),
+    ).toEqual([
+      { participantId: '12', status: '在籍中' },
+      { participantId: '13', status: '在籍中' },
+      { participantId: '14', status: '休会中' },
+    ]);
+    const pair2 = team.getPairs()[1];
+    expect(
+      pair2.getAllMember().map((ps) => {
+        return { participantId: ps.participantId, status: ps.getStatusValue() };
+      }),
+    ).toEqual([
+      { participantId: '11', status: '在籍中' },
+      { participantId: '31', status: '在籍中' },
+      { participantId: '33', status: '休会中' },
+    ]);
   });
 });

@@ -17,109 +17,91 @@ describe('participant-by-taskStatus-qs.integration.test', () => {
       id: '01',
       name: 'テスト001',
       email: 'test001@example.com',
-      status: '在籍中',
     };
     const p2 = {
       id: '02',
       name: 'テスト002',
       email: 'test002@example.com',
-      status: '在籍中',
     };
     const p3 = {
       id: '03',
       name: 'テスト003',
       email: 'test003@example.com',
-      status: '在籍中',
     };
     const p4 = {
       id: '04',
       name: 'テスト004',
       email: 'test004@example.com',
-      status: '在籍中',
     };
     const p5 = {
       id: '05',
       name: 'テスト005',
       email: 'test005@example.com',
-      status: '在籍中',
     };
     const p6 = {
       id: '06',
       name: 'テスト006',
       email: 'test006@example.com',
-      status: '在籍中',
     };
     const p7 = {
       id: '07',
       name: 'テスト007',
       email: 'test007@example.com',
-      status: '在籍中',
     };
     const p8 = {
       id: '08',
       name: 'テスト008',
       email: 'test008@example.com',
-      status: '在籍中',
     };
     const p9 = {
       id: '09',
       name: 'テスト009',
       email: 'test009@example.com',
-      status: '在籍中',
     };
     const p10 = {
       id: '10',
       name: 'テスト010',
       email: 'test010@example.com',
-      status: '休会中',
     };
     const p11 = {
       id: '11',
       name: 'テスト011',
       email: 'test011@example.com',
-      status: '在籍中',
     };
     const p12 = {
       id: '12',
       name: 'テスト012',
       email: 'test012@example.com',
-      status: '在籍中',
     };
     const p13 = {
       id: '13',
       name: 'テスト013',
       email: 'test013@example.com',
-      status: '在籍中',
     };
     const p14 = {
       id: '14',
       name: 'テスト014',
       email: 'test014@example.com',
-      status: '在籍中',
     };
     const p15 = {
       id: '15',
       name: 'テスト015',
       email: 'test015@example.com',
-      status: '退会済',
     };
     const p16 = {
       id: '16',
       name: 'テスト016',
       email: 'test016@example.com',
-      status: '在籍中',
     };
     const p17 = {
       id: '17',
       name: 'テスト017',
       email: 'test017@example.com',
-      status: '在籍中',
     };
     const p18 = {
       id: '18',
       name: 'テスト018',
       email: 'test018@example.com',
-      status: '在籍中',
     };
 
     const t1 = { id: '1', title: '課題01', content: '内容01' };

@@ -1,14 +1,9 @@
 import { PrismaClient } from '@prisma/client';
-import { isLeft } from 'fp-ts/lib/Either';
 import { Option, none, some } from 'fp-ts/lib/Option';
 import { Participant } from 'src/domain/entity/participant';
 import { IParticipantRepository } from 'src/domain/repository-interface/participant-repository';
 import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
 import { ParticipantName } from 'src/domain/value-object/participantName';
-import {
-  createUserStatus,
-  getParticipantStatusValue,
-} from 'src/domain/value-object/participantStatus';
 
 export class ParticipantRepository implements IParticipantRepository {
   private prismaClient: PrismaClient;
@@ -24,16 +19,11 @@ export class ParticipantRepository implements IParticipantRepository {
     if (result == null) {
       return none;
     }
-    const statusResult = createUserStatus(result.status);
-    if (isLeft(statusResult)) {
-      throw new Error();
-    }
-    const status = statusResult.right;
-    const participant = Participant.create(result.id.toString(), {
-      name: ParticipantName.create(result.name),
-      email: ParticipantEmail.create(result.email),
-      status,
-    });
+    const participant = Participant.create(
+      result.id.toString(),
+      ParticipantName.create(result.name),
+      ParticipantEmail.create(result.email),
+    );
     return some(participant);
   }
 
@@ -44,16 +34,11 @@ export class ParticipantRepository implements IParticipantRepository {
     if (result == null) {
       return none;
     }
-    const statusResult = createUserStatus(result.status);
-    if (isLeft(statusResult)) {
-      throw new Error();
-    }
-    const status = statusResult.right;
-    const participant = Participant.create(result.id.toString(), {
-      name: ParticipantName.create(result.name),
-      email: ParticipantEmail.create(result.email),
-      status,
-    });
+    const participant = Participant.create(
+      result.id.toString(),
+      ParticipantName.create(result.name),
+      ParticipantEmail.create(result.email),
+    );
     return some(participant);
   }
 
@@ -61,15 +46,13 @@ export class ParticipantRepository implements IParticipantRepository {
     await this.prismaClient.participant.upsert({
       where: { id: participant.id },
       update: {
-        name: participant.participantName.getValue(),
-        email: participant.email.getValue(),
-        status: getParticipantStatusValue(participant.status),
+        name: participant.getName().getValue(),
+        email: participant.getEmail().getValue(),
       },
       create: {
         id: participant.id,
-        name: participant.participantName.getValue(),
-        email: participant.email.getValue(),
-        status: getParticipantStatusValue(participant.status),
+        name: participant.getName().getValue(),
+        email: participant.getEmail().getValue(),
       },
     });
   }

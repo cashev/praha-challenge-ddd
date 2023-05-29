@@ -5,7 +5,6 @@ import { ITaskStatusRepository } from 'src/domain/repository-interface/taskStatu
 import { ITeamRepository } from 'src/domain/repository-interface/team-repository';
 import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
 import { ParticipantName } from 'src/domain/value-object/participantName';
-import { Zaiseki } from 'src/domain/value-object/participantStatus';
 import { randomChoice } from 'src/util/random';
 import { ITaskIdQS } from './query-service-interface/task-qs';
 import { TaskStatusService } from 'src/domain/service/taskStatus-service';
@@ -17,22 +16,12 @@ import { TaskIdType, TaskStatus } from 'src/domain/entity/taskStatus';
  * 参加者を新規追加するユースケース
  */
 export class JoinNewParticipantUsecase {
-  private participantRepo: IParticipantRepository;
-  private teamRepo: ITeamRepository;
-  private taskStatusRepo: ITaskStatusRepository;
-  private qs: ITaskIdQS;
-
   constructor(
-    participantRepo: IParticipantRepository,
-    teamRepo: ITeamRepository,
-    taskStatusRepo: ITaskStatusRepository,
-    qs: ITaskIdQS,
-  ) {
-    this.participantRepo = participantRepo;
-    this.teamRepo = teamRepo;
-    this.taskStatusRepo = taskStatusRepo;
-    this.qs = qs;
-  }
+    private readonly participantRepo: IParticipantRepository,
+    private readonly teamRepo: ITeamRepository,
+    private readonly taskStatusRepo: ITaskStatusRepository,
+    private readonly qs: ITaskIdQS,
+  ) {}
 
   /**
    * 参加者を新規追加、チームへ追加、課題の進捗ステータスを作成します。
@@ -41,24 +30,35 @@ export class JoinNewParticipantUsecase {
    * @param email 参加者のメールアドレス
    */
   async do(name: string, email: string): Promise<Option<Error>> {
+    const validateResult = await this.validate(email);
+    if (isSome(validateResult)) {
+      return validateResult;
+    }
+    // 参加者を新規参加
+    const newParticipant = Participant.create(
+      createRandomIdString(),
+      ParticipantName.create(name),
+      ParticipantEmail.create(email),
+    );
+    // 新規参加者をチームに追加する
+    const team = await this.findTeam();
+    const joinResult = team.joinParticipant(newParticipant.id);
+    if (isSome(joinResult)) {
+      return joinResult;
+    }
+    // 各課題について未着手の進捗ステータスを作成する
+    const taskStatusList = await this.createTaskStatusList(newParticipant.id);
+    await this.participantRepo.save(newParticipant);
+    await this.teamRepo.save(team);
+    await this.taskStatusRepo.saveAll(taskStatusList);
+    return none;
+  }
+
+  private async validate(email: string): Promise<Option<Error>> {
     if (isSome(await this.participantRepo.findByEmail(email))) {
       // メールアドレス重複チェック
       return some(new Error('メールアドレスが重複しています。'));
     }
-    // 参加者を新規参加
-    const newParticipant = Participant.create(createRandomIdString(), {
-      name: ParticipantName.create(name),
-      email: ParticipantEmail.create(email),
-      status: Zaiseki,
-    });
-    await this.participantRepo.save(newParticipant);
-    // 新規参加者をチームに追加する
-    const team = await this.findTeam();
-    team.addParticipant(newParticipant);
-    await this.teamRepo.save(team);
-    // 各課題について未着手の進捗ステータスを作成する
-    const taskStatusList = await this.createTaskStatusList(newParticipant.id);
-    await this.taskStatusRepo.saveAll(taskStatusList);
     return none;
   }
 

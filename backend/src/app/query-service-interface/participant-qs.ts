@@ -4,17 +4,11 @@ export class ParticipantDto {
   public readonly email: string;
   public readonly status: string;
 
-  public constructor(props: {
-    id: string;
-    name: string;
-    email: string;
-    status: string;
-  }) {
-    const { id, name, email, status } = props;
+  public constructor(props: { id: string; name: string; email: string }) {
+    const { id, name, email } = props;
     this.id = id;
     this.name = name;
     this.email = email;
-    this.status = status;
   }
 }
 

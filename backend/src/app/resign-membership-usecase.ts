@@ -1,39 +1,35 @@
-import { IParticipantRepository } from 'src/domain/repository-interface/participant-repository';
-import { Taikai } from 'src/domain/value-object/participantStatus';
 import { Option, none, some } from 'fp-ts/lib/Option';
 import { isLeft } from 'fp-ts/lib/Either';
-import { IRemoveMemberUsecase } from './remove-member-usecase';
+import { ITeamRepository } from 'src/domain/repository-interface/team-repository';
+import { IRemovalTeamMemberValidator } from './util/removal-team-member-validator';
+import { ParticipantIdType } from 'src/domain/entity/participant';
 
 /**
- * 参加者の在籍ステータスを退会済にするユースケース
+ * 参加者が退会するユースケース
  */
 export class ResignMembershipUsecase {
-  private readonly participantRepo: IParticipantRepository;
-  private readonly removeMemberUsecase: IRemoveMemberUsecase;
-
   constructor(
-    participantRepo: IParticipantRepository,
-    removeMemberUsecase: IRemoveMemberUsecase,
-  ) {
-    this.participantRepo = participantRepo;
-    this.removeMemberUsecase = removeMemberUsecase;
-  }
+    private readonly teamRepo: ITeamRepository,
+    private readonly removalTeamMemberValidator: IRemovalTeamMemberValidator,
+  ) {}
 
   /**
-   * 指定された参加者をチームから取り除き、在籍ステータスを退会済へ更新します。
+   * 指定された参加者をチームから取り除きます。
    * 参加者が抜けてペアが1人になる場合、チーム内でペアを再編成します。
    * チームメンバーが最低人数を下回る場合、管理者へ通知します。
    *
    * @param participantId 参加者id
    */
   async do(participantId: string): Promise<Option<Error>> {
-    const removeResult = await this.removeMemberUsecase.do(participantId);
-    if (isLeft(removeResult)) {
-      return some(removeResult.left);
+    const pid = participantId as ParticipantIdType;
+    const validateResult =
+      await this.removalTeamMemberValidator.validateFromParticipantId(pid);
+    if (isLeft(validateResult)) {
+      return some(validateResult.left);
     }
-    const participant = removeResult.right;
-    participant.status = Taikai;
-    this.participantRepo.save(participant);
+    const team = validateResult.right;
+    team.removeParticipant(pid);
+    this.teamRepo.save(team);
     return none;
   }
 }

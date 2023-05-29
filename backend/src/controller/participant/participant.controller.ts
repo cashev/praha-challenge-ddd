@@ -3,7 +3,6 @@ import {
   Body,
   Controller,
   Get,
-  Patch,
   Post,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
@@ -16,26 +15,21 @@ import {
 import { GetParticipantResponse } from './response/participant-response';
 import { ParticipantRepository } from 'src/infra/db/repository/participant-repository';
 import { TeamRepository } from 'src/infra/db/repository/team-repository';
-import {
-  Kyukai,
-  Taikai,
-  Zaiseki,
-  createUserStatus,
-} from 'src/domain/value-object/participantStatus';
 import { RejoinParticipantUseCase } from 'src/app/rejoin-participant-usecase';
 import { SuspendMembershipUsecase } from 'src/app/suspend-membership-usecase';
 import { ResignMembershipUsecase } from 'src/app/resign-membership-usecase';
 import {
-  PatchParticipantRequest,
-  PostParticipantRequest,
+  CreateParticipantRequest,
+  ResignParticipantRequest,
+  SuspendParticipantRequest,
+  RejoinParticipantRequest,
 } from './request/participant-request';
 import { TaskIdQS } from 'src/infra/db/query-service/task-qs';
 import { TaskStatusRepository } from 'src/infra/db/repository/taskStatus-repository';
 import { JoinNewParticipantUsecase } from 'src/app/join-new-participant-usecase';
 import { NotificationSender } from 'src/infra/notifier/notification-sender';
-import { Option, isSome } from 'fp-ts/lib/Option';
-import { RemoveMemberUsecase } from 'src/app/remove-member-usecase';
-import { isLeft } from 'fp-ts/lib/Either';
+import { isSome } from 'fp-ts/lib/Option';
+import { RemovalTeamMemberValidator } from 'src/app/util/removal-team-member-validator';
 
 @Controller({
   path: '/participant',
@@ -52,11 +46,11 @@ export class ParticipantController {
     return response;
   }
 
-  @Post()
+  @Post('create')
   @ApiResponse({ status: 200 })
   async createParticipant(
     @Body()
-    postParticipantRequest: PostParticipantRequest,
+    request: CreateParticipantRequest,
   ): Promise<void> {
     const prisma = new PrismaClient();
     const participantRepository = new ParticipantRepository(prisma);
@@ -70,58 +64,70 @@ export class ParticipantController {
       taskStatusRepository,
       taskIdQS,
     );
-    const { name, email } = postParticipantRequest;
+    const { name, email } = request;
     const result = await usecase.do(name, email);
     if (isSome(result)) {
       throw new BadRequestException(result.value.message);
     }
   }
 
-  @Patch()
+  @Post('rejoin')
   @ApiResponse({ status: 200 })
-  async changeParticipantStatus(
+  async rejoinParticipant(
     @Body()
-    patchParticipantRequest: PatchParticipantRequest,
+    request: RejoinParticipantRequest,
   ): Promise<void> {
     const prisma = new PrismaClient();
-    const participantRepository = new ParticipantRepository(prisma);
+    const teamRepository = new TeamRepository(prisma);
+
+    const usecase = new RejoinParticipantUseCase(teamRepository);
+    const result = await usecase.do(request.participantId);
+    if (isSome(result)) {
+      throw new BadRequestException(result.value.message);
+    }
+  }
+
+  @Post('suspend')
+  @ApiResponse({ status: 200 })
+  async suspendParticipant(
+    @Body()
+    request: SuspendParticipantRequest,
+  ): Promise<void> {
+    const prisma = new PrismaClient();
     const teamRepository = new TeamRepository(prisma);
     const notificationSender = new NotificationSender();
     const participantNameQS = new ParticipantNameQS(prisma);
-    const removeMemberUsecase = new RemoveMemberUsecase(
-      participantRepository,
+    const validator = new RemovalTeamMemberValidator(
       teamRepository,
       notificationSender,
       participantNameQS,
     );
 
-    const { participantId, status } = patchParticipantRequest;
-    let result: Option<Error>;
-    const statusResult = createUserStatus(status);
-    if (isLeft(statusResult)) {
-      throw new BadRequestException(statusResult.left.message);
+    const usecase = new SuspendMembershipUsecase(teamRepository, validator);
+    const result = await usecase.do(request.participantId);
+    if (isSome(result)) {
+      throw new BadRequestException(result.value.message);
     }
-    const participantStatus = statusResult.right;
-    switch (participantStatus) {
-      case Zaiseki:
-        result = await new RejoinParticipantUseCase(
-          participantRepository,
-          teamRepository,
-        ).do(participantId);
-        break;
-      case Kyukai:
-        result = await new SuspendMembershipUsecase(
-          participantRepository,
-          removeMemberUsecase,
-        ).do(participantId);
-        break;
-      case Taikai:
-        result = await new ResignMembershipUsecase(
-          participantRepository,
-          removeMemberUsecase,
-        ).do(participantId);
-        break;
-    }
+  }
+
+  @Post('resign')
+  @ApiResponse({ status: 200 })
+  async resignParticipant(
+    @Body()
+    request: ResignParticipantRequest,
+  ): Promise<void> {
+    const prisma = new PrismaClient();
+    const teamRepository = new TeamRepository(prisma);
+    const notificationSender = new NotificationSender();
+    const participantNameQS = new ParticipantNameQS(prisma);
+    const validator = new RemovalTeamMemberValidator(
+      teamRepository,
+      notificationSender,
+      participantNameQS,
+    );
+
+    const usecase = new ResignMembershipUsecase(teamRepository, validator);
+    const result = await usecase.do(request.participantId);
     if (isSome(result)) {
       throw new BadRequestException(result.value.message);
     }

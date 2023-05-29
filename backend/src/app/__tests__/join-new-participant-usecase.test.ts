@@ -1,8 +1,5 @@
-import { Pair } from 'src/domain/entity/pair';
-import { Participant, ParticipantIdType } from 'src/domain/entity/participant';
+import { Participant } from 'src/domain/entity/participant';
 import { Team } from 'src/domain/entity/team';
-import { PairName } from 'src/domain/value-object/pairName';
-import { TeamName } from 'src/domain/value-object/teamName';
 import { JoinNewParticipantUsecase } from '../join-new-participant-usecase';
 import { Yet } from 'src/domain/value-object/taskStatusValue';
 import { TaskIdDto } from '../query-service-interface/task-qs';
@@ -11,8 +8,41 @@ import { MockTeamRepository } from './mock/team-repository';
 import { MockParticipantRepository } from './mock/participant-repository';
 import { ParticipantName } from 'src/domain/value-object/participantName';
 import { ParticipantEmail } from 'src/domain/value-object/participantEmail';
-import { Zaiseki } from 'src/domain/value-object/participantStatus';
 import { MockTaskStatusRepository } from './mock/taskStatus-repository';
+
+const createThreeZaisekiMember = () => {
+  const ps11 = {
+    participantId: '11',
+    status: '在籍中',
+  };
+  const ps12 = {
+    participantId: '12',
+    status: '在籍中',
+  };
+  const ps13 = {
+    participantId: '13',
+    status: '在籍中',
+  };
+  const ps14 = {
+    participantId: '14',
+    status: '休会中',
+  };
+  return [ps11, ps12, ps13, ps14];
+};
+
+const createPair = () => {
+  const p1 = {
+    pairId: '1',
+    pairName: 'a',
+    member: [...createThreeZaisekiMember()],
+  };
+  return [p1];
+};
+
+const createTeam = () => {
+  const t1 = Team.create('1', '123', [...createPair()]);
+  return t1;
+};
 
 describe('do', () => {
   const createMockTaskQS = () => {
@@ -27,26 +57,6 @@ describe('do', () => {
       getAll: jest.fn().mockResolvedValue(ret),
     };
   };
-  const createThreeMember = () => {
-    const p21 = '21' as ParticipantIdType;
-    const p22 = '22' as ParticipantIdType;
-    const p23 = '23' as ParticipantIdType;
-    return [p21, p22, p23];
-  };
-  const createPair = () => {
-    const pair = Pair.create('1', {
-      name: PairName.create('a'),
-      member: createThreeMember(),
-    });
-    return [pair];
-  };
-  const createTeam = () => {
-    const team = Team.create('1', {
-      name: TeamName.create('123'),
-      pairList: createPair(),
-    });
-    return team;
-  };
 
   test('[正常系] 新規参加者を追加する', async () => {
     const team = createTeam();
@@ -59,19 +69,20 @@ describe('do', () => {
     );
     await usecase.do('三谷 照也', 'ayuret1975@gmo-media.jp');
 
-    expect(team.pairList.length).toBe(2);
-    expect(team.member.length).toBe(4);
+    expect(team.getPairs().length).toBe(2);
+    expect(team.getAllMember().length).toBe(5);
+    expect(team.getZaisekiMember().length).toBe(4);
     const tsList = mockTSRepository.getAll();
     expect(tsList.length).toBe(80);
     expect(tsList.every((ts) => ts.status === Yet)).toBeTruthy();
   });
 
   test('[異常系] メールアドレスが重複した参加者を追加する', async () => {
-    const duplicateParticipant = Participant.create('31', {
-      name: ParticipantName.create('中島 裕実'),
-      email: ParticipantEmail.create('nakasima-hiromi@dion.ne.jp'),
-      status: Zaiseki,
-    });
+    const duplicateParticipant = Participant.create(
+      '31',
+      ParticipantName.create('中島 裕実'),
+      ParticipantEmail.create('nakasima-hiromi@dion.ne.jp'),
+    );
     const team = createTeam();
     const usecase = new JoinNewParticipantUsecase(
       new MockParticipantRepository(some(duplicateParticipant)),

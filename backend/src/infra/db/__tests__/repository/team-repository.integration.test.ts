@@ -9,10 +9,6 @@ import {
   createTestTeamPair,
 } from 'src/testUtil/test-data';
 import { Team } from 'src/domain/entity/team';
-import { TeamName } from 'src/domain/value-object/teamName';
-import { Pair } from 'src/domain/entity/pair';
-import { PairName } from 'src/domain/value-object/pairName';
-import { ParticipantIdType } from 'src/domain/entity/participant';
 import { isNone, none } from 'fp-ts/lib/Option';
 
 describe('team-repository.integration.test', () => {
@@ -60,8 +56,8 @@ describe('team-repository.integration.test', () => {
       }
       const team = result.value;
       expect(team.id).toEqual('200');
-      expect(team.teamName.getValue()).toEqual('204');
-      expect(team.pairList.length).toBe(2);
+      expect(team.name.getValue()).toEqual('204');
+      expect(team.getPairs().length).toBe(2);
     });
 
     test('[異常系]', async () => {
@@ -82,8 +78,10 @@ describe('team-repository.integration.test', () => {
         throw new Error();
       }
       const teams = result.value;
-      expect(teams.length).toBe(3);
-      expect(teams.every((t) => t.member.length === 3)).toBeTruthy();
+      expect(teams.length).toBe(2);
+      expect(
+        teams.every((t) => t.getZaisekiMember().length === 3),
+      ).toBeTruthy();
     });
   });
   describe('save', () => {
@@ -94,19 +92,24 @@ describe('team-repository.integration.test', () => {
       await deleteTestData();
     });
     test('[正常系] メンバー追加', async () => {
-      const team = Team.create('300', {
-        name: TeamName.create('303'),
-        pairList: [
-          Pair.create('301', {
-            name: PairName.create('a'),
-            member: ['008' as ParticipantIdType, '010' as ParticipantIdType],
-          }),
-          Pair.create('302', {
-            name: PairName.create('b'),
-            member: ['009' as ParticipantIdType, '081' as ParticipantIdType],
-          }),
-        ],
-      });
+      const team = Team.create('300', '303', [
+        {
+          pairId: '301',
+          pairName: 'a',
+          member: [
+            { participantId: '008', status: '在籍中' },
+            { participantId: '010', status: '在籍中' },
+          ],
+        },
+        {
+          pairId: '302',
+          pairName: 'b',
+          member: [
+            { participantId: '009', status: '在籍中' },
+            { participantId: '081', status: '在籍中' },
+          ],
+        },
+      ]);
       await teamRepository.save(team);
       const result = await teamRepository.findByParticipantId('081');
       if (isNone(result)) {
@@ -114,23 +117,21 @@ describe('team-repository.integration.test', () => {
       }
       const teamResult = result.value;
       expect(teamResult.id).toEqual('300');
-      expect(teamResult.teamName.getValue()).toEqual('303');
-      expect(teamResult.pairList.length).toBe(2);
+      expect(teamResult.name.getValue()).toEqual('303');
+      expect(teamResult.getPairs().length).toBe(2);
     });
     test('[正常系] メンバー削除', async () => {
-      const team = Team.create('400', {
-        name: TeamName.create('404'),
-        pairList: [
-          Pair.create('402', {
-            name: PairName.create('b'),
-            member: [
-              '011' as ParticipantIdType,
-              '013' as ParticipantIdType,
-              '014' as ParticipantIdType,
-            ],
-          }),
-        ],
-      });
+      const team = Team.create('400', '404', [
+        {
+          pairId: '402',
+          pairName: 'b',
+          member: [
+            { participantId: '011', status: '在籍中' },
+            { participantId: '013', status: '在籍中' },
+            { participantId: '014', status: '在籍中' },
+          ],
+        },
+      ]);
       await teamRepository.save(team);
       const result = await teamRepository.findByParticipantId('011');
       if (isNone(result)) {
@@ -138,8 +139,8 @@ describe('team-repository.integration.test', () => {
       }
       const teamResult = result.value;
       expect(teamResult.id).toEqual('400');
-      expect(teamResult.pairList.length).toBe(1);
-      expect(teamResult.pairList[0].member.length).toBe(3);
+      expect(teamResult.getPairs().length).toBe(1);
+      expect(teamResult.getPairs()[0].getZaisekiMember().length).toBe(3);
 
       const result2 = await teamRepository.findByParticipantId('012');
       expect(result2).toEqual(none);

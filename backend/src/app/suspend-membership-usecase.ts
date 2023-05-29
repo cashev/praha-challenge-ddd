@@ -1,39 +1,35 @@
-import { IParticipantRepository } from 'src/domain/repository-interface/participant-repository';
-import { Kyukai } from 'src/domain/value-object/participantStatus';
-import { IRemoveMemberUsecase } from './remove-member-usecase';
 import { Option, none, some } from 'fp-ts/lib/Option';
 import { isLeft } from 'fp-ts/lib/Either';
+import { IRemovalTeamMemberValidator } from './util/removal-team-member-validator';
+import { ParticipantIdType } from 'src/domain/entity/participant';
+import { ITeamRepository } from 'src/domain/repository-interface/team-repository';
 
 /**
- * 参加者の在籍ステータスを休会中にするユースケース
+ * 参加者を休会にするユースケース
  */
 export class SuspendMembershipUsecase {
-  private readonly participantRepo: IParticipantRepository;
-  private readonly removeMemberUsecase: IRemoveMemberUsecase;
-
   constructor(
-    participantRepo: IParticipantRepository,
-    removeMemberUsecase: IRemoveMemberUsecase,
-  ) {
-    this.participantRepo = participantRepo;
-    this.removeMemberUsecase = removeMemberUsecase;
-  }
+    private readonly teamRepo: ITeamRepository,
+    private readonly removalTeamMemberValidator: IRemovalTeamMemberValidator,
+  ) {}
 
   /**
-   * 指定された参加者をチームから取り除き、在籍ステータスを休会中へ更新します。
+   * 指定された参加者の在籍ステータスを休会中へ更新します。
    * 参加者が抜けてペアが1人になる場合、チーム内でペアを再編成します。
    * チームメンバーが最低人数を下回る場合、管理者へ通知します。
    *
    * @param participantId 参加者id
    */
   async do(participantId: string): Promise<Option<Error>> {
-    const removeResult = await this.removeMemberUsecase.do(participantId);
-    if (isLeft(removeResult)) {
-      return some(removeResult.left);
+    const pid = participantId as ParticipantIdType;
+    const validateResult =
+      await this.removalTeamMemberValidator.validateFromParticipantId(pid);
+    if (isLeft(validateResult)) {
+      return some(validateResult.left);
     }
-    const participant = removeResult.right;
-    participant.status = Kyukai;
-    this.participantRepo.save(participant);
+    const team = validateResult.right;
+    team.suspendParticipant(pid);
+    this.teamRepo.save(team);
     return none;
   }
 }

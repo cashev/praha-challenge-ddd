@@ -9,19 +9,16 @@ describe('do', () => {
     id: '1',
     name: '永野 哲哉',
     email: 'tty-ngn19800814@dion.ne.jp',
-    status: '在籍',
   });
   const u2 = new ParticipantDto({
     id: '2',
     name: '江口 隆吉',
     email: 'egt572@asp.home.ne.jp',
-    status: '在籍',
   });
   const u3 = new ParticipantDto({
     id: '3',
     name: '柳沢 朋美',
     email: 'tmmyngsw@ybb.ne.jp',
-    status: '在籍',
   });
   const mockParticipantQS = new (class implements IParticipantQS {
     public getAll(): Promise<ParticipantDto[]> {

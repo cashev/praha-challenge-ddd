@@ -1,11 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Option, none, some } from 'fp-ts/lib/Option';
-import { Pair } from 'src/domain/entity/pair';
-import { ParticipantIdType } from 'src/domain/entity/participant';
 import { Team } from 'src/domain/entity/team';
 import { ITeamRepository } from 'src/domain/repository-interface/team-repository';
-import { PairName } from 'src/domain/value-object/pairName';
-import { TeamName } from 'src/domain/value-object/teamName';
 
 export class TeamRepository implements ITeamRepository {
   private prismaClient: PrismaClient;
@@ -38,20 +34,21 @@ export class TeamRepository implements ITeamRepository {
     if (result == null) {
       return none;
     }
-    const pairList = result.pairs
-      .map((tp) => tp.pair)
-      .map((p) => {
-        return Pair.create(p.id, {
-          name: PairName.create(p.name),
-          member: p.participants.map(
-            (p2) => p2.participantId as ParticipantIdType,
-          ),
-        });
-      });
-    const team = Team.create(result.id, {
-      name: TeamName.create(result.name),
-      pairList,
-    });
+    const team = Team.create(
+      result.id,
+      result.name,
+      result.pairs
+        .map((tp) => tp.pair)
+        .map((p) => {
+          return {
+            pairId: p.id,
+            pairName: p.name,
+            member: p.participants.map((pp) => {
+              return { participantId: pp.participantId, status: pp.status };
+            }),
+          };
+        }),
+    );
     return some(team);
   }
 
@@ -115,19 +112,21 @@ export class TeamRepository implements ITeamRepository {
       },
     });
     const ret = teams.map((team) => {
-      return Team.create(team.id, {
-        name: TeamName.create(team.name),
-        pairList: team.pairs
+      return Team.create(
+        team.id,
+        team.name,
+        team.pairs
           .map((tp) => tp.pair)
-          .map((pair) => {
-            return Pair.create(pair.id, {
-              name: PairName.create(pair.name),
-              member: pair.participants.map(
-                (pp) => pp.participantId as ParticipantIdType,
-              ),
-            });
+          .map((p) => {
+            return {
+              pairId: p.id,
+              pairName: p.name,
+              member: p.participants.map((pp) => {
+                return { participantId: pp.participantId, status: pp.status };
+              }),
+            };
           }),
-      });
+      );
     });
     return some(ret);
   }
@@ -137,40 +136,58 @@ export class TeamRepository implements ITeamRepository {
       await tx.team.upsert({
         where: { id: team.id },
         update: {
-          name: team.teamName.getValue(),
+          name: team.name.getValue(),
         },
         create: {
           id: team.id,
-          name: team.teamName.getValue(),
+          name: team.name.getValue(),
         },
       });
-      team.pairList.map(async (pair) => {
+      team.getPairs().map(async (pair) => {
         await tx.pair.upsert({
           where: { id: pair.id },
           update: {
-            name: pair.pairName.getValue(),
+            name: pair.name.getValue(),
           },
           create: {
             id: pair.id,
-            name: pair.pairName.getValue(),
+            name: pair.name.getValue(),
           },
         });
       });
       await tx.pair_Participant.deleteMany({
         where: {
-          pair: {
-            team: {
-              some: {
-                teamId: team.id,
+          OR: [
+            {
+              pair: {
+                team: {
+                  some: {
+                    teamId: team.id,
+                  },
+                },
               },
             },
-          },
+            {
+              pairId: {
+                in: team.getPairs().map((p) => p.id),
+              },
+            },
+            {
+              participantId: {
+                in: team.getAllMember().map((m) => m.participantId),
+              },
+            },
+          ],
         },
       });
       await tx.pair_Participant.createMany({
-        data: team.pairList.flatMap((pair) => {
-          return pair.member.map((id) => {
-            return { pairId: pair.id, participantId: id };
+        data: team.getPairs().flatMap((pair) => {
+          return pair.getAllMember().map((ps) => {
+            return {
+              pairId: pair.id,
+              participantId: ps.participantId,
+              status: ps.getStatusValue(),
+            };
           });
         }),
       });
@@ -180,30 +197,29 @@ export class TeamRepository implements ITeamRepository {
         },
       });
       await tx.team_Pair.createMany({
-        data: team.pairList.map((pair) => {
+        data: team.getPairs().map((pair) => {
           return { teamId: team.id, pairId: pair.id };
         }),
       });
       await tx.team_Participant.deleteMany({
         where: {
-          teamId: team.id,
+          OR: [
+            { teamId: team.id },
+            {
+              participantId: {
+                in: team.getAllMember().map((m) => m.participantId),
+              },
+            },
+          ],
         },
       });
       await tx.team_Participant.createMany({
-        data: team.pairList.flatMap((pair) => {
-          return pair.member.map((id) => {
-            return { teamId: team.id, participantId: id };
+        data: team.getPairs().flatMap((pair) => {
+          return pair.getAllMember().map((ps) => {
+            return { teamId: team.id, participantId: ps.participantId };
           });
         }),
       });
     });
   }
 }
-
-// type TeamPairDto = {
-//   teamId: string;
-//   teamName: string;
-//   pairId: string;
-//   pairName: string;
-//   participantId: string;
-// };

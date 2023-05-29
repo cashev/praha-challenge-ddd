@@ -1,51 +1,36 @@
 import { ParticipantEmail } from '../value-object/participantEmail';
 import { ParticipantName } from '../value-object/participantName';
-import { ParticipantStatus } from '../value-object/participantStatus';
 import { Brand } from '../value-object/valueObject';
-import { Entity } from './entity';
+import { Entity2 } from './entity';
 
 export type ParticipantIdType = Brand<string, 'ParticipantId'>;
 
-interface ParticipantProps {
-  name: ParticipantName;
-  email: ParticipantEmail;
-  status: ParticipantStatus;
-}
-
-export class Participant extends Entity<ParticipantIdType, ParticipantProps> {
+export class Participant extends Entity2<ParticipantIdType> {
   get id(): ParticipantIdType {
     return this._id;
   }
 
-  get participantName(): ParticipantName {
-    return this.props.name;
+  getName(): ParticipantName {
+    return this.name;
   }
 
-  set participantName(participantName: ParticipantName) {
-    this.props.name = participantName;
+  getEmail(): ParticipantEmail {
+    return this.email;
   }
 
-  get email(): ParticipantEmail {
-    return this.props.email;
+  private constructor(
+    id: ParticipantIdType,
+    private readonly name: ParticipantName,
+    private email: ParticipantEmail,
+  ) {
+    super(id);
   }
 
-  set email(email: ParticipantEmail) {
-    this.props.email = email;
-  }
-
-  get status(): ParticipantStatus {
-    return this.props.status;
-  }
-
-  set status(status: ParticipantStatus) {
-    this.props.status = status;
-  }
-
-  private constructor(id: ParticipantIdType, props: ParticipantProps) {
-    super(id, props);
-  }
-
-  public static create(id: string, props: ParticipantProps): Participant {
-    return new Participant(id as ParticipantIdType, props);
+  public static create(
+    id: string,
+    name: ParticipantName,
+    email: ParticipantEmail,
+  ): Participant {
+    return new Participant(id as ParticipantIdType, name, email);
   }
 }
