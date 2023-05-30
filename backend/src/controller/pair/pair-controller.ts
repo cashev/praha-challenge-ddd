@@ -11,7 +11,7 @@ import { PairQS } from 'src/infra/db/query-service/pair-qs';
 export class PairController {
   @Get()
   @ApiResponse({ status: 200, type: GetPairResponse })
-  async getAllParticipant(): Promise<GetPairResponse> {
+  async getAll(): Promise<GetPairResponse> {
     const prisma = new PrismaClient();
     const qs = new PairQS(prisma);
     const usecase = new GetAllPairUseCase(qs);

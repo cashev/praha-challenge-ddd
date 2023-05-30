@@ -11,7 +11,7 @@ import { TeamQS } from 'src/infra/db/query-service/team-qs';
 export class TeamController {
   @Get()
   @ApiResponse({ status: 200, type: GetTeamResponse })
-  async getAllParticipant(): Promise<GetTeamResponse> {
+  async getAll(): Promise<GetTeamResponse> {
     const prisma = new PrismaClient();
     const qs = new TeamQS(prisma);
     const usecase = new GetAllTeamUseCase(qs);

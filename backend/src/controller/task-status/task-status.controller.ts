@@ -29,7 +29,7 @@ import { GetAllTaskStatusUseCase } from 'src/app/get-all-task-status-usecase';
 export class TaskStatusController {
   @Get()
   @ApiResponse({ status: 200, type: GetTaskStatusResponse })
-  async getAllTaskStatus(): Promise<GetTaskStatusResponse> {
+  async getAll(): Promise<GetTaskStatusResponse> {
     const prisma = new PrismaClient();
     const qs = new TaskStatusQS(prisma);
     const usecase = new GetAllTaskStatusUseCase(qs);

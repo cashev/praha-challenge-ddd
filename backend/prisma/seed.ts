@@ -201,37 +201,31 @@ const participants = [
     id: createRandomIdString(),
     name: '志村 拓夫',
     email: 'takuo1975@dti.ad.jp',
-    status: '休会中',
   },
   {
     id: createRandomIdString(),
     name: '栗田 ひとみ',
     email: 'atiruk1975@sunfield.ne.jp',
-    status: '休会中',
   },
   {
     id: createRandomIdString(),
     name: '市川 孝市',
     email: 'wkti@users.gr.jp',
-    status: '休会中',
   },
   {
     id: createRandomIdString(),
     name: '小原 好行',
     email: 'ohr6461207@dion.ne.jp',
-    status: '退会済',
   },
   {
     id: createRandomIdString(),
     name: '増田 三佐男',
     email: 'masuda.misao@example.or.jp',
-    status: '退会済',
   },
   {
     id: createRandomIdString(),
     name: '中田 知生',
     email: 'tmo-nkt@mxi.asp.home.ne.jp',
-    status: '退会済',
   },
 ];
 
@@ -253,7 +247,6 @@ const pairs = [
   { id: createRandomIdString(), name: 'c' },
   { id: createRandomIdString(), name: 'a' },
   { id: createRandomIdString(), name: 'b' },
-  { id: createRandomIdString(), name: 'c' },
 ];
 
 const teams = [
@@ -765,7 +758,7 @@ const pairParticipants = [
   {
     pairId: pairs[11].id,
     participantId: participants[25].id,
-    status: '在籍中',
+    status: '休会中',
   },
 
   {
@@ -801,7 +794,7 @@ const pairParticipants = [
   {
     pairId: pairs[14].id,
     participantId: participants[32].id,
-    status: '在籍中',
+    status: '休会中',
   },
 
   {
@@ -822,17 +815,7 @@ const pairParticipants = [
   {
     pairId: pairs[16].id,
     participantId: participants[36].id,
-    status: '休会中',
-  },
-  {
-    pairId: pairs[17].id,
-    participantId: participants[37].id,
-    status: '休会中',
-  },
-  {
-    pairId: pairs[17].id,
-    participantId: participants[38].id,
-    status: '休会中',
+    status: '在籍中',
   },
 ];
 
@@ -856,7 +839,6 @@ const teamPair = [
   { teamId: teams[4].id, pairId: pairs[14].id },
   { teamId: teams[5].id, pairId: pairs[15].id },
   { teamId: teams[5].id, pairId: pairs[16].id },
-  { teamId: teams[5].id, pairId: pairs[17].id },
 ];
 
 const teamParticipants = [
@@ -899,8 +881,6 @@ const teamParticipants = [
   { teamId: teams[5].id, participantId: participants[34].id },
   { teamId: teams[5].id, participantId: participants[35].id },
   { teamId: teams[5].id, participantId: participants[36].id },
-  { teamId: teams[5].id, participantId: participants[37].id },
-  { teamId: teams[5].id, participantId: participants[38].id },
 ];
 
 const prisma = new PrismaClient();

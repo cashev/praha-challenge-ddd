@@ -14,8 +14,10 @@ export class ParticipantQS implements IParticipantQS {
   }
 
   public async getAll(): Promise<ParticipantDto[]> {
-    const users = await this.prismaClient.participant.findMany();
-    return users.map((participant) => new ParticipantDto({ ...participant }));
+    const participants = await this.prismaClient.participant.findMany();
+    return participants.map(
+      (participant) => new ParticipantDto({ ...participant }),
+    );
   }
 }
 
@@ -27,14 +29,14 @@ export class ParticipantNameQS implements IParticipantNameQS {
   }
 
   public async getNames(ids: string[]): Promise<ParticipantNameDto[]> {
-    const users = await this.prismaClient.participant.findMany({
+    const result = await this.prismaClient.participant.findMany({
       where: {
         id: {
           in: ids,
         },
       },
     });
-    return users.map(
+    return result.map(
       (participant) => new ParticipantNameDto({ ...participant }),
     );
   }

@@ -9,7 +9,28 @@ export class PairQS implements IPairQS {
   }
 
   public async getAll(): Promise<PairDto[]> {
-    const pairs = await this.prismaClient.pair.findMany();
+    const result = await this.prismaClient.pair.findMany({
+      include: {
+        participants: {
+          include: {
+            participant: true,
+          },
+        },
+      },
+    });
+    const pairs = result.map((p) => {
+      return {
+        id: p.id,
+        name: p.name,
+        participants: p.participants.map((pp) => {
+          return {
+            participantId: pp.participantId,
+            participantName: pp.participant.name,
+            status: pp.status,
+          };
+        }),
+      };
+    });
     return pairs.map((pair) => new PairDto({ ...pair }));
   }
 }

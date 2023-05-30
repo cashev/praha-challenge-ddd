@@ -20,18 +20,10 @@ class ParticipantData {
   name: string;
   @ApiProperty()
   email: string;
-  @ApiProperty()
-  status: string;
 
-  public constructor(params: {
-    id: string;
-    name: string;
-    email: string;
-    status: string;
-  }) {
+  public constructor(params: { id: string; name: string; email: string }) {
     this.id = params.id;
     this.name = params.name;
     this.email = params.email;
-    this.status = params.status;
   }
 }

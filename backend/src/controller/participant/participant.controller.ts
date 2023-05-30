@@ -37,7 +37,7 @@ import { RemovalTeamMemberValidator } from 'src/app/util/removal-team-member-val
 export class ParticipantController {
   @Get()
   @ApiResponse({ status: 200, type: GetParticipantResponse })
-  async getAllParticipant(): Promise<GetParticipantResponse> {
+  async getAll(): Promise<GetParticipantResponse> {
     const prisma = new PrismaClient();
     const qs = new ParticipantQS(prisma);
     const usecase = new GetAllParticipantUseCase(qs);
