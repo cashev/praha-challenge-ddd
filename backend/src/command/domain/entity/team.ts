@@ -1,6 +1,6 @@
 import { PairName } from '../value-object/pairName';
 import { TeamName } from '../value-object/teamName';
-import { Entity2 } from './entity';
+import { Entity } from './entity';
 import { ParticipantIdType } from './participant';
 import { Brand } from '../value-object/valueObject';
 import { createRandomIdString, randomChoice } from 'src/util/random';
@@ -9,7 +9,7 @@ import { Option, none, some } from 'fp-ts/lib/Option';
 
 type TeamIdType = Brand<string, 'TeamId'>;
 
-export class Team extends Entity2<TeamIdType> {
+export class Team extends Entity<TeamIdType> {
   private static readonly MIN_TEAM_MEMBER_SIZE = 3;
 
   getPairs(): Pair[] {
@@ -357,7 +357,7 @@ export class Team extends Entity2<TeamIdType> {
 
 type PairIdType = Brand<string, 'PairId'>;
 
-class Pair extends Entity2<PairIdType> {
+class Pair extends Entity<PairIdType> {
   private static readonly MIN_PAIR_MEMBER_SIZE = 2;
   private static readonly MAX_PAIR_MEMBER_SIZE = 3;
 
@@ -535,7 +535,7 @@ type ParticipantStatusIdType = Brand<string, 'ParticipantStatusId'>;
 /**
  * 参加者ステータス
  */
-class ParticipantStatus extends Entity2<ParticipantStatusIdType> {
+class ParticipantStatus extends Entity<ParticipantStatusIdType> {
   getStatusValue(): string {
     return getParticipantStatusValue(this.status);
   }

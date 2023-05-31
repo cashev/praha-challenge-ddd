@@ -1,11 +1,11 @@
 import { ParticipantEmail } from '../value-object/participantEmail';
 import { ParticipantName } from '../value-object/participantName';
 import { Brand } from '../value-object/valueObject';
-import { Entity2 } from './entity';
+import { Entity } from './entity';
 
 export type ParticipantIdType = Brand<string, 'ParticipantId'>;
 
-export class Participant extends Entity2<ParticipantIdType> {
+export class Participant extends Entity<ParticipantIdType> {
   get id(): ParticipantIdType {
     return this._id;
   }

@@ -7,14 +7,8 @@ import { ParticipantName } from '../value-object/participantName';
 import { TeamName } from '../value-object/teamName';
 import { Entity } from './entity';
 
-interface NotificationProps {
-  targetParticipantName: ParticipantName;
-  teamName: TeamName;
-  teamMemberNames: ParticipantName[];
-}
-
 export class MemberLimitNotification
-  extends Entity<NotificationIdType, NotificationProps>
+  extends Entity<NotificationIdType>
   implements INotification
 {
   getTitle(): string {
@@ -22,21 +16,37 @@ export class MemberLimitNotification
   }
   getContent(): string {
     const content = `チームの人数が3人を下回ることになるため、以下参加者をチームから取り除くことができません。
-    対象者: ${this.props.targetParticipantName.getValue()}
-    チーム名: ${this.props.teamName.getValue()}
+    対象者: ${this.targetParticipantName.getValue()}
+    チーム名: ${this.teamName.getValue()}
     チーム参加者名:
-    ${this.props.teamMemberNames.forEach((pName) => `  ${pName.getValue()}\n`)}
+    ${this.teamMemberNames.forEach((pName) => `  ${pName.getValue()}\n`)}
     `;
     return content;
   }
 
-  private constructor(id: NotificationIdType, props: NotificationProps) {
-    super(id, props);
+  private constructor(
+    id: NotificationIdType,
+    private readonly targetParticipantName: ParticipantName,
+    private readonly teamName: TeamName,
+    private readonly teamMemberNames: ParticipantName[],
+  ) {
+    super(id);
   }
 
-  public static create(props: NotificationProps): INotification {
+  public static create(params: {
+    targetParticipantName: ParticipantName;
+    teamName: TeamName;
+    teamMemberNames: ParticipantName[];
+  }): INotification {
     const id = createRandomIdString() as NotificationIdType;
-    props.teamMemberNames = [...props.teamMemberNames];
-    return new MemberLimitNotification(id, props);
+    const targetParticipantName = params.targetParticipantName;
+    const teamName = params.teamName;
+    const teamMemberNames = [...params.teamMemberNames];
+    return new MemberLimitNotification(
+      id,
+      targetParticipantName,
+      teamName,
+      teamMemberNames,
+    );
   }
 }

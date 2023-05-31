@@ -6,41 +6,44 @@ import { ParticipantIdType } from './participant';
 type TaskStatusIdType = Brand<string, 'TaskStatusId'>;
 export type TaskIdType = Brand<string, 'TaskId'>;
 
-interface TaskStatusProps {
-  participantId: ParticipantIdType;
-  taskId: TaskIdType;
-  status: TaskStatusValue;
-}
+export class TaskStatus extends Entity<TaskStatusIdType> {
+  private _status: TaskStatusValue;
 
-export class TaskStatus extends Entity<TaskStatusIdType, TaskStatusProps> {
-  private constructor(id: TaskStatusIdType, props: TaskStatusProps) {
-    super(id, props);
+  private constructor(
+    public readonly id: TaskStatusIdType,
+    public readonly participantId: ParticipantIdType,
+    public readonly taskId: TaskIdType,
+    status: TaskStatusValue,
+  ) {
+    super(id);
+    this._status = status;
   }
 
-  public static create(id: string, props: TaskStatusProps): TaskStatus {
-    return new TaskStatus(id as TaskStatusIdType, props);
-  }
-
-  get id(): TaskStatusIdType {
-    return this._id;
-  }
-
-  get participantId(): ParticipantIdType {
-    return this.props.participantId;
-  }
-
-  get taskId(): TaskIdType {
-    return this.props.taskId;
+  public static create(
+    id: string,
+    params: {
+      participantId: ParticipantIdType;
+      taskId: TaskIdType;
+      status: TaskStatusValue;
+    },
+  ): TaskStatus {
+    const { participantId, taskId, status } = params;
+    return new TaskStatus(
+      id as TaskStatusIdType,
+      participantId,
+      taskId,
+      status,
+    );
   }
 
   get status(): TaskStatusValue {
-    return this.props.status;
+    return this._status;
   }
 
   set status(status: TaskStatusValue) {
-    if (this.props.status === Done) {
+    if (this._status === Done) {
       throw Error('完了から他のステータスへの変更できません。');
     }
-    this.props.status = status;
+    this._status = status;
   }
 }
