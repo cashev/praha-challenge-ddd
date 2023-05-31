@@ -7,29 +7,29 @@ import {
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { PrismaClient } from '@prisma/client';
-import { GetAllParticipantUseCase } from 'src/app/get-all-participant-usecase';
-import {
-  ParticipantNameQS,
-  ParticipantQS,
-} from 'src/infra/db/query-service/participant-qs';
 import { GetParticipantResponse } from './response/participant-response';
-import { ParticipantRepository } from 'src/infra/db/repository/participant-repository';
-import { TeamRepository } from 'src/infra/db/repository/team-repository';
-import { RejoinParticipantUseCase } from 'src/app/rejoin-participant-usecase';
-import { SuspendMembershipUsecase } from 'src/app/suspend-membership-usecase';
-import { ResignMembershipUsecase } from 'src/app/resign-membership-usecase';
 import {
   CreateParticipantRequest,
   ResignParticipantRequest,
   SuspendParticipantRequest,
   RejoinParticipantRequest,
 } from './request/participant-request';
-import { TaskIdQS } from 'src/infra/db/query-service/task-qs';
-import { TaskStatusRepository } from 'src/infra/db/repository/taskStatus-repository';
-import { JoinNewParticipantUsecase } from 'src/app/join-new-participant-usecase';
-import { NotificationSender } from 'src/infra/notifier/notification-sender';
+import { NotificationSender } from 'src/command/infra/notifier/notification-sender';
 import { isSome } from 'fp-ts/lib/Option';
-import { RemovalTeamMemberValidator } from 'src/app/util/removal-team-member-validator';
+import { RemovalTeamMemberValidator } from 'src/command/usecase/util/removal-team-member-validator';
+import {
+  ParticipantNameQS,
+  ParticipantQS,
+} from 'src/query/infra/db/participant-qs';
+import { GetAllParticipantUseCase } from 'src/query/usecase/get-all-participant-usecase';
+import { ParticipantRepository } from 'src/command/infra/db/participant-repository';
+import { TeamRepository } from 'src/command/infra/db/team-repository';
+import { TaskStatusRepository } from 'src/command/infra/db/taskStatus-repository';
+import { TaskIdQS } from 'src/query/infra/db/task-qs';
+import { JoinNewParticipantUsecase } from 'src/command/usecase/join-new-participant-usecase';
+import { RejoinParticipantUseCase } from 'src/command/usecase/rejoin-participant-usecase';
+import { SuspendMembershipUsecase } from 'src/command/usecase/suspend-membership-usecase';
+import { ResignMembershipUsecase } from 'src/command/usecase/resign-membership-usecase';
 
 @Controller({
   path: '/participant',

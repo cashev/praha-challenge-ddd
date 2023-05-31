@@ -2,8 +2,8 @@ import { Controller, Get } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { PrismaClient } from '@prisma/client';
 import { GetTeamResponse } from './response/team-response';
-import { GetAllTeamUseCase } from 'src/app/get-all-team-usecase';
-import { TeamQS } from 'src/infra/db/query-service/team-qs';
+import { TeamQS } from 'src/query/infra/db/team-qs';
+import { GetAllTeamUseCase } from 'src/query/usecase/get-all-team-usecase';
 
 @Controller({
   path: '/team',

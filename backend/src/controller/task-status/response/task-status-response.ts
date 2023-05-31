@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ParticipantDto } from 'src/app/query-service-interface/participant-qs';
-import { TaskStatusDto } from 'src/app/query-service-interface/task-status-qs';
+import { ParticipantDto } from 'src/query/usecase/query-service-interface/participant-qs';
+import { TaskStatusDto } from 'src/query/usecase/query-service-interface/task-status-qs';
 
 export class GetTaskStatusResponse {
   taskStatusData: TaskStatusData[];

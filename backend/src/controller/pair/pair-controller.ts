@@ -2,8 +2,8 @@ import { Controller, Get } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { PrismaClient } from '@prisma/client';
 import { GetPairResponse } from './response/pair-response';
-import { GetAllPairUseCase } from 'src/app/get-all-pair-usecase';
-import { PairQS } from 'src/infra/db/query-service/pair-qs';
+import { PairQS } from 'src/query/infra/db/pair-qs';
+import { GetAllPairUseCase } from 'src/query/usecase/get-all-pair-usecase';
 
 @Controller({
   path: '/pair',

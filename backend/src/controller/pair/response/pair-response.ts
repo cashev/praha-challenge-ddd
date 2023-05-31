@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { PairDto } from 'src/app/query-service-interface/pair-qs';
+import { PairDto } from 'src/query/usecase/query-service-interface/pair-qs';
 
 export class GetPairResponse {
   @ApiProperty({ type: () => [PairData] })
