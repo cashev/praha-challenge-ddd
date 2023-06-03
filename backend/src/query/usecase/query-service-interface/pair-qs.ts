@@ -1,7 +1,7 @@
 export class PairDto {
   public readonly id: string;
   public readonly name: string;
-  public readonly participants: ParticipantStatusDto[];
+  public readonly participants: ParticipantDto[];
 
   public constructor(props: {
     id: string;
@@ -9,30 +9,26 @@ export class PairDto {
     participants: {
       participantId: string;
       participantName: string;
-      status: string;
     }[];
   }) {
     const { id, name, participants } = props;
     this.id = id;
     this.name = name;
-    this.participants = participants.map((p) => new ParticipantStatusDto(p));
+    this.participants = participants.map((p) => new ParticipantDto(p));
   }
 }
 
-class ParticipantStatusDto {
+class ParticipantDto {
   public readonly participantId: string;
   public readonly participantName: string;
-  public readonly status: string;
 
   public constructor(props: {
     participantId: string;
     participantName: string;
-    status: string;
   }) {
-    const { participantId, participantName, status } = props;
+    const { participantId, participantName } = props;
     this.participantId = participantId;
     this.participantName = participantName;
-    this.status = status;
   }
 }
 

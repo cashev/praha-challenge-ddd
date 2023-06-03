@@ -2,6 +2,7 @@ export class TeamDto {
   public readonly id: string;
   public readonly name: string;
   public readonly pairs: PairDto[];
+  public readonly kyukaiParticipants: ParticipantDto[];
 
   public constructor(props: {
     id: string;
@@ -12,21 +13,27 @@ export class TeamDto {
       participants: {
         participantId: string;
         participantName: string;
-        status: string;
       }[];
     }[];
+    kyukaiParticipants: {
+      participantId: string;
+      participantName: string;
+    }[];
   }) {
-    const { id, name, pairs } = props;
+    const { id, name, pairs, kyukaiParticipants } = props;
     this.id = id;
     this.name = name;
     this.pairs = pairs.map((p) => new PairDto(p));
+    this.kyukaiParticipants = kyukaiParticipants.map(
+      (kp) => new ParticipantDto(kp),
+    );
   }
 }
 
 class PairDto {
   public readonly pairId: string;
   public readonly pairName: string;
-  public readonly participants: ParticipantStatusDto[];
+  public readonly participants: ParticipantDto[];
 
   public constructor(props: {
     pairId: string;
@@ -34,30 +41,26 @@ class PairDto {
     participants: {
       participantId: string;
       participantName: string;
-      status: string;
     }[];
   }) {
     const { pairId, pairName, participants } = props;
     this.pairId = pairId;
     this.pairName = pairName;
-    this.participants = participants.map((p) => new ParticipantStatusDto(p));
+    this.participants = participants.map((p) => new ParticipantDto(p));
   }
 }
 
-class ParticipantStatusDto {
+class ParticipantDto {
   public readonly participantId: string;
   public readonly participantName: string;
-  public readonly status: string;
 
   public constructor(props: {
     participantId: string;
     participantName: string;
-    status: string;
   }) {
-    const { participantId, participantName, status } = props;
+    const { participantId, participantName } = props;
     this.participantId = participantId;
     this.participantName = participantName;
-    this.status = status;
   }
 }
 

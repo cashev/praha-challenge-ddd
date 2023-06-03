@@ -52,9 +52,9 @@ export class RemovalTeamMemberValidator implements IRemovalTeamMemberValidator {
    */
   private async notifyToAdmin(participantId: ParticipantIdType, team: Team) {
     // チームの参加者名
-    const participantNames = await this.participantNameQS.getNames([
-      ...team.getZaisekiMember().map((m) => m.participantId),
-    ]);
+    const participantNames = await this.participantNameQS.getNames(
+      team.getZaisekiMember(),
+    );
     const notification = MemberLimitNotification.create({
       targetParticipantName: ParticipantName.create(
         participantNames.filter((pn) => pn.id == participantId)[0].name,

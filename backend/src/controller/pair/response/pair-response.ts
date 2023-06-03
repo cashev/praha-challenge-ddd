@@ -25,7 +25,6 @@ class PairData {
     participants: {
       participantId: string;
       participantName: string;
-      status: string;
     }[];
   }) {
     this.id = params.id;
@@ -39,16 +38,9 @@ class ParticipantData {
   participantId: string;
   @ApiProperty()
   participantName: string;
-  @ApiProperty()
-  status: string;
 
-  constructor(params: {
-    participantId: string;
-    participantName: string;
-    status: string;
-  }) {
+  constructor(params: { participantId: string; participantName: string }) {
     this.participantId = params.participantId;
     this.participantName = params.participantName;
-    this.status = params.status;
   }
 }

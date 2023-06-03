@@ -29,7 +29,6 @@ export class PairQS implements IPairQS {
           return {
             participantId: pp.participantId,
             participantName: pp.participant.name,
-            status: pp.status,
           };
         }),
       };

@@ -18,6 +18,8 @@ class TeamData {
   name: string;
   @ApiProperty()
   pairs: PairData[];
+  @ApiProperty()
+  kyukaiParticipants: ParticipantData[];
 
   public constructor(params: {
     id: string;
@@ -28,13 +30,19 @@ class TeamData {
       participants: {
         participantId: string;
         participantName: string;
-        status: string;
       }[];
+    }[];
+    kyukaiParticipants: {
+      participantId: string;
+      participantName: string;
     }[];
   }) {
     this.id = params.id;
     this.name = params.name;
     this.pairs = params.pairs.map((p) => new PairData(p));
+    this.kyukaiParticipants = params.kyukaiParticipants.map(
+      (kp) => new ParticipantData(kp),
+    );
   }
 }
 
@@ -52,7 +60,6 @@ class PairData {
     participants: {
       participantId: string;
       participantName: string;
-      status: string;
     }[];
   }) {
     this.pairId = params.pairId;
@@ -66,16 +73,9 @@ class ParticipantData {
   participantId: string;
   @ApiProperty()
   participantName: string;
-  @ApiProperty()
-  status: string;
 
-  constructor(params: {
-    participantId: string;
-    participantName: string;
-    status: string;
-  }) {
+  constructor(params: { participantId: string; participantName: string }) {
     this.participantId = params.participantId;
     this.participantName = params.participantName;
-    this.status = params.status;
   }
 }

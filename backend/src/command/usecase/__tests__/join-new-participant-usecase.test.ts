@@ -10,37 +10,17 @@ import { Yet } from 'src/command/domain/value-object/taskStatusValue';
 import { TaskIdDto } from 'src/query/usecase/query-service-interface/task-qs';
 import { Team } from 'src/command/domain/entity/team';
 
-const createThreeZaisekiMember = () => {
-  const ps11 = {
-    participantId: '11',
-    status: '在籍中',
-  };
-  const ps12 = {
-    participantId: '12',
-    status: '在籍中',
-  };
-  const ps13 = {
-    participantId: '13',
-    status: '在籍中',
-  };
-  const ps14 = {
-    participantId: '14',
-    status: '休会中',
-  };
-  return [ps11, ps12, ps13, ps14];
-};
-
 const createPair = () => {
   const p1 = {
     pairId: '1',
     pairName: 'a',
-    member: [...createThreeZaisekiMember()],
+    participants: ['11', '12', '13'],
   };
   return [p1];
 };
 
 const createTeam = () => {
-  const t1 = Team.create('1', '123', [...createPair()]);
+  const t1 = Team.create('1', '123', [...createPair()], ['14']);
   return t1;
 };
 

@@ -6,43 +6,16 @@ import { MockRemovalTeamMemberValidator } from './mock/removal-team-member-valid
 import { ParticipantIdType } from 'src/command/domain/entity/participant';
 import { Team } from 'src/command/domain/entity/team';
 
-const createTwoZaisekiMember01 = () => {
-  const ps21 = {
-    participantId: '21',
-    status: '在籍中',
-  };
-  const ps22 = {
-    participantId: '22',
-    status: '在籍中',
-  };
-  const ps23 = {
-    participantId: '23',
-    status: '休会中',
-  };
-  return [ps21, ps22, ps23];
-};
-
-const createTwoZaisekiMember02 = () => {
-  const ps21 = {
-    participantId: '31',
-    status: '在籍中',
-  };
-  const ps22 = {
-    participantId: '32',
-    status: '在籍中',
-  };
-  const ps23 = {
-    participantId: '33',
-    status: '休会中',
-  };
-  return [ps21, ps22, ps23];
-};
-
 const createTeam = () => {
-  const t1 = Team.create('1', '123', [
-    { pairId: '1', pairName: 'a', member: [...createTwoZaisekiMember01()] },
-    { pairId: '2', pairName: 'b', member: [...createTwoZaisekiMember02()] },
-  ]);
+  const t1 = Team.create(
+    '1',
+    '123',
+    [
+      { pairId: '1', pairName: 'a', participants: ['21', '22'] },
+      { pairId: '2', pairName: 'b', participants: ['31', '32'] },
+    ],
+    ['23', '33'],
+  );
   return t1;
 };
 
@@ -60,9 +33,7 @@ describe('do', () => {
     expect(team.getZaisekiMember().length).toEqual(3);
     const pid = '31' as ParticipantIdType;
     expect(team.getPairs().some((p) => p.isMember(pid))).toBeFalsy();
-    expect(
-      team.getAllMember().some((ps) => ps.participantId == pid),
-    ).toBeFalsy();
+    expect(team.getAllMember().some((p) => p == pid)).toBeFalsy();
   });
 
   test('[異常系]', async () => {

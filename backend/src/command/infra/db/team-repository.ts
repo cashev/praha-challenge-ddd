@@ -43,9 +43,7 @@ export class TeamRepository implements ITeamRepository {
           return {
             pairId: p.id,
             pairName: p.name,
-            member: p.participants.map((pp) => {
-              return { participantId: pp.participantId, status: pp.status };
-            }),
+            participants: p.participants.map((pp) => pp.participantId),
           };
         }),
     );
@@ -121,9 +119,7 @@ export class TeamRepository implements ITeamRepository {
             return {
               pairId: p.id,
               pairName: p.name,
-              member: p.participants.map((pp) => {
-                return { participantId: pp.participantId, status: pp.status };
-              }),
+              participants: p.participants.map((pp) => pp.participantId),
             };
           }),
       );
@@ -174,7 +170,7 @@ export class TeamRepository implements ITeamRepository {
             },
             {
               participantId: {
-                in: team.getAllMember().map((m) => m.participantId),
+                in: team.getAllMember(),
               },
             },
           ],
@@ -182,11 +178,10 @@ export class TeamRepository implements ITeamRepository {
       });
       await tx.pair_Participant.createMany({
         data: team.getPairs().flatMap((pair) => {
-          return pair.getAllMember().map((ps) => {
+          return pair.getParticipants().map((ps) => {
             return {
               pairId: pair.id,
-              participantId: ps.participantId,
-              status: ps.getStatusValue(),
+              participantId: ps,
             };
           });
         }),
@@ -207,17 +202,32 @@ export class TeamRepository implements ITeamRepository {
             { teamId: team.id },
             {
               participantId: {
-                in: team.getAllMember().map((m) => m.participantId),
+                in: team.getAllMember(),
               },
             },
           ],
         },
       });
       await tx.team_Participant.createMany({
-        data: team.getPairs().flatMap((pair) => {
-          return pair.getAllMember().map((ps) => {
-            return { teamId: team.id, participantId: ps.participantId };
-          });
+        data: team.getAllMember().map((p) => {
+          return { teamId: team.id, participantId: p };
+        }),
+      });
+      await tx.team_Kyukai_Participant.deleteMany({
+        where: {
+          OR: [
+            { teamId: team.id },
+            {
+              participantId: {
+                in: team.getKyukaiMember(),
+              },
+            },
+          ],
+        },
+      });
+      await tx.team_Kyukai_Participant.createMany({
+        data: team.getKyukaiMember().map((p) => {
+          return { teamId: team.id, participantId: p };
         }),
       });
     });

@@ -13,21 +13,19 @@ describe('do', () => {
           {
             participantId: '11',
             participantName: '田口 益三',
-            status: '在籍中',
           },
           {
             participantId: '12',
             participantName: '渡部 玲奈',
-            status: '在籍中',
           },
           {
             participantId: '13',
             participantName: '河村 三男',
-            status: '在籍中',
           },
         ],
       },
     ],
+    kyukaiParticipants: [],
   });
   const t2 = new TeamDto({
     id: '2',
@@ -40,21 +38,19 @@ describe('do', () => {
           {
             participantId: '21',
             participantName: '横山 宜昭',
-            status: '在籍中',
           },
           {
             participantId: '22',
             participantName: '松島 喜治',
-            status: '在籍中',
           },
           {
             participantId: '23',
             participantName: '青山 謙三',
-            status: '在籍中',
           },
         ],
       },
     ],
+    kyukaiParticipants: [],
   });
   const t3 = new TeamDto({
     id: '3',
@@ -67,21 +63,19 @@ describe('do', () => {
           {
             participantId: '31',
             participantName: '工藤 洋昌',
-            status: '在籍中',
           },
           {
             participantId: '32',
             participantName: '瀬戸 江美',
-            status: '在籍中',
           },
           {
             participantId: '33',
             participantName: '野崎 晶紀',
-            status: '在籍中',
           },
         ],
       },
     ],
+    kyukaiParticipants: [],
   });
 
   const mockTeamQS = new (class implements ITeamQS {

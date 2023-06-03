@@ -27,6 +27,11 @@ export class TeamQS implements ITeamQS {
             },
           },
         },
+        kyukaiParticipant: {
+          include: {
+            participant: true,
+          },
+        },
       },
     });
     const teams = result.map((t) => {
@@ -41,9 +46,14 @@ export class TeamQS implements ITeamQS {
               return {
                 participantId: pp.participantId,
                 participantName: pp.participant.name,
-                status: pp.status,
               };
             }),
+          };
+        }),
+        kyukaiParticipants: t.kyukaiParticipant.map((kp) => {
+          return {
+            participantId: kp.participantId,
+            participantName: kp.participant.name,
           };
         }),
       };

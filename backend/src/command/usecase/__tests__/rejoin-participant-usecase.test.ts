@@ -4,37 +4,17 @@ import { MockTeamRepository } from './mock/team-repository';
 import { ParticipantIdType } from 'src/command/domain/entity/participant';
 import { Team } from 'src/command/domain/entity/team';
 
-const createThreeZaisekiMember = () => {
-  const ps11 = {
-    participantId: '11',
-    status: '在籍中',
-  };
-  const ps12 = {
-    participantId: '12',
-    status: '在籍中',
-  };
-  const ps13 = {
-    participantId: '13',
-    status: '在籍中',
-  };
-  const ps14 = {
-    participantId: '14',
-    status: '休会中',
-  };
-  return [ps11, ps12, ps13, ps14];
-};
-
 const createPair = () => {
   const p1 = {
     pairId: '1',
     pairName: 'a',
-    member: [...createThreeZaisekiMember()],
+    participants: ['11', '12', '13'],
   };
   return [p1];
 };
 
 const createTeam = () => {
-  const t1 = Team.create('1', '123', [...createPair()]);
+  const t1 = Team.create('1', '123', [...createPair()], ['14']);
   return t1;
 };
 
@@ -48,8 +28,8 @@ describe('do', () => {
     expect(team.getZaisekiMember().length).toEqual(4);
     const pid = '14' as ParticipantIdType;
     expect(team.getPairs().some((p) => p.isMember(pid))).toBeTruthy();
-    const ps = team.getAllMember().filter((ps) => ps.participantId === pid)[0];
-    expect(ps.isZaiseki()).toBeTruthy();
+    expect(team.getKyukaiMember().length).toEqual(0);
+    expect(team.getZaisekiMember().some((p) => p === pid)).toBeTruthy();
   });
 
   test('[異常系] 存在しない参加者', async () => {
@@ -69,7 +49,7 @@ describe('do', () => {
     expect(isSome(result)).toBeTruthy();
     expect(team.getZaisekiMember().length).toEqual(3);
     const pid = '14' as ParticipantIdType;
-    const ps = team.getAllMember().filter((ps) => ps.participantId === pid)[0];
-    expect(ps.isKyukai()).toBeTruthy();
+    expect(team.getKyukaiMember()).toEqual(['14']);
+    expect(team.getZaisekiMember().some((p) => p == pid)).toBeFalsy();
   });
 });

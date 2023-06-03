@@ -711,111 +711,95 @@ const createTaskStatus = () => {
 };
 
 const pairParticipants = [
-  { pairId: pairs[0].id, participantId: participants[0].id, status: '在籍中' },
-  { pairId: pairs[0].id, participantId: participants[1].id, status: '在籍中' },
-  { pairId: pairs[1].id, participantId: participants[2].id, status: '在籍中' },
-  { pairId: pairs[1].id, participantId: participants[3].id, status: '在籍中' },
-  { pairId: pairs[2].id, participantId: participants[4].id, status: '在籍中' },
-  { pairId: pairs[2].id, participantId: participants[5].id, status: '在籍中' },
-  { pairId: pairs[2].id, participantId: participants[6].id, status: '在籍中' },
+  { pairId: pairs[0].id, participantId: participants[0].id },
+  { pairId: pairs[0].id, participantId: participants[1].id },
+  { pairId: pairs[1].id, participantId: participants[2].id },
+  { pairId: pairs[1].id, participantId: participants[3].id },
+  { pairId: pairs[2].id, participantId: participants[4].id },
+  { pairId: pairs[2].id, participantId: participants[5].id },
+  { pairId: pairs[2].id, participantId: participants[6].id },
 
-  { pairId: pairs[3].id, participantId: participants[7].id, status: '在籍中' },
-  { pairId: pairs[3].id, participantId: participants[8].id, status: '在籍中' },
-  { pairId: pairs[4].id, participantId: participants[9].id, status: '在籍中' },
-  { pairId: pairs[4].id, participantId: participants[10].id, status: '在籍中' },
-  { pairId: pairs[5].id, participantId: participants[11].id, status: '在籍中' },
-  { pairId: pairs[5].id, participantId: participants[12].id, status: '在籍中' },
+  { pairId: pairs[3].id, participantId: participants[7].id },
+  { pairId: pairs[3].id, participantId: participants[8].id },
+  { pairId: pairs[4].id, participantId: participants[9].id },
+  { pairId: pairs[4].id, participantId: participants[10].id },
+  { pairId: pairs[5].id, participantId: participants[11].id },
+  { pairId: pairs[5].id, participantId: participants[12].id },
 
-  { pairId: pairs[6].id, participantId: participants[13].id, status: '在籍中' },
-  { pairId: pairs[6].id, participantId: participants[14].id, status: '在籍中' },
-  { pairId: pairs[7].id, participantId: participants[15].id, status: '在籍中' },
-  { pairId: pairs[7].id, participantId: participants[16].id, status: '在籍中' },
-  { pairId: pairs[8].id, participantId: participants[17].id, status: '在籍中' },
-  { pairId: pairs[8].id, participantId: participants[18].id, status: '在籍中' },
+  { pairId: pairs[6].id, participantId: participants[13].id },
+  { pairId: pairs[6].id, participantId: participants[14].id },
+  { pairId: pairs[7].id, participantId: participants[15].id },
+  { pairId: pairs[7].id, participantId: participants[16].id },
+  { pairId: pairs[8].id, participantId: participants[17].id },
+  { pairId: pairs[8].id, participantId: participants[18].id },
 
-  { pairId: pairs[9].id, participantId: participants[19].id, status: '在籍中' },
-  { pairId: pairs[9].id, participantId: participants[20].id, status: '在籍中' },
+  { pairId: pairs[9].id, participantId: participants[19].id },
+  { pairId: pairs[9].id, participantId: participants[20].id },
   {
     pairId: pairs[10].id,
     participantId: participants[21].id,
-    status: '在籍中',
   },
   {
     pairId: pairs[10].id,
     participantId: participants[22].id,
-    status: '在籍中',
   },
   {
     pairId: pairs[11].id,
     participantId: participants[23].id,
-    status: '在籍中',
   },
   {
     pairId: pairs[11].id,
     participantId: participants[24].id,
-    status: '在籍中',
   },
   {
     pairId: pairs[11].id,
     participantId: participants[25].id,
-    status: '休会中',
   },
 
   {
     pairId: pairs[12].id,
     participantId: participants[26].id,
-    status: '在籍中',
   },
   {
     pairId: pairs[12].id,
     participantId: participants[27].id,
-    status: '在籍中',
   },
   {
     pairId: pairs[13].id,
     participantId: participants[28].id,
-    status: '在籍中',
   },
   {
     pairId: pairs[13].id,
     participantId: participants[29].id,
-    status: '在籍中',
   },
   {
     pairId: pairs[14].id,
     participantId: participants[30].id,
-    status: '在籍中',
   },
   {
     pairId: pairs[14].id,
     participantId: participants[31].id,
-    status: '在籍中',
   },
   {
     pairId: pairs[14].id,
     participantId: participants[32].id,
-    status: '休会中',
   },
 
   {
     pairId: pairs[15].id,
     participantId: participants[33].id,
-    status: '在籍中',
   },
   {
     pairId: pairs[15].id,
     participantId: participants[34].id,
-    status: '在籍中',
   },
   {
     pairId: pairs[16].id,
     participantId: participants[35].id,
-    status: '在籍中',
   },
   {
     pairId: pairs[16].id,
     participantId: participants[36].id,
-    status: '在籍中',
   },
 ];
 
@@ -881,6 +865,23 @@ const teamParticipants = [
   { teamId: teams[5].id, participantId: participants[34].id },
   { teamId: teams[5].id, participantId: participants[35].id },
   { teamId: teams[5].id, participantId: participants[36].id },
+
+  // 休会中
+  { teamId: teams[3].id, participantId: participants[37].id },
+  { teamId: teams[4].id, participantId: participants[38].id },
+  { teamId: teams[4].id, participantId: participants[39].id },
+  { teamId: teams[5].id, participantId: participants[40].id },
+  { teamId: teams[5].id, participantId: participants[41].id },
+  { teamId: teams[5].id, participantId: participants[42].id },
+];
+
+const teamKyukaiParticipants = [
+  { teamId: teams[3].id, participantId: participants[37].id },
+  { teamId: teams[4].id, participantId: participants[38].id },
+  { teamId: teams[4].id, participantId: participants[39].id },
+  { teamId: teams[5].id, participantId: participants[40].id },
+  { teamId: teams[5].id, participantId: participants[41].id },
+  { teamId: teams[5].id, participantId: participants[42].id },
 ];
 
 const prisma = new PrismaClient();
@@ -891,6 +892,7 @@ const deleteData = async () => {
   await prisma.task.deleteMany();
 
   await prisma.team_Participant.deleteMany();
+  await prisma.team_Kyukai_Participant.deleteMany();
   await prisma.team_Pair.deleteMany();
   await prisma.pair_Participant.deleteMany();
 
@@ -909,6 +911,9 @@ async function main() {
   await prisma.pair_Participant.createMany({ data: pairParticipants });
   await prisma.team_Pair.createMany({ data: teamPair });
   await prisma.team_Participant.createMany({ data: teamParticipants });
+  await prisma.team_Kyukai_Participant.createMany({
+    data: teamKyukaiParticipants,
+  });
 
   await prisma.task.createMany({ data: tasks });
   await prisma.taskStatus.createMany({ data: taskStatus });
