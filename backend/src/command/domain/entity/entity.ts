@@ -1,6 +1,6 @@
 import { Brand } from '../value-object/valueObject';
 
-const isEntity2 = (v: any): v is Entity<any> => {
+const isEntity = (v: any): v is Entity<any> => {
   return v instanceof Entity;
 };
 
@@ -18,7 +18,7 @@ export abstract class Entity<T extends Brand<any, any>> {
     if (this === object) {
       return true;
     }
-    if (!isEntity2(object)) {
+    if (!isEntity(object)) {
       return false;
     }
     return this._id === object._id;
