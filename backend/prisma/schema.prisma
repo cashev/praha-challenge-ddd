@@ -11,13 +11,13 @@ datasource db {
 }
 
 model Participant {
-  id         String            @id
+  id         String                   @id
   name       String
-  email      String            @unique
-  status     String
+  email      String                   @unique
   TaskStatus TaskStatus[]
   pair       Pair_Participant?
   team       Team_Participant?
+  kyukai     Team_Kyukai_Participant?
 }
 
 model Task {
@@ -72,9 +72,19 @@ model Team_Participant {
   @@unique([teamId, participantId])
 }
 
+model Team_Kyukai_Participant {
+  team          Team        @relation(fields: [teamId], references: [id])
+  teamId        String
+  participant   Participant @relation(fields: [participantId], references: [id])
+  participantId String      @unique
+
+  @@unique([teamId, participantId])
+}
+
 model Team {
-  id           String             @id
-  name         String
-  pairs        Team_Pair[]
-  participants Team_Participant[]
+  id                String                    @id
+  name              String
+  pairs             Team_Pair[]
+  participants      Team_Participant[]
+  kyukaiParticipant Team_Kyukai_Participant[]
 }

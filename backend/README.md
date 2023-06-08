@@ -34,7 +34,7 @@ Onion Architectureに基づいて設計しています。
 
     全ての参加者を取得します。
 
-  - POST `/participant`  
+  - POST `/participant/create`  
 
     参加者を新規に追加、チーム, ペアにアサインし、課題進捗を登録します。
 
@@ -42,15 +42,27 @@ Onion Architectureに基づいて設計しています。
     - name: 名前
     - email: メールアドレス
 
-  - PATCH `/participant`  
+  - POST `/participant/rejoin`  
 
-    参加者の在籍ステータスを更新します。  
-    参加者が在籍中になった場合、自動的にチーム, ペアにアサインします。  
-    参加者が在籍中以外になった場合、自動的にチーム, ペアから取り除かれます。
+    休会中の参加者をペアに割り当てます。
 
-    Request Body  
+    Request Body
     - participantId: 対象の参加者id
-    - status: 参加者ステータス: ["在籍中", "休会中", "退会済"]のいづれか
+
+  - POST `/participant/suspend`  
+
+    参加者を休会させ、ペアから取り除きます。
+
+    Request Body
+    - participantId: 対象の参加者id
+
+  - POST `/participant/resign`  
+
+    参加者を退会させます。  
+    チーム, ペアから取り除きます。
+
+    Request Body
+    - participantId: 対象の参加者id
 
 - チーム
 

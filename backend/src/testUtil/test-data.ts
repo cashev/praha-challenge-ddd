@@ -3,139 +3,116 @@ export const createTestParticipants = () => [
     id: '001',
     name: 'テストユーザ001',
     email: 'test001@example.com',
-    status: '在籍中',
   },
   {
     id: '002',
     name: 'テストユーザ002',
     email: 'test002@example.com',
-    status: '在籍中',
   },
   {
     id: '003',
     name: 'テストユーザ003',
     email: 'test003@example.com',
-    status: '在籍中',
   },
   {
     id: '004',
     name: 'テストユーザ004',
     email: 'test004@example.com',
-    status: '在籍中',
   },
   {
     id: '005',
     name: 'テストユーザ005',
     email: 'test005@example.com',
-    status: '在籍中',
   },
   {
     id: '006',
     name: 'テストユーザ006',
     email: 'test006@example.com',
-    status: '在籍中',
   },
   {
     id: '007',
     name: 'テストユーザ007',
     email: 'test007@example.com',
-    status: '在籍中',
   },
   {
     id: '008',
     name: 'テストユーザ008',
     email: 'test008@example.com',
-    status: '在籍中',
   },
   {
     id: '009',
     name: 'テストユーザ009',
     email: 'test009@example.com',
-    status: '在籍中',
   },
   {
     id: '010',
     name: 'テストユーザ010',
     email: 'test010@example.com',
-    status: '在籍中',
   },
   {
     id: '011',
     name: 'テストユーザ011',
     email: 'test011@example.com',
-    status: '在籍中',
   },
   {
     id: '012',
     name: 'テストユーザ012',
     email: 'test012@example.com',
-    status: '在籍中',
   },
   {
     id: '013',
     name: 'テストユーザ013',
     email: 'test013@example.com',
-    status: '在籍中',
   },
   {
     id: '014',
     name: 'テストユーザ014',
     email: 'test014@example.com',
-    status: '在籍中',
   },
   {
     id: '015',
     name: 'テストユーザ015',
     email: 'test015@example.com',
-    status: '在籍中',
   },
   {
     id: '016',
     name: 'テストユーザ016',
     email: 'test016@example.com',
-    status: '在籍中',
   },
   {
     id: '017',
     name: 'テストユーザ017',
     email: 'test017@example.com',
-    status: '在籍中',
   },
   {
     id: '081',
     name: 'テストユーザ081',
     email: 'test081@example.com',
-    status: '休会中',
   },
   {
     id: '082',
     name: 'テストユーザ082',
     email: 'test082@example.com',
-    status: '休会中',
   },
   {
     id: '083',
     name: 'テストユーザ083',
     email: 'test083@example.com',
-    status: '休会中',
   },
   {
     id: '091',
     name: 'テストユーザ091',
     email: 'test091@example.com',
-    status: '退会済',
   },
   {
     id: '092',
     name: 'テストユーザ092',
     email: 'test092@example.com',
-    status: '退会済',
   },
   {
     id: '093',
     name: 'テストユーザ093',
     email: 'test093@example.com',
-    status: '退会済',
   },
 ];
 
@@ -175,6 +152,9 @@ export const creaeTestPairParticipants = () => [
   { pairId: '501', participantId: '015' },
   { pairId: '501', participantId: '016' },
   { pairId: '501', participantId: '017' },
+  { pairId: '501', participantId: '081' },
+  { pairId: '501', participantId: '082' },
+  { pairId: '501', participantId: '083' },
 ];
 
 export const createTestTeamPair = () => [
@@ -205,6 +185,15 @@ export const creaeTestTeamParticipants = () => [
   { teamId: '500', participantId: '015' },
   { teamId: '500', participantId: '016' },
   { teamId: '500', participantId: '017' },
+  { teamId: '500', participantId: '081' },
+  { teamId: '500', participantId: '082' },
+  { teamId: '500', participantId: '083' },
+];
+
+export const creaeTestTeamKyukaiParticipants = () => [
+  { teamId: '500', participantId: '081' },
+  { teamId: '500', participantId: '082' },
+  { teamId: '500', participantId: '083' },
 ];
 
 export const createTestTask = () => [

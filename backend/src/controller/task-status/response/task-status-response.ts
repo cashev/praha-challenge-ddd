@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ParticipantDto } from 'src/app/query-service-interface/participant-qs';
-import { TaskStatusDto } from 'src/app/query-service-interface/task-status-qs';
+import { ParticipantDto } from 'src/query/usecase/query-service-interface/participant-qs';
+import { TaskStatusDto } from 'src/query/usecase/query-service-interface/task-status-qs';
 
 export class GetTaskStatusResponse {
   taskStatusData: TaskStatusData[];
@@ -55,18 +55,10 @@ class ParticipantData {
   name: string;
   @ApiProperty()
   email: string;
-  @ApiProperty()
-  status: string;
 
-  public constructor(params: {
-    id: string;
-    name: string;
-    email: string;
-    status: string;
-  }) {
+  public constructor(params: { id: string; name: string; email: string }) {
     this.id = params.id;
     this.name = params.name;
     this.email = params.email;
-    this.status = params.status;
   }
 }

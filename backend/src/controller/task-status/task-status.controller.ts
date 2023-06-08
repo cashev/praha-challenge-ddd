@@ -3,8 +3,6 @@ import {
   GetByTaskStatusResponse,
   GetTaskStatusResponse,
 } from './response/task-status-response';
-import { TaskStatusQS } from 'src/infra/db/query-service/task-status-qs';
-import { GetByTaskStatusUsecase } from 'src/app/get-by-taskStatus-usecase';
 import {
   BadRequestException,
   Body,
@@ -18,10 +16,12 @@ import {
   PatchTaskStatusRequest,
   PostTaskStatusRequest,
 } from './request/task-status-request';
-import { TaskStatusRepository } from 'src/infra/db/repository/taskStatus-repository';
-import { UpdateTaskStatusUseCase } from 'src/app/update-taskStatus-usecase';
 import { isSome } from 'fp-ts/lib/Option';
-import { GetAllTaskStatusUseCase } from 'src/app/get-all-task-status-usecase';
+import { TaskStatusQS } from 'src/query/infra/db/task-status-qs';
+import { GetAllTaskStatusUseCase } from 'src/query/usecase/get-all-task-status-usecase';
+import { GetByTaskStatusUsecase } from 'src/query/usecase/get-by-taskStatus-usecase';
+import { TaskStatusRepository } from 'src/command/infra/db/taskStatus-repository';
+import { UpdateTaskStatusUseCase } from 'src/command/usecase/update-taskStatus-usecase';
 
 @Controller({
   path: '/taskStatus',
@@ -29,7 +29,7 @@ import { GetAllTaskStatusUseCase } from 'src/app/get-all-task-status-usecase';
 export class TaskStatusController {
   @Get()
   @ApiResponse({ status: 200, type: GetTaskStatusResponse })
-  async getAllTaskStatus(): Promise<GetTaskStatusResponse> {
+  async getAll(): Promise<GetTaskStatusResponse> {
     const prisma = new PrismaClient();
     const qs = new TaskStatusQS(prisma);
     const usecase = new GetAllTaskStatusUseCase(qs);

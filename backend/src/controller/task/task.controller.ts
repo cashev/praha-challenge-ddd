@@ -1,9 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 import { GetAllTaskResponse } from './response/task-response';
-import { GetAllTaskUseCase } from 'src/app/get-all-task-usecase';
-import { TaskQS } from 'src/infra/db/query-service/task-qs';
 import { Controller, Get } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
+import { TaskQS } from 'src/query/infra/db/task-qs';
+import { GetAllTaskUseCase } from 'src/query/usecase/get-all-task-usecase';
 
 @Controller({
   path: '/task',

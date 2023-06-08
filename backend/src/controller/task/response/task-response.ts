@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { TaskDto } from 'src/app/query-service-interface/task-qs';
+import { TaskDto } from 'src/query/usecase/query-service-interface/task-qs';
 
 export class GetAllTaskResponse {
   @ApiProperty({ type: () => [TaskData] })

@@ -6,271 +6,226 @@ const participants = [
     id: createRandomIdString(),
     name: '谷川 智美',
     email: 'tanikawa_tomomi@t-com.ne.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '星野 季雄',
     email: 'sueo.hosino@example.org',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '茂木 成夫',
     email: 'moki_nario@example.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '小柳 恵治',
     email: 'gnyk9598@example.org',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '高田 初美',
     email: 'htm.tkt@dti.ne.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '荒井 眞八',
     email: 'sny1976@excite.com',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '杉浦 文典',
     email: 'huminori.sugiura@tiki.ne.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '田原 完一',
     email: 'arahat928304@hi-ho.ne.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '大木 玲',
     email: 'ikoo0315@infoseek.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '小谷 邦煕',
     email: 'kotanikunihiro@geocities.com',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '近藤 安則',
     email: 'knduysnr@rakuten.co.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '西沢 治次',
     email: 'awazisin639@gmo-media.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '久保 健也',
     email: 'obuk71@example.ad.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '金田 正宣',
     email: 'masanori.kaneta@dion.ne.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '谷 錦也',
     email: 'tani@comeon.to',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '金沢 仁美',
     email: 'kanazawahitomi@mxi.asp.home.ne.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '足立 洋子',
     email: 'itada0303@combzmail.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '長島 梨恵子',
     email: 'ngsm_rek@infoweb.ne.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '岸 登喜雄',
     email: 'oikot1988@example.ne.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '天野 義幸',
     email: 'kysy74@sannet.ne.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '清水 千代枝',
     email: 'eoyittiyoe@excite.co.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '本多 雅栄',
     email: 'adnoh1986@sannet.ne.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '大崎 佳久',
     email: 'ikasoo739@example.ac.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '谷 洋助',
     email: 'tani0903@gmail.com',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '白川 真紀',
     email: 'ikam9120802@dti.ne.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '辻 秀春',
     email: 'zt@iij.ad.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '小西 志津恵',
     email: 'euzis@t-com.ne.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '足立 正宣',
     email: 'adati1981@infoseek.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '榎本 荘介',
     email: 'sousukeenomoto@hotmail.co.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '平野 礼',
     email: 'rei1977@infoweb.ne.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '松原 厚史',
     email: 'matubara70@freeml.co.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '岩崎 梨絵',
     email: 'rie0731@gmo-media.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '白井 邦江',
     email: 'kne_srikne_sri@hotmail.co.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '矢野 留美子',
     email: 'yano0701@livedoor.com',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '小倉 勇四郎',
     email: 'yusru06yusru06@users.gr.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '内海 武俊',
     email: 'taketosi1991@sunfield.ne.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '福島 倉美',
     email: 'amisukuh3860403@combzmail.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '福井 由水',
     email: 'hukui.yumi@plala.or.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '菅 健也',
     email: 'nak675211@goo.ne.jp',
-    status: '在籍中',
   },
   {
     id: createRandomIdString(),
     name: '志村 拓夫',
     email: 'takuo1975@dti.ad.jp',
-    status: '休会中',
   },
   {
     id: createRandomIdString(),
     name: '栗田 ひとみ',
     email: 'atiruk1975@sunfield.ne.jp',
-    status: '休会中',
   },
   {
     id: createRandomIdString(),
     name: '市川 孝市',
     email: 'wkti@users.gr.jp',
-    status: '休会中',
   },
   {
     id: createRandomIdString(),
     name: '小原 好行',
     email: 'ohr6461207@dion.ne.jp',
-    status: '退会済',
   },
   {
     id: createRandomIdString(),
     name: '増田 三佐男',
     email: 'masuda.misao@example.or.jp',
-    status: '退会済',
   },
   {
     id: createRandomIdString(),
     name: '中田 知生',
     email: 'tmo-nkt@mxi.asp.home.ne.jp',
-    status: '退会済',
   },
 ];
 
@@ -292,7 +247,6 @@ const pairs = [
   { id: createRandomIdString(), name: 'c' },
   { id: createRandomIdString(), name: 'a' },
   { id: createRandomIdString(), name: 'b' },
-  { id: createRandomIdString(), name: 'c' },
 ];
 
 const teams = [
@@ -781,26 +735,72 @@ const pairParticipants = [
 
   { pairId: pairs[9].id, participantId: participants[19].id },
   { pairId: pairs[9].id, participantId: participants[20].id },
-  { pairId: pairs[10].id, participantId: participants[21].id },
-  { pairId: pairs[10].id, participantId: participants[22].id },
-  { pairId: pairs[11].id, participantId: participants[23].id },
-  { pairId: pairs[11].id, participantId: participants[24].id },
-  { pairId: pairs[11].id, participantId: participants[25].id },
+  {
+    pairId: pairs[10].id,
+    participantId: participants[21].id,
+  },
+  {
+    pairId: pairs[10].id,
+    participantId: participants[22].id,
+  },
+  {
+    pairId: pairs[11].id,
+    participantId: participants[23].id,
+  },
+  {
+    pairId: pairs[11].id,
+    participantId: participants[24].id,
+  },
+  {
+    pairId: pairs[11].id,
+    participantId: participants[25].id,
+  },
 
-  { pairId: pairs[12].id, participantId: participants[26].id },
-  { pairId: pairs[12].id, participantId: participants[27].id },
-  { pairId: pairs[13].id, participantId: participants[28].id },
-  { pairId: pairs[13].id, participantId: participants[29].id },
-  { pairId: pairs[14].id, participantId: participants[30].id },
-  { pairId: pairs[14].id, participantId: participants[31].id },
-  { pairId: pairs[14].id, participantId: participants[32].id },
+  {
+    pairId: pairs[12].id,
+    participantId: participants[26].id,
+  },
+  {
+    pairId: pairs[12].id,
+    participantId: participants[27].id,
+  },
+  {
+    pairId: pairs[13].id,
+    participantId: participants[28].id,
+  },
+  {
+    pairId: pairs[13].id,
+    participantId: participants[29].id,
+  },
+  {
+    pairId: pairs[14].id,
+    participantId: participants[30].id,
+  },
+  {
+    pairId: pairs[14].id,
+    participantId: participants[31].id,
+  },
+  {
+    pairId: pairs[14].id,
+    participantId: participants[32].id,
+  },
 
-  { pairId: pairs[15].id, participantId: participants[33].id },
-  { pairId: pairs[15].id, participantId: participants[34].id },
-  { pairId: pairs[16].id, participantId: participants[35].id },
-  { pairId: pairs[16].id, participantId: participants[36].id },
-  { pairId: pairs[17].id, participantId: participants[37].id },
-  { pairId: pairs[17].id, participantId: participants[38].id },
+  {
+    pairId: pairs[15].id,
+    participantId: participants[33].id,
+  },
+  {
+    pairId: pairs[15].id,
+    participantId: participants[34].id,
+  },
+  {
+    pairId: pairs[16].id,
+    participantId: participants[35].id,
+  },
+  {
+    pairId: pairs[16].id,
+    participantId: participants[36].id,
+  },
 ];
 
 const teamPair = [
@@ -823,7 +823,6 @@ const teamPair = [
   { teamId: teams[4].id, pairId: pairs[14].id },
   { teamId: teams[5].id, pairId: pairs[15].id },
   { teamId: teams[5].id, pairId: pairs[16].id },
-  { teamId: teams[5].id, pairId: pairs[17].id },
 ];
 
 const teamParticipants = [
@@ -866,8 +865,23 @@ const teamParticipants = [
   { teamId: teams[5].id, participantId: participants[34].id },
   { teamId: teams[5].id, participantId: participants[35].id },
   { teamId: teams[5].id, participantId: participants[36].id },
-  { teamId: teams[5].id, participantId: participants[37].id },
-  { teamId: teams[5].id, participantId: participants[38].id },
+
+  // 休会中
+  { teamId: teams[3].id, participantId: participants[37].id },
+  { teamId: teams[4].id, participantId: participants[38].id },
+  { teamId: teams[4].id, participantId: participants[39].id },
+  { teamId: teams[5].id, participantId: participants[40].id },
+  { teamId: teams[5].id, participantId: participants[41].id },
+  { teamId: teams[5].id, participantId: participants[42].id },
+];
+
+const teamKyukaiParticipants = [
+  { teamId: teams[3].id, participantId: participants[37].id },
+  { teamId: teams[4].id, participantId: participants[38].id },
+  { teamId: teams[4].id, participantId: participants[39].id },
+  { teamId: teams[5].id, participantId: participants[40].id },
+  { teamId: teams[5].id, participantId: participants[41].id },
+  { teamId: teams[5].id, participantId: participants[42].id },
 ];
 
 const prisma = new PrismaClient();
@@ -878,6 +892,7 @@ const deleteData = async () => {
   await prisma.task.deleteMany();
 
   await prisma.team_Participant.deleteMany();
+  await prisma.team_Kyukai_Participant.deleteMany();
   await prisma.team_Pair.deleteMany();
   await prisma.pair_Participant.deleteMany();
 
@@ -896,6 +911,9 @@ async function main() {
   await prisma.pair_Participant.createMany({ data: pairParticipants });
   await prisma.team_Pair.createMany({ data: teamPair });
   await prisma.team_Participant.createMany({ data: teamParticipants });
+  await prisma.team_Kyukai_Participant.createMany({
+    data: teamKyukaiParticipants,
+  });
 
   await prisma.task.createMany({ data: tasks });
   await prisma.taskStatus.createMany({ data: taskStatus });
