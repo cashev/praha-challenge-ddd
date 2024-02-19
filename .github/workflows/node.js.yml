@@ -20,7 +20,7 @@ jobs:
           github_token: ${{ secrets.github_token }}
           workdir: backend
           reporter: github-pr-review
-          eslint_flags: "backend/src/**/*.ts"
+          eslint_flags: 'backend/src/'
 
   build:
 
