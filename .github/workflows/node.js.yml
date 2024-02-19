@@ -7,6 +7,20 @@ on:
     branches: [ main ]
 
 jobs:
+  lint:
+    name: runner / eslint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          eslint_flags: backend/src/**/*.ts"
+
   build:
 
     runs-on: ubuntu-latest
