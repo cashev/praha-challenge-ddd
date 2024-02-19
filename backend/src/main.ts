@@ -19,4 +19,4 @@ async function bootstrap() {
 }
 bootstrap();
 
-console.log('foo');
+console.log('foo')
