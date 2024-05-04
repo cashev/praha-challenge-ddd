@@ -15,7 +15,7 @@ model Participant {
   name       String
   email      String                   @unique
   TaskStatus TaskStatus[]
-  pair       Pair_Participant?
+  pair       Pair_Participant[]
   team       Team_Participant?
   kyukai     Team_Kyukai_Participant?
 }
@@ -42,7 +42,7 @@ model Pair_Participant {
   pair          Pair        @relation(fields: [pairId], references: [id])
   pairId        String
   participant   Participant @relation(fields: [participantId], references: [id])
-  participantId String      @unique
+  participantId String
 
   @@unique([pairId, participantId])
 }
