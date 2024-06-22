@@ -1,0 +1,11 @@
+FROM node:21.7.3-alpine3.20
+
+COPY . .
+
+RUN npm install
+RUN npm run model-generate
+RUN npm run build
+
+ENV DATABASE_URL="postgresql://root:prisma2023@host.docker.internal:5403/prisma"
+
+CMD ["npm", "start"]
