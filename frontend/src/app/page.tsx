@@ -1,10 +1,9 @@
 'use client';
 
 import Image from "next/image";
-import SignIn from "../components/sign-in";
-import SignUp from "../components/sign-up";
 import { UserProvider, useUser } from "../contexts/user-context";
 import SignOut from "@/components/sign-out";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -52,8 +51,8 @@ function MainContent() {
         </>
       ) : (
         <>
-          <SignUp />
-          <SignIn />
+          <Link href="/signin">サインイン</Link>
+          <Link href="/signup">サインアップ</Link>
         </>
       )}
 

@@ -18,7 +18,6 @@ export default function SignOut() {
 
   return (
     <div>
-      <h2>サインアウト</h2>
       <button onClick={handleSignOut}>サインアウト</button>
     </div>
   );
