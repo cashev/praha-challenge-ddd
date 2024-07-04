@@ -4,6 +4,7 @@ import Image from "next/image";
 import SignIn from "../components/sign-in";
 import SignUp from "../components/sign-up";
 import { UserProvider, useUser } from "../contexts/user-context";
+import SignOut from "@/components/sign-out";
 
 export default function Home() {
   return (
@@ -47,7 +48,7 @@ function MainContent() {
       (
         <>
           <div>ログイン中: {user.email}</div>
-          <div>TODO SignOut</div>
+          <SignOut />
         </>
       ) : (
         <>
