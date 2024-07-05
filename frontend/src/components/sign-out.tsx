@@ -10,15 +10,15 @@ export default function SignOut() {
     try {
       await auth.signOut();
       setUser(null);
-      alert('サインアウト成功！');
+      alert('ログアウト成功！');
     } catch (error: any) {
-      alert(`サインアウト失敗: ${error.message}`);
+      alert(`ログアウト失敗: ${error.message}`);
     }
   };
 
   return (
     <div>
-      <button onClick={handleSignOut}>サインアウト</button>
+      <button onClick={handleSignOut}>ログアウト</button>
     </div>
   );
 }

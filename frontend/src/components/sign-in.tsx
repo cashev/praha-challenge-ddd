@@ -18,7 +18,7 @@ export default function SignIn() {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       setUser(userCredential.user);
-      alert('サインイン成功！');
+      alert('ログイン成功！');
 
       router.push('/');
     } catch (error: any) {
@@ -38,7 +38,7 @@ export default function SignIn() {
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">サインイン</button>
+        <button type="submit">ログイン</button>
       </form>
     </div>
   );

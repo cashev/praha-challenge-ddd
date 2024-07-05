@@ -18,7 +18,7 @@ export default function SignUp() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       setUser(userCredential.user);
-      alert('サインアップ成功！');
+      alert('新規登録成功！');
 
       router.push('/');
     } catch (error: any) {
@@ -38,7 +38,7 @@ export default function SignUp() {
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">サインアップ</button>
+        <button type="submit">新規登録</button>
       </form>
     </div>
   );
