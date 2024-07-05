@@ -5,9 +5,7 @@ export default function SignInPage() {
   return (
     <div>
       <h1>サインイン画面</h1>
-      <UserProvider>
-        <SignIn />
-      </UserProvider>
+      <SignIn />
     </div>
   );
 }

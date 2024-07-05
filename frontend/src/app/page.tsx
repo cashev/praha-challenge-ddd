@@ -6,14 +6,6 @@ import SignOut from "@/components/sign-out";
 import Link from "next/link";
 
 export default function Home() {
-  return (
-    <UserProvider>
-      <MainContent />
-    </UserProvider>
-  );
-}
-
-function MainContent() {
   const { user } = useUser();
 
   return (

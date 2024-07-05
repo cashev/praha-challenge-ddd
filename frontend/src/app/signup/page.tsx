@@ -5,9 +5,7 @@ export default function SignUpPage() {
   return (
     <div>
       <h1>サインアップ画面</h1>
-      <UserProvider>
-        <SignUp />
-      </UserProvider>
+      <SignUp />
     </div>
   );
 }
