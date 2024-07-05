@@ -8,5 +8,15 @@ async function getData() {
 
 export default async function TeamPage() {
   const data = await getData();
-  return <main>{JSON.stringify(data)}</main>
+  return (
+    <>
+      <h1 className="">チーム一覧画面</h1>
+      <div>
+        <h2>取得結果</h2>
+        <pre>
+          {JSON.stringify(data, null, 2)}
+        </pre>
+      </div>
+    </>
+  );
 }
