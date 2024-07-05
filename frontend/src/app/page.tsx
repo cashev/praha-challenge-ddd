@@ -28,6 +28,14 @@ export default function Home() {
                   <Link href="/signup">新規登録</Link>
                 </li>
               </ul>
+              <ul>
+                <li>
+                  <Link href="/team">チーム一覧</Link>
+                </li>
+                <li>
+                  <Link href="/pair">ペア一覧</Link>
+                </li>
+              </ul>
             </nav>
           </>
         )}
