@@ -10,6 +10,8 @@ export default function SignUp() {
   const [password, setPassword] = useState<string>('');
 
   const handleSignUp = async (e: FormEvent) => {
+    if (!email) return;
+    if (!password) return;
     e.preventDefault();
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
