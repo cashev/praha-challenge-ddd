@@ -9,10 +9,9 @@ export const authOptions: NextAuthOptions = {
       authorize: async ({ idToken }: any, _req) => {
         if (idToken) {
           try {
-            console.log(idToken);
             const decoded = await auth.verifyIdToken(idToken);
-            const { uid, email, email_verified } = decoded;
-            return { id: uid, email, email_verified };
+            const { uid, email } = decoded;
+            return { id: uid, email, idToken };
           } catch (error) {
             console.error(error);
           }
@@ -26,12 +25,10 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }): Promise<any> {
-      console.log("jwt", token, user);
       return { ...token, ...user };
     },
     async session({ session, token }) {
-      console.log("session", session, token);
-      session.user.emailVerified = token.emailVerified;
+      session.user.idToken = token.idToken;
       session.user.uid = token.uid;
       return session;
     },
