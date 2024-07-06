@@ -3,26 +3,22 @@
 import { useState, FormEvent } from 'react';
 import { auth } from '../lib/firebase/auth';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useUser } from '../contexts/user-context';
-import { useRouter } from 'next/navigation';
+import { signIn as signInByNextAuth } from 'next-auth/react';
 
 export default function SignIn() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [error, setError] = useState<string | null>(null);
-  const { setUser } = useUser();
-  const router = useRouter();
 
   const handleSignIn = async (e: FormEvent) => {
+    if (!email) return;
+    if (!password) return;
     e.preventDefault();
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      setUser(userCredential.user);
-      alert('ログイン成功！');
-
-      router.push('/');
-    } catch (error: any) {
-      setError(error.message);
+      const idToken = await userCredential.user.getIdToken();
+      await signInByNextAuth("credentials", { idToken, callbackUrl: "/", });
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -37,7 +33,6 @@ export default function SignIn() {
           <label>Password:</label>
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
         <button type="submit">ログイン</button>
       </form>
     </div>

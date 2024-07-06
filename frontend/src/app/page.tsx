@@ -1,11 +1,11 @@
-'use client';
-
-import { useUser } from "../contexts/user-context";
 import SignOut from "@/components/sign-out";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
+import { authOptions } from "./api/auth/[...nextauth]/route";
 
-export default function Home() {
-  const { user } = useUser();
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+  const user = session?.user;
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">

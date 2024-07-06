@@ -1,15 +1,14 @@
 'use client';
 
-import { useUser } from '../contexts/user-context';
 import { auth } from '../lib/firebase/auth';
+import { signOut } from 'next-auth/react';
 
 export default function SignOut() {
-  const { setUser } = useUser();
 
   const handleSignOut = async () => {
     try {
       await auth.signOut();
-      setUser(null);
+      await signOut();
       alert('ログアウト成功！');
     } catch (error: any) {
       alert(`ログアウト失敗: ${error.message}`);
