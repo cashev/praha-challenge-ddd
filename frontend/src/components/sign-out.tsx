@@ -1,7 +1,7 @@
 'use client';
 
 import { useUser } from '../contexts/user-context';
-import { auth } from '../lib/firebase/firebase';
+import { auth } from '../lib/firebase/auth';
 
 export default function SignOut() {
   const { setUser } = useUser();
