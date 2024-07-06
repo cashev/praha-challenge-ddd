@@ -4,14 +4,14 @@ import React, { createContext, useState, useContext, ReactNode, useEffect } from
 import { User, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../lib/firebase/firebase';
 
-interface UserContextType {
+interface AuthContextType {
   user: User | null;
   setUser: (user: User | null) => void;
 }
 
-const UserContext = createContext<UserContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -22,14 +22,14 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, setUser }}>
       {children}
-    </UserContext.Provider>
+    </AuthContext.Provider>
   );
 };
 
 export const useUser = () => {
-  const context = useContext(UserContext);
+  const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useUser must be used within a UserProvider');
   }
