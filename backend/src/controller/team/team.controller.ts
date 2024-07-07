@@ -12,7 +12,9 @@ import { auth } from 'src/lib/firebase/admin';
 export class TeamController {
   @Get()
   @ApiResponse({ status: 200, type: GetTeamResponse })
-  async getAll(@Headers('Authorization') authorization: string): Promise<GetTeamResponse> {
+  async getAll(
+    @Headers('Authorization') authorization: string,
+  ): Promise<GetTeamResponse> {
     const token = authorization?.split(' ')[1];
     try {
       // Firebaseでトークンの検証を行う
