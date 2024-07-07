@@ -1,4 +1,4 @@
-import { BadRequestException, Controller, Get, Headers } from '@nestjs/common';
+import { Controller, Get, Headers, UnauthorizedException } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { PrismaClient } from '@prisma/client';
 import { GetTeamResponse } from './response/team-response';
@@ -20,7 +20,7 @@ export class TeamController {
       // Firebaseでトークンの検証を行う
       await auth.verifyIdToken(token);
     } catch (error) {
-      throw new BadRequestException('Invalid token');
+      throw new UnauthorizedException('Invalid token');
     }
 
     const prisma = new PrismaClient();
